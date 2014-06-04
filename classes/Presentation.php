@@ -1,0 +1,333 @@
+<?php
+
+/**
+ * The presentation layer.
+ *
+ * PHP version 5
+ *
+ * @category  CMSimple_XH
+ * @package   Chess
+ * @author    Christoph M. Becker <cmbecker69@gmx.de>
+ * @copyright 2014 Christoph M. Becker <http://3-magi.net>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @version   SVN: $Id$
+ * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+
+/**
+ * The controllers.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_Controller
+{
+    /**
+     * Returns the game view.
+     *
+     * @param string $basename A basename of a data file.
+     *
+     * @return string (X)HTML.
+     */
+    public function chess($basename)
+    {
+        $game = Chess_Game::load($basename);
+        if (!$game) {
+            return $this->_renderFailure('load_error', $basename);
+        }
+        $ply = isset($_GET['chess_ply']) ? $_GET['chess_ply'] : 0;
+        $flipped = isset($_GET['chess_flip'])
+            ? (bool) $_GET['chess_flip'] : false;
+        $gameView = Chess_GameView::make($game, $ply, $flipped);
+        return $gameView->render();
+    }
+
+    /**
+     * Returns a failure message.
+     *
+     * @param string $key A message key.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderFailure($key)
+    {
+        global $plugin_tx;
+
+        $args = func_get_args();
+        array_shift($args);
+        $message = vsprintf($plugin_tx['chess']['message_' . $key], $args);
+        if (function_exists('XH_message')) {
+            return XH_message('fail', $message);
+        } else {
+            return '<p class="cmsimplecore_warning">' . $message . '<p>';
+        }
+    }
+}
+
+/**
+ * The game views.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_GameView
+{
+    /**
+     * The game.
+     *
+     * @var Chess_Game
+     */
+    private $_game;
+
+    /**
+     * The current ply number.
+     *
+     * @var int
+     */
+    private $_ply;
+
+    /**
+     * The current position.
+     *
+     * @var array
+     */
+    private $_position;
+
+    /**
+     * Whether the board is flipped (i.e. the white side is at the top).
+     *
+     * @var bool
+     */
+    private $_flipped;
+
+    /**
+     * Makes a new game view.
+     *
+     * @param Chess_Game $game    A game.
+     * @param int        $ply     A ply number.
+     * @param bool       $flipped Whether the board is flipped.
+     *
+     * @return Chess_GameView
+     */
+    public static function make(Chess_Game $game, $ply = 0, $flipped = false)
+    {
+        return new self($game, $ply, $flipped);
+    }
+
+    /**
+     * Initializes a new instance.
+     *
+     * @param Chess_Game $game    A game.
+     * @param int        $ply     A ply number.
+     * @param bool       $flipped Whether the board is flipped.
+     *
+     * @return void
+     */
+    public function __construct(Chess_Game $game, $ply = 0, $flipped = false)
+    {
+        $this->_game = $game;
+        $this->_ply = (int) $ply;
+        $this->_position = $game->getPosition($this->_ply);
+        $this->_flipped = (bool) $flipped;
+    }
+
+    /**
+     * Renders the game view.
+     *
+     * @return string (X)HTML.
+     */
+    public function render()
+    {
+        return '<div class="chess_view">'
+            . $this->_renderControlPanel() . $this->_renderBoard()
+            . '</div>';
+    }
+
+    /**
+     * Renders the board.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderBoard()
+    {
+        $result = '<table class="chess_board">';
+        foreach ($this->_getRanks() as $rank) {
+            $result .= $this->_renderRank($rank);
+        }
+        $result .= '</table>';
+        return $result;
+    }
+
+    /**
+     * Returns an array of ranks.
+     *
+     * @return array
+     */
+    private function _getRanks()
+    {
+        $ranks = range(8, 1, -1);
+        if ($this->_flipped) {
+            $ranks = array_reverse($ranks);
+        }
+        return $ranks;
+    }
+
+    /**
+     * Renders a certain rank as table row.
+     *
+     * @param int $rank A rank.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderRank($rank)
+    {
+        $result = '<tr>';
+        foreach ($this->_getFiles() as $file) {
+            $result .= $this->_renderSquare($file, $rank);
+        }
+        $result .= '</tr>';
+        return $result;
+    }
+
+    /**
+     * Returns an array of files.
+     *
+     * @return array
+     */
+    private function _getFiles()
+    {
+        $files = array_map('chr', range(97, 104));
+        if ($this->_flipped) {
+            $files = array_reverse($files);
+        }
+        return $files;
+    }
+
+    /**
+     * Renders a certain square.
+     *
+     * @param string $file A file.
+     * @param string $rank A rank.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderSquare($file, $rank)
+    {
+        $square = "$file$rank";
+        $class = ($rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
+        $result = '<td class="' . $class . '">';
+        if (isset($this->_position[$square])) {
+            $result .= $this->_renderPiece($this->_position[$square]);
+        }
+        $result .= '</td>';
+        return $result;
+    }
+
+    /**
+     * Renders a piece.
+     *
+     * @param string $piece A piece.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The paths of system files and folders.
+     */
+    private function _renderPiece($piece)
+    {
+        global $pth;
+
+        $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
+        return tag('img src="' . $src . '"');
+    }
+
+    /**
+     * Renders the control panel.
+     *
+     * @return string (X)HTML.
+     *
+     * @global string The script name.
+     * @global string The selected URL.
+     */
+    private function _renderControlPanel()
+    {
+        global $sn, $su;
+
+        return '<form class="chess_control_panel" action="' . $sn
+            . '" method="get">'
+            . $this->_renderHiddenInput('selected', $su)
+            . $this->_renderHiddenInput('chess_ply', $this->_ply)
+            . $this->_renderHiddenInput('chess_flip', (int) $this->_flipped)
+            . $this->_renderButton('flip')
+            . $this->_renderButton('start') . $this->_renderButton('previous')
+            . $this->_renderButton('next') . $this->_renderButton('end')
+            . '</form>';
+    }
+
+    /**
+     * Renders a hidden input field.
+     *
+     * @param string $name  A name attribute value.
+     * @param string $value A value attribute value.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderHiddenInput($name, $value)
+    {
+        return tag(
+            'input type="hidden" name="' . $name . '" value="' . $value . '"'
+        );
+    }
+
+    /**
+     * Renders a button.
+     *
+     * @param string $which Which button to render.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The localization of the plugins.
+     */
+    private function _renderButton($which)
+    {
+        global $plugin_tx;
+
+        switch ($which) {
+        case 'flip':
+            $name = 'chess_flip';
+            $value = (int) !$this->_flipped;
+            $disabled = false;
+            break;
+        case 'start':
+            $name = 'chess_ply';
+            $value = 0;
+            $disabled = ($this->_ply == 0);
+            break;
+        case 'previous':
+            $name = 'chess_ply';
+            $value = max($this->_ply - 1, 0);
+            $disabled = ($this->_ply == 0);
+            break;
+        case 'next':
+            $name = 'chess_ply';
+            $value = min($this->_ply + 1, $this->_game->getPlyCount());
+            $disabled = ($this->_ply == $this->_game->getPlyCount());
+            break;
+        case 'end';
+            $name = 'chess_ply';
+            $value = $this->_game->getPlyCount();
+            $disabled = ($this->_ply == $this->_game->getPlyCount());
+            break;
+        }
+        return '<button name="' . $name . '" value="' . $value . '"'
+            . ($disabled ? ' disabled="disabled"' : '') . '>'
+            . $plugin_tx['chess']["label_$which"] . '</button>';
+    }
+}
+
+?>

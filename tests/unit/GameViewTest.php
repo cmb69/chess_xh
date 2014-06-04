@@ -1,0 +1,414 @@
+<?php
+
+/**
+ * Testing the game views.
+ *
+ * PHP version 5
+ *
+ * @category  Testing
+ * @package   Chess
+ * @author    Christoph M. Becker <cmbecker69@gmx.de>
+ * @copyright 2014 Christoph M. Becker <http://3-magi.net>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @version   SVN: $Id$
+ * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+
+require_once '../../cmsimple/functions.php';
+require_once './classes/Domain.php';
+require_once './classes/Presentation.php';
+
+/**
+ * Testing the game views.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class GameViewTest extends PHPUnit_Framework_TestCase
+{
+    /**
+     * The test subject.
+     *
+     * @var Chess_GameView
+     */
+    private $_subject;
+
+    /**
+     * The game.
+     *
+     * @var Chess_Game
+     */
+    private $_game;
+
+    /**
+     * Sets up the test fixture.
+     *
+     * @return void
+     *
+     * @global array  The paths of system files and folders.
+     * @global string The site name.
+     * @global string The selected URL.
+     * @global array  The localization of the plugins.
+     */
+    public function setUp()
+    {
+        global $pth, $sn, $su, $plugin_tx;
+
+        $pth = array(
+            'folder' => array('plugins' => './')
+        );
+        $sn = '/xh/';
+        $su = 'Chess';
+        $plugin_tx = array(
+            'chess' => array(
+                'label_flip' => 'Flip',
+                'label_start' => 'Start',
+                'label_next' => 'Next',
+                'label_previous' => 'Previous',
+                'label_end' => 'End'
+            )
+        );
+        $this->_game = new Chess_Game();
+        $this->_subject = new Chess_GameView($this->_game);
+    }
+
+    /**
+     * Tests the factory.
+     *
+     * @return void
+     */
+    public function testFactory()
+    {
+        $this->assertInstanceOf(
+            'Chess_GameView', Chess_GameView::make(new Chess_Game())
+        );
+    }
+
+    /**
+     * Tests that the view is rendered.
+     *
+     * @return void
+     */
+    public function testRendersView()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'div',
+                'attributes' => array('class' => 'chess_view')
+            )
+        );
+    }
+
+    /**
+     * Tests that a table with 8 rows is rendered.
+     *
+     * @return void
+     */
+    public function testRendersTableWith8Rows()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'table',
+                'attributes' => array('class' => 'chess_board'),
+                'children' => array(
+                    'only' => array('tag' => 'tr'),
+                    'count' => 8
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that a row with 8 cells is rendered.
+     *
+     * @return void
+     */
+    public function testRendersRowWith8Cells()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'tr',
+                'children' => array(
+                    'only' => array('tag' => 'td'),
+                    'count' => 8
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that a white queen is rendered.
+     *
+     * @return void
+     */
+    public function testRendersWhiteQueen()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'td',
+                'attributes' => array('class' => 'chess_light'),
+                'child' => array(
+                    'tag' => 'img',
+                    'attributes' => array(
+                        'src' => './chess/images/wq.png'
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that a black queen is rendered.
+     *
+     * @return void
+     */
+    public function testRendersBlackQueen()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'td',
+                'attributes' => array('class' => 'chess_dark'),
+                'child' => array(
+                    'tag' => 'img',
+                    'attributes' => array(
+                        'src' => './chess/images/bq.png'
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that a white king is rendered on a light square.
+     *
+     * @return void
+     */
+    public function testRendersWhiteKingOnLightSquare()
+    {
+        $game = new Chess_Game();
+        $game->move('e2', 'e4');
+        $game->move('e7', 'e5');
+        $game->move('e1', 'e2');
+        $subject = new Chess_GameView($game, 2);
+        $matcher = array(
+            'tag' => 'td',
+            'attributes' => array('class' => 'chess_dark'),
+            'child' => array(
+                'tag' => 'img',
+                'attributes' => array(
+                    'src' => './chess/images/wk.png'
+                )
+            )
+        );
+        $this->assertTag($matcher, $subject->render());
+    }
+
+    /**
+     * Tests the flipped chess board.
+     *
+     * @return void
+     */
+    public function testFlipped()
+    {
+        $this->_subject = new Chess_GameView(new Chess_Game(), null, true);
+        $this->_assertRenders(
+            array(
+                'tag' => 'table',
+                'attributes' => array('class' => 'chess_board'),
+                'children' => array(
+                    'only' => array('tag' => 'tr'),
+                    'count' => 8
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that a control panel is rendered.
+     *
+     * @return void
+     */
+    public function testRendersControlPanel()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'form',
+                'attributes' => array(
+                    'class' => 'chess_control_panel',
+                    'action' => '/xh/',
+                    'method' => 'get'
+                ),
+                'child' => array(
+                    'tag' => 'input',
+                    'attributes' => array(
+                        'type' => 'hidden',
+                        'name' => 'selected',
+                        'value' => 'Chess'
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that the flip input field is rendered.
+     *
+     * @return void
+     */
+    public function testRendersFlipInput()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'input',
+                'attributes' => array(
+                    'type' => 'hidden',
+                    'name' => 'chess_flip',
+                    'value' => '0'
+                ),
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the ply input field is rendered.
+     *
+     * @return void
+     */
+    public function testRendersPlyInput()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'input',
+                'attributes' => array(
+                    'type' => 'hidden',
+                    'name' => 'chess_ply',
+                    'value' => '0'
+                ),
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the flip button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersFlipButton()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_flip',
+                    'value' => '1'
+                ),
+                'content' => 'Flip',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the start button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersStartButton()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_ply',
+                    'value' => '0',
+                    'disabled' => 'disabled'
+                ),
+                'content' => 'Start',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the previous button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersPreviousButton()
+    {
+        $this->_assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_ply',
+                    'value' => '0',
+                    'disabled' => 'disabled'
+                ),
+                'content' => 'Previous',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the next button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersNextButton()
+    {
+        $this->_game->move('e2', 'e4');
+        $this->_assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_ply',
+                    'value' => '1'
+                ),
+                'content' => 'Next',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the end button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersEndButton()
+    {
+        $this->_game->move('e2', 'e4');
+        $this->_game->move('e7', 'e5');
+        $this->_assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_ply',
+                    'value' => '2'
+                ),
+                'content' => 'End',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Asserts that the rendering matches a matcher.
+     *
+     * @param array $matcher A matcher.
+     *
+     * @return void
+     */
+    private function _assertRenders($matcher)
+    {
+        $this->assertTag($matcher, $this->_subject->render());
+    }
+}
+
+?>
