@@ -58,23 +58,26 @@ class GameTest extends TestBase
     }
 
     /**
+     * Tests that getPosition() returns a Chess_Position.
+     *
+     * @return void
+     */
+    public function testgetPositionReturnsChessPosition()
+    {
+        $this->assertInstanceOf('Chess_Position', $this->_subject->getPosition(0));
+    }
+
+    /**
      * Tests the start position.
      *
      * @return void
      */
     public function testStartPosition()
     {
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'e2' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e7' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
+        $this->assertEquals(
+            'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+            $this->_subject->getPosition(0)
         );
-        $this->assertEquals($expected, $this->_subject->getPosition(0));
     }
 
     /**
@@ -94,18 +97,11 @@ class GameTest extends TestBase
      */
     public function testMoveChangesPosition()
     {
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'e4' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e7' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
-        );
         $this->_subject->move('e2', 'e4');
-        $this->assertEquals($expected, $this->_subject->getPosition(1));
+        $this->assertEquals(
+            'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
+            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
+        );
     }
 
     /**
@@ -115,152 +111,12 @@ class GameTest extends TestBase
      */
     public function testHistoricPosition()
     {
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'e4' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e7' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
-        );
         $this->_subject->move('e2', 'e4');
         $this->_subject->move('e7', 'e5');
-        $this->assertEquals($expected, $this->_subject->getPosition(1));
-    }
-
-    /**
-     * Tests a capture.
-     *
-     * @return void
-     */
-    public function testCapture()
-    {
-        $this->_subject->move('e2', 'e4');
-        $this->_subject->move('d7', 'd5');
-        $this->_subject->move('e4', 'd5');
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'd5' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp',
-            'e7' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
+        $this->assertEquals(
+            'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
+            (string) $this->_subject->getPosition(1)
         );
-        $this->assertEquals($expected, $this->_subject->getPosition(3));
-    }
-
-    /**
-     * Tests a king's side castling.
-     *
-     * @return void
-     */
-    public function testCastlingKingsSide()
-    {
-        $this->_subject->move('e2', 'e4');
-        $this->_subject->move('e7', 'e5');
-        $this->_subject->move('g1', 'f3');
-        $this->_subject->move('b8', 'c6');
-        $this->_subject->move('f1', 'c4');
-        $this->_subject->move('g8', 'f6');
-        $this->_subject->move('e1', 'g1');
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'g1' => 'wk', 'c4' => 'wb', 'f3' => 'wn', 'f1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'e4' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e5' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'c6' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'f6' => 'bn', 'h8' => 'br'
-        );
-        $this->assertEquals($expected, $this->_subject->getPosition(7));
-    }
-
-    /**
-     * Tests a queen's side castling.
-     *
-     * @return void
-     */
-    public function testCastlingQueensSide()
-    {
-        $this->_subject->move('d2', 'd4');
-        $this->_subject->move('d7', 'd5');
-        $this->_subject->move('b1', 'c3');
-        $this->_subject->move('b8', 'c6');
-        $this->_subject->move('c1', 'f4');
-        $this->_subject->move('c8', 'f5');
-        $this->_subject->move('d1', 'd2');
-        $this->_subject->move('d8', 'd7');
-        $this->_subject->move('e1', 'c1');
-        $expected = array(
-            'd1' => 'wr', 'c3' => 'wn', 'f4' => 'wb', 'd2' => 'wq',
-            'c1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd4' => 'wp',
-            'e2' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd5' => 'bp',
-            'e7' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'c6' => 'bn', 'f5' => 'bb', 'd7' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
-        );
-        $this->assertEquals($expected, $this->_subject->getPosition(9));
-    }
-
-    /**
-     * Tests an en passant.
-     *
-     * @return void
-     */
-    public function testEnPassant()
-    {
-        $this->_subject->move('e2', 'e4');
-        $this->_subject->move('a7', 'a5');
-        $this->_subject->move('e4', 'e5');
-        $this->_subject->move('f7', 'f5');
-        $this->_subject->move('e5', 'f6');
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'f6' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a5' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e7' => 'bp',               'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn', 'h8' => 'br'
-        );
-        $this->assertEquals($expected, $this->_subject->getPosition(5));
-    }
-
-    /**
-     * Tests a promotion.
-     *
-     * @return void
-     */
-    public function testPromotion()
-    {
-        $this->_subject->move('e2', 'e4');
-        $this->_subject->move('f7', 'f5');
-        $this->_subject->move('e4', 'f5');
-        $this->_subject->move('g7', 'g6');
-        $this->_subject->move('f5', 'g6');
-        $this->_subject->move('a7', 'a6');
-        $this->_subject->move('g6', 'g7');
-        $this->_subject->move('b7', 'b5');
-        $this->_subject->move('g7', 'h8', 'q');
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'h8' => 'wq', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a6' => 'bp', 'b5' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e7' => 'bp',                             'h7' => 'bp',
-            'a8' => 'br', 'b8' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'f8' => 'bb', 'g8' => 'bn'
-        );
-        $this->assertEquals($expected, $this->_subject->getPosition(9));
     }
 
     /**
@@ -271,17 +127,10 @@ class GameTest extends TestBase
     public function testLoad()
     {
         $this->_subject = Chess_Game::load('italian');
-        $expected = array(
-            'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
-            'e1' => 'wk', 'c4' => 'wb', 'f3' => 'wn', 'h1' => 'wr',
-            'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
-            'e4' => 'wp', 'f2' => 'wp', 'g2' => 'wp', 'h2' => 'wp',
-            'a7' => 'bp', 'b7' => 'bp', 'c7' => 'bp', 'd7' => 'bp',
-            'e5' => 'bp', 'f7' => 'bp', 'g7' => 'bp', 'h7' => 'bp',
-            'a8' => 'br', 'c6' => 'bn', 'c8' => 'bb', 'd8' => 'bq',
-            'e8' => 'bk', 'c5' => 'bb', 'g8' => 'bn', 'h8' => 'br'
+        $this->assertEquals(
+            'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
+            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
         );
-        $this->assertEquals($expected, $this->_subject->getPosition(6));
     }
 
     /**

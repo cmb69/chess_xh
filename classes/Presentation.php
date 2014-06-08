@@ -135,7 +135,7 @@ class Chess_GameView
     /**
      * The current position.
      *
-     * @var array
+     * @var Chess_Position
      */
     private $_position;
 
@@ -262,8 +262,8 @@ class Chess_GameView
         $square = "$file$rank";
         $class = ($rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
         $result = '<td class="' . $class . '">';
-        if (isset($this->_position[$square])) {
-            $result .= $this->_renderPiece($this->_position[$square]);
+        if ($this->_position->hasPieceOn($square)) {
+            $result .= $this->_renderPiece($this->_position->getPieceOn($square));
         }
         $result .= '</td>';
         return $result;
