@@ -27,3 +27,15 @@
     /*float: left;*/
     margin: 1em;
 }
+
+/*
+ * Back end.
+ */
+
+.chess_icon {
+    float: left;
+    margin-right: 1em;
+}
+.chess_license {
+    text-align: justify;
+}

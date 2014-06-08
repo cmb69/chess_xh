@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing the controllers.
+ * Testing the front end functionality of the controllers.
  *
  * PHP version 5
  *
@@ -19,7 +19,7 @@ require_once './classes/Presentation.php';
 require_once './tests/unit/TestBase.php';
 
 /**
- * Testing the controllers.
+ * Testing the front end functionality of the controllers.
  *
  * @category CMSimple_XH
  * @package  Chess
@@ -27,7 +27,7 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class ControllerTest extends TestBase
+class FrontEndControllerTest extends TestBase
 {
     private $_subject;
 
@@ -42,6 +42,7 @@ class ControllerTest extends TestBase
     {
         global $pth, $plugin_tx;
 
+        $this->defineConstant('XH_ADM', false);
         $pth = array(
             'folder' => array('plugins' => '../')
         );
@@ -51,6 +52,25 @@ class ControllerTest extends TestBase
             )
         );
         $this->_subject = new Chess_Controller();
+    }
+
+    /**
+     * Tests that the back end can't be accessed.
+     *
+     * @return void
+     *
+     * @global string Whether the plugin administration is requested.
+     */
+    public function testCantAccessBackEnd()
+    {
+        global $chess;
+
+        $chess = 'true';
+        $printPluginAdminMock = new PHPUnit_Extensions_MockFunction(
+            'print_plugin_admin', $this->_subject
+        );
+        $printPluginAdminMock->expects($this->never());
+        $this->_subject->dispatch();
     }
 
     /**

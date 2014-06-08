@@ -33,6 +33,11 @@ require_once $pth['folder']['plugin_classes'] . 'Domain.php';
 require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
 
 /**
+ * The plugin version.
+ */
+define('CHESS_VERSION', '@CHESS_VERSION@');
+
+/**
  * Renders a game view.
  *
  * @param string $basename A basename of a data file.
@@ -52,5 +57,6 @@ function chess($basename)
  * The plugin controller.
  */
 $_Chess_controller = new Chess_Controller();
+$_Chess_controller->dispatch();
 
 ?>
