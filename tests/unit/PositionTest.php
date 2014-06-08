@@ -39,6 +39,18 @@ class PositionTest extends TestBase
     }
 
     /**
+     * Tests makeFromFen.
+     *
+     * @return void
+     */
+    public function testMakeFromFen()
+    {
+        $fen = 'r1bq1rk1/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1';
+        $position = Chess_Position::makeFromFen($fen);
+        $this->assertEquals($fen, (string) $position);
+    }
+
+    /**
      * Tests the start position.
      *
      * @return void
@@ -167,6 +179,75 @@ class PositionTest extends TestBase
     public function testGetPieceOn()
     {
         $this->assertEquals('wk', $this->_subject->getPieceOn('e1'));
+    }
+
+    /**
+     * Test isAttacking().
+     *
+     * @param string $fen         A FEN like piece placement string.
+     * @param string $source      A square in AN.
+     * @param string $destination A square in AN.
+     *
+     * @return void
+     *
+     * @dataProvider isAttackingData
+     */
+    public function testIsAttacking($fen, $source, $destination)
+    {
+        $subject = Chess_Position::makeFromFen($fen);
+        $this->assertTrue($subject->isAttacking($source, $destination));
+    }
+
+    /**
+     * Returns test data for testIsAttacking().
+     *
+     * @return array
+     */
+    public function isAttackingData()
+    {
+        return array(
+            array('8/8/8/3p4/4P3/8/8/8', 'e4', 'd5'),
+            array('8/8/8/8/3pP3/4PN2/8/8', 'f3', 'd4'),
+            array('8/8/8/3p4/4P3/8/8/8', 'd5', 'e4'),
+            array('8/8/8/8/2n5/8/8/5B2', 'f1', 'c4'),
+            array('3r4/8/8/8/8/8/8/3R4', 'd1', 'd8'),
+            array('3q4/8/8/8/8/8/8/3Q4', 'd1', 'd8'),
+            array('8/8/8/3r4/4K3/8/8/8', 'e4', 'd5'),
+        );
+    }
+
+    /**
+     * Tests isAttacking().
+     *
+     * @param string $fen         A FEN like piece placement string.
+     * @param string $source      A square in AN.
+     * @param string $destination A square in AN.
+     *
+     * @return void
+     *
+     * @dataProvider isNotAttackingData
+     */
+    public function testIsNotAttacking($fen, $source, $destination)
+    {
+        $subject = Chess_Position::makeFromFen($fen);
+        $this->assertFalse($subject->isAttacking($source, $destination));
+    }
+
+    /**
+     * Returns test data for testIsNotAttacking().
+     *
+     * @return array
+     */
+    public function isNotAttackingData()
+    {
+        return array(
+            array('8/8/8/3P4/4P3/8/8/8', 'e4', 'd5'),
+            array('8/8/8/4p3/4P3/8/8/8', 'e4', 'e5'),
+            array('8/8/8/8/2n5/3P4/8/5B2', 'f1', 'c4'),
+            array('3r4/8/8/3P4/8/8/8/3R4', 'd1', 'd8'),
+            array('3q4/8/8/3p4/8/8/8/3Q4', 'd1', 'd8'),
+            array('8/8/3n4/8/4K3/8/8/8', 'e4', 'd6'),
+        );
     }
 
     /**

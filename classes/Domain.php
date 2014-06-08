@@ -129,6 +129,35 @@ class Chess_Position
     private $_pieces;
 
     /**
+     * Creates a new position from a FEN string.
+     *
+     * @param string $fen A FEN string.
+     *
+     * @return Chess_Position
+     */
+    public static function makeFromFen($fen)
+    {
+        $result = new self();
+        $result->_pieces = array();
+        $rank = 8;
+        $file = 'a';
+        for ($i = 0; $i < strlen($fen); ++$i) {
+            $char = $fen[$i];
+            if ($char == '/') {
+                --$rank;
+                $file = 'a';
+            } elseif ($char >= '1' && $char <= '8') {
+                $file = chr(ord($file) + $char);
+            } else {
+                $color = ($char >= 'A' && $char <= 'Z') ? 'w' : 'b';
+                $result->_pieces[$file . $rank] = $color . strtolower($char);
+                ++$file;
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Initializes a new instance.
      *
      * @return void
@@ -153,6 +182,8 @@ class Chess_Position
      * @param string $square A square.
      *
      * @return bool
+     *
+     * @todo Rename to isOccupied?
      */
     public function hasPieceOn($square)
     {
@@ -180,9 +211,9 @@ class Chess_Position
      */
     public function applyMove($move)
     {
-        if ($this->_isCastling($move)) {
+        if ($this->isCastling($move)) {
             $this->_moveRookForCastling($move);
-        } elseif ($this->_isEnPassant($move)) {
+        } elseif ($this->isEnPassant($move)) {
             $this->_removeEnPassantCapturedPawn($move);
         }
         $destination = $move->getDestination();
@@ -195,13 +226,271 @@ class Chess_Position
     }
 
     /**
+     * Returns whether a king can be moved.
+     *
+     * @param bool $isWhite Whether to check the white or black king.
+     *
+     * @return bool
+     */
+    public function canMoveKing($isWhite)
+    {
+        $piece = $isWhite ? 'wk' : 'bk';
+        $kingSquare = array_search($piece, $this->_pieces);
+        $destinations = $this->_getCapturingDestinations($kingSquare);
+        foreach ($destinations as $destination) {
+            $position = clone $this;
+            $position->applyMove(new Chess_Move($kingSquare, $destination));
+            if (!$position->isUnderAttack($destination)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns whether a square is under attack.
+     *
+     * @param string $square A square in AN.
+     *
+     * @return bool
+     */
+    public function isUnderAttack($square)
+    {
+        foreach (array_keys($this->_pieces) as $attacker) {
+            if ($this->isAttacking($attacker, $square)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns whether a piece is attacking a square.
+     *
+     * @param string $source      A square in AN.
+     * @param string $destination A square in AN.
+     *
+     * @return bool
+     */
+    public function isAttacking($source, $destination)
+    {
+        if ($this->_pieces[$source][0] == $this->_pieces[$destination][0]) {
+            return false;
+        }
+        return in_array($destination, $this->_getCapturingDestinations($source));
+    }
+
+    /**
+     * Returns the allowed capturing destinations of a piece.
+     *
+     * @param string $square A square in AN.
+     *
+     * @return array
+     */
+    private function _getCapturingDestinations($square)
+    {
+        $result = array();
+        switch ($this->_pieces[$square][1]) {
+        case 'p':
+            if ($this->_pieces[$square][0] == 'w') {
+                $directions = array('nw', 'ne');
+            } else {
+                $directions = array('sw', 'se');
+            }
+            $result = $this->_getNeighborSquares($square, $directions);
+            break;
+        case 'n':
+            $result = $this->_getKnightsSquares($square);
+            break;
+        case 'b':
+            $directions = array('ne', 'se', 'sw', 'nw');
+            // fall through
+        case 'r':
+            $directions = array('n', 'e', 's', 'w');
+            // fall through
+        case 'q':
+            $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
+            foreach ($directions as $direction) {
+                $result = array_merge(
+                    $result, $this->_getSquaresTo($direction, $square)
+                );
+            }
+            break;
+        case 'k':
+            $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
+            foreach ($directions as $direction) {
+                $neighbor = $this->_getNeighborSquare($square, $direction);
+                if ($neighbor) {
+                    $result []= $neighbor;
+                }
+            }
+            break;
+        }
+        return $result;
+    }
+
+    /**
+     * Returns an array of allowed knight's squares.
+     *
+     * @param string $square A square in AN.
+     *
+     * @return array
+     */
+    private function _getKnightsSquares($square)
+    {
+        $result = array();
+        foreach (array('n', 'e', 's', 'w') as $direction) {
+            $square1 = $this->_getNeighborSquare($square, $direction);
+            if ($square1) {
+                switch ($direction) {
+                case 'n';
+                    $result = array_merge(
+                        $result,
+                        $this->_getNeighborSquares($square1, array('nw', 'ne'))
+                    );
+                    break;
+                case 'e':
+                    $result = array_merge(
+                        $result,
+                        $this->_getNeighborSquares($square1, array('ne', 'se'))
+                    );
+                    break;
+                case 's':
+                    $result = array_merge(
+                        $result,
+                        $this->_getNeighborSquares($square1, array('se', 'sw'))
+                    );
+                    break;
+                case 'w':
+                    $result = array_merge(
+                        $result,
+                        $this->_getNeighborSquares($square1, array('sw', 'nw'))
+                    );
+                    break;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the squares in a certain direction.
+     *
+     * Use only for queen, rook and bishop.
+     *
+     * @param string $direction A direction, e.g. 'n' or 'se'.
+     * @param string $square    A square in AN.
+     *
+     * @return array
+     */
+    private function _getSquaresTo($direction, $square)
+    {
+        $result = array();
+        while ($square = $this->_getNeighborSquare($square, $direction)) {
+            $result []= $square;
+            if ($this->hasPieceOn($square)) {
+                break;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the neighboring squares.
+     *
+     * @param string $square     A square in AN.
+     * @param array  $directions An array of directions.
+     *
+     * @return array
+     */
+    private function _getNeighborSquares($square, $directions)
+    {
+        $result = array();
+        foreach ($directions as $direction) {
+            $neighbor = $this->_getNeighborSquare($square, $direction);
+            if ($neighbor) {
+                $result []= $neighbor;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Returns a neighboring square.
+     *
+     * @param string $square    A square in AN.
+     * @param string $direction A direction.
+     *
+     * @return string
+     */
+    private function _getNeighborSquare($square, $direction)
+    {
+        $file = $square[0]; $rank = $square[1];
+        switch ($direction) {
+        case 'n':
+            ++$rank;
+            break;
+        case 'ne':
+            ++$rank; ++$file;
+            break;
+        case 'e':
+            ++$file;
+            break;
+        case 'se':
+            --$rank; ++$file;
+            break;
+        case 's':
+            --$rank;
+            break;
+        case 'sw':
+            --$rank; $file = chr(ord($file) - 1);
+            break;
+        case 'w':
+            $file = chr(ord($file) - 1);
+            break;
+        case 'nw':
+            ++$rank; $file = chr(ord($file) - 1);
+            break;
+        }
+        $square = $file . $rank;
+        return $this->_isValidSquare($square) ? $square : false;
+    }
+
+    /**
+     * Returns whether a square is valid (i.e. exists on the board).
+     *
+     * @param string $square A square in AN.
+     *
+     * @return bool
+     */
+    private function _isValidSquare($square)
+    {
+        return $square[0] >= 'a' && $square[0] <= 'h'
+            && $square[1] >= '1' && $square[1] <= '8';
+    }
+
+    /**
+     * Returns whether a king is checked.
+     *
+     * @param bool $isWhite Whether the white (vs. black) king is relevant.
+     *
+     * @return bool
+     */
+    public function isChecked($isWhite)
+    {
+        $king = $isWhite ? 'wk' : 'bk';
+        return ($kingSquare = array_search($king, $this->_pieces))
+            && $this->isUnderAttack($kingSquare);
+    }
+
+    /**
      * Returns whether a move is castling.
      *
      * @param Chess_Move $move A move.
      *
      * @return bool
      */
-    private function _isCastling($move)
+    public function isCastling($move)
     {
         return $this->_pieces[$move->getSource()][1] == 'k'
             && $move->getFileDistance() == 2;
@@ -234,7 +523,7 @@ class Chess_Position
      *
      * @return void
      */
-    private function _isEnPassant($move)
+    public function isEnPassant($move)
     {
         return $this->_pieces[$move->getSource()][1] == 'p'
             && $move->getDestinationFile() != $move->getSourceFile()
@@ -432,6 +721,73 @@ class Chess_Move
     public function getPromotion()
     {
         return $this->_promotion;
+    }
+
+    /**
+     * Returns the SAN of the move.
+     *
+     * @param Chess_Position $position A position.
+     *
+     * @return string
+     */
+    public function getSan(Chess_Position $position)
+    {
+        if ($position->isCastling($this)) {
+            if ($this->getDestinationFile() == 'g') {
+                return 'O-O';
+            } else {
+                return 'O-O-O';
+            }
+        }
+
+        $result = '';
+
+        $piece = $position->getPieceOn($this->_source);
+        $piece = strtoupper($piece[1]);
+        if ($piece == 'P') {
+            $piece = '';
+        }
+        $result .= $piece;
+
+        if ($this->_isCapture($position)) {
+            if ($piece == '') {
+                $result = $this->getSourceFile();
+            }
+            $result .= 'x';
+        }
+
+        $result .= $this->_destination;
+
+        if (isset($this->_promotion)) {
+            $result .= '=' . strtoupper($this->_promotion);
+        }
+
+        $piece = $position->getPieceOn($this->_source);
+        $isWhite = $piece[0] != 'w';
+        $position1 = clone $position;
+        $position1->applyMove($this);
+        if ($position1->isChecked($isWhite)) {
+            if ($position1->canMoveKing($isWhite)) {
+                $result .= '+';
+            } else {
+                $result .= '#';
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns whether the move is capturing.
+     *
+     * @param Chess_Position $position A position.
+     *
+     * @return bool
+     */
+    private function _isCapture(Chess_Position $position)
+    {
+        return $position->hasPieceOn($this->_destination)
+            || $position->isEnPassant($this);
     }
 }
 
