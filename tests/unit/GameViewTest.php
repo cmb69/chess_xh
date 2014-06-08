@@ -17,6 +17,7 @@
 require_once '../../cmsimple/functions.php';
 require_once './classes/Domain.php';
 require_once './classes/Presentation.php';
+require_once './tests/unit/TestBase.php';
 
 /**
  * Testing the game views.
@@ -27,14 +28,14 @@ require_once './classes/Presentation.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class GameViewTest extends PHPUnit_Framework_TestCase
+class GameViewTest extends TestBase
 {
     /**
      * The test subject.
      *
      * @var Chess_GameView
      */
-    private $_subject;
+    protected $subject;
 
     /**
      * The game.
@@ -72,7 +73,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->_game = new Chess_Game();
-        $this->_subject = new Chess_GameView($this->_game);
+        $this->subject = new Chess_GameView($this->_game);
     }
 
     /**
@@ -94,7 +95,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersView()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'div',
                 'attributes' => array('class' => 'chess_view')
@@ -109,7 +110,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersTableWith8Rows()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'table',
                 'attributes' => array('class' => 'chess_board'),
@@ -128,7 +129,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersRowWith8Cells()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'tr',
                 'children' => array(
@@ -146,7 +147,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersWhiteQueen()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'td',
                 'attributes' => array('class' => 'chess_light'),
@@ -167,7 +168,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersBlackQueen()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'td',
                 'attributes' => array('class' => 'chess_dark'),
@@ -213,8 +214,8 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testFlipped()
     {
-        $this->_subject = new Chess_GameView(new Chess_Game(), null, true);
-        $this->_assertRenders(
+        $this->subject = new Chess_GameView(new Chess_Game(), null, true);
+        $this->assertRenders(
             array(
                 'tag' => 'table',
                 'attributes' => array('class' => 'chess_board'),
@@ -233,7 +234,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersControlPanel()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'form',
                 'attributes' => array(
@@ -260,7 +261,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersFlipInput()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'input',
                 'attributes' => array(
@@ -280,7 +281,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersPlyInput()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'input',
                 'attributes' => array(
@@ -300,7 +301,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersFlipButton()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array(
@@ -320,7 +321,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersStartButton()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array(
@@ -341,7 +342,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersPreviousButton()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array(
@@ -363,7 +364,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
     public function testRendersNextButton()
     {
         $this->_game->move('e2', 'e4');
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array(
@@ -385,7 +386,7 @@ class GameViewTest extends PHPUnit_Framework_TestCase
     {
         $this->_game->move('e2', 'e4');
         $this->_game->move('e7', 'e5');
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array(
@@ -396,18 +397,6 @@ class GameViewTest extends PHPUnit_Framework_TestCase
                 'parent' => array('tag' => 'form')
             )
         );
-    }
-
-    /**
-     * Asserts that the rendering matches a matcher.
-     *
-     * @param array $matcher A matcher.
-     *
-     * @return void
-     */
-    private function _assertRenders($matcher)
-    {
-        $this->assertTag($matcher, $this->_subject->render());
     }
 }
 

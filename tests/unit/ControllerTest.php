@@ -16,6 +16,7 @@
 
 require_once './vendor/autoload.php';
 require_once './classes/Presentation.php';
+require_once './tests/unit/TestBase.php';
 
 /**
  * Testing the controllers.
@@ -26,7 +27,7 @@ require_once './classes/Presentation.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class ControllerTest extends PHPUnit_Framework_TestCase
+class ControllerTest extends TestBase
 {
     private $_subject;
 

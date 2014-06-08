@@ -16,6 +16,7 @@
 
 require_once './vendor/autoload.php';
 require_once './classes/Domain.php';
+require_once './tests/unit/TestBase.php';
 
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -30,7 +31,7 @@ use org\bovigo\vfs\vfsStream;
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class GameTest extends PHPUnit_Framework_TestCase
+class GameTest extends TestBase
 {
     /**
      * The test subject.
