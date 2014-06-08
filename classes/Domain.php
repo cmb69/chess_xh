@@ -122,49 +122,172 @@ class Chess_Game
      */
     public function move($from, $to, $promotion = null)
     {
-        $this->_moves[] = compact('from', 'to', 'promotion');
+        $this->_moves[] = new Chess_Move($from, $to, $promotion);
     }
 
     /**
      * Makes a move and changes the position accordingly.
      *
-     * @param array &$position A position.
-     * @param array $move      A move record.
+     * @param array      &$position A position.
+     * @param Chess_Move $move      A move.
      *
      * @return void
      */
     private function _doMove(&$position, $move)
     {
-        extract($move);
-        switch ($position[$from][1]) {
+        switch ($position[$move->getSource()][1]) {
         case 'k':
-            if (abs(ord($from[0]) - ord($to[0])) == 2) {
+            if ($move->getFileDistance() == 2) {
                 // castling
-                if ($to[0] == 'g') {
+                if ($move->getDestinationFile() == 'g') {
                     // king's side
-                    $rookFrom = "h$from[1]";
-                    $rookTo = "f$from[1]";
+                    $rookFrom = 'h' . $move->getSourceRank();
+                    $rookTo = 'f' . $move->getSourceRank();
                 } else {
                     // queen's side
-                    $rookFrom = "a$from[1]";
-                    $rookTo = "d$from[1]";
+                    $rookFrom = 'a' . $move->getSourceRank();
+                    $rookTo = 'd' . $move->getSourceRank();
                 }
                 $position[$rookTo] = $position[$rookFrom];
                 unset($position[$rookFrom]);
             }
             break;
         case 'p':
-            if ($to[0] != $from[0] && !isset($position[$to])) {
+            if ($move->getDestinationFile() != $move->getSourceFile()
+                && !isset($position[$move->getDestination()])
+            ) {
                 // en passant
-                unset($position["$to[0]$from[1]"]);
+                unset(
+                    $position[$move->getDestinationFile() . $move->getSourceRank()]
+                );
             }
             break;
         }
-        $position[$to] = $position[$from];
-        if (isset($promotion)) {
-            $position[$to] = $position[$to][0] . $promotion;
+        $position[$move->getDestination()] = $position[$move->getSource()];
+        if ($move->getPromotion() !== null) {
+            $position[$move->getDestination()]
+                = $position[$move->getDestination()][0] . $move->getPromotion();
         }
-        unset($position[$from]);
+        unset($position[$move->getSource()]);
+    }
+}
+
+/**
+ * The moves.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_Move
+{
+    /**
+     * The source square.
+     *
+     * @var string
+     */
+    private $_source;
+
+    /**
+     * The destination square.
+     *
+     * @var string
+     */
+    private $_destination;
+
+    /**
+     * The piece to promote to.
+     *
+     * @var string
+     */
+    private $_promotion;
+
+    /**
+     * Initializes a new instance.
+     *
+     * @param string $source      The source square.
+     * @param string $destination The destination square.
+     * @param string $promotion   The piece to promote to.
+     *
+     * @return void
+     */
+    public function __construct($source, $destination, $promotion = null)
+    {
+        $this->_source = (string) $source;
+        $this->_destination = (string) $destination;
+        $this->_promotion = $promotion;
+    }
+
+    /**
+     * Returns the source square.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->_source;
+    }
+
+    /**
+     * Returns the source file.
+     *
+     * @return string
+     */
+    public function getSourceFile()
+    {
+        return $this->_source[0];
+    }
+
+    /**
+     * Returns the source rank.
+     *
+     * @return string
+     */
+    public function getSourceRank()
+    {
+        return $this->_source[1];
+    }
+
+    /**
+     * Returns the destination square.
+     *
+     * @return string
+     */
+    public function getDestination()
+    {
+        return $this->_destination;
+    }
+
+    /**
+     * Returns the destination file.
+     *
+     * @return string
+     */
+    public function getDestinationFile()
+    {
+        return $this->_destination[0];
+    }
+
+    /**
+     * Returns the file distance.
+     *
+     * @return int
+     */
+    public function getFileDistance()
+    {
+        return abs(ord($this->_source[0]) - ord($this->_destination[0]));
+    }
+
+    /**
+     * Returns the piece to promote to.
+     *
+     * @return string
+     */
+    public function getPromotion()
+    {
+        return $this->_promotion;
     }
 }
 
