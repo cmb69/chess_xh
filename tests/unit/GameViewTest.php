@@ -211,6 +211,21 @@ class GameViewTest extends TestBase
     }
 
     /**
+     * Tests that an empty square is renderd.
+     *
+     * @return void
+     */
+    public function testRendersEmptySquare()
+    {
+        $this->assertRenders(
+            array(
+                'tag' => 'td',
+                'content' => "\xC2\xA0"
+            )
+        );
+    }
+
+    /**
      * Tests the flipped chess board.
      *
      * @return void

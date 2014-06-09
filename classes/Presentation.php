@@ -316,6 +316,8 @@ class Chess_GameView
         $result = '<td class="' . $class . '">';
         if ($this->_position->hasPieceOn($square)) {
             $result .= $this->_renderPiece($this->_position->getPieceOn($square));
+        } else {
+            $result .= '&nbsp;';
         }
         $result .= '</td>';
         return $result;
