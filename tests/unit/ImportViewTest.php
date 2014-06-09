@@ -58,7 +58,10 @@ class ImportViewTest extends TestBase
 
         $sn = '/xh/';
         $plugin_tx = array(
-            'chess' => array('label_import' => 'Import')
+            'chess' => array(
+                'label_import' => 'Import',
+                'menu_main' => 'Import'
+            )
         );
         $this->_importer = $this->getMockBuilder('Chess_PgnImporter')
             ->disableOriginalConstructor()->getMock();
@@ -107,7 +110,8 @@ class ImportViewTest extends TestBase
                 'attributes' => array(
                     'action' => '/xh/?chess',
                     'method' => 'post'
-                )
+                ),
+                'class' => 'chess_import_form'
             )
         );
     }

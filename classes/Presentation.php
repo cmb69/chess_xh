@@ -215,7 +215,7 @@ class Chess_GameView
     {
         $this->_renderScript();
         return '<div class="chess_view">'
-            . $this->_renderControlPanel() . $this->_renderBoard()
+            . $this->_renderBoard() . $this->_renderControlPanel()
             . '</div>';
     }
 
@@ -631,7 +631,7 @@ class Chess_ImportView
     {
         global $plugin_tx;
 
-        return '<h1>Chess &ndash; ' . $plugin_tx['chess']['label_import'] . '</h1>'
+        return '<h1>Chess &ndash; ' . $plugin_tx['chess']['menu_main'] . '</h1>'
             . $this->_renderForm();
     }
 
@@ -646,7 +646,8 @@ class Chess_ImportView
     {
         global $sn;
 
-        return '<form action="' . $sn . '?chess" method="post">'
+        return '<form class="chess_import_form" action="' . $sn
+            . '?chess" method="post">'
             . tag('input type="hidden" name="admin" value="plugin_main"')
             . tag('input type="hidden" name="action" value="import"')
             . $this->_renderList()
@@ -657,21 +658,35 @@ class Chess_ImportView
      * Renders the list.
      *
      * @return string (X)HTML.
-     *
-     * @global array The localization of the plugins.
      */
     private function _renderList()
     {
-        global $plugin_tx;
-
         $result = '<ul>';
         foreach ($this->_importer->findAll() as $name) {
-            $result .= '<li><button name="chess_game" value="' . $name . '">'
-                . $plugin_tx['chess']['label_import'] . '</button>' . $name
-                . '</li>';
+            $result .= $this->_renderListItem($name);
         }
         $result .= '</ul>';
         return $result;
+    }
+
+    /**
+     * Renders a list item.
+     *
+     * @param string $name A basename.
+     *
+     * @return string (X)HTML
+     *
+     * @global array The localization of the plugins.
+     */
+    private function _renderListItem($name)
+    {
+        global $plugin_tx;
+
+        return '<li>'
+            . $name
+            . '<button name="chess_game" value="' . $name . '">'
+            . $plugin_tx['chess']['label_import'] . '</button>'
+            . '</li>';
     }
 }
 

@@ -2,13 +2,11 @@
  * Front end.
  */
 
-.chess_view {
-    overflow: hidden; /* establish block formatting context */
-}
+.chess_view {}
 
 .chess_board {
-    /*float: left;*/
     border-collapse: collapse;
+    margin: 1em auto;
 }
 .chess_board td {
     width: 55px;
@@ -24,13 +22,17 @@
 }
 
 .chess_control_panel {
-    /*float: left;*/
-    margin: 1em;
+    display: table;
+    margin: 1em auto;
 }
 
 /*
  * Back end.
  */
+
+.chess_import_form li button {
+    margin-left: 1em;
+}
 
 .chess_icon {
     float: left;
