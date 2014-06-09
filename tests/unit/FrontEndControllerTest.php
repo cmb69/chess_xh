@@ -151,6 +151,8 @@ class FrontEndControllerTest extends TestBase
     public function testChessAjax()
     {
         $_GET['chess_ajax'] = '1';
+        $header = new PHPUnit_Extensions_MockFunction('header', $this->_subject);
+        $header->expects($this->once())->with($this->stringContains('Content-Type'));
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
