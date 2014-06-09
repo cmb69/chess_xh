@@ -29,7 +29,26 @@ require_once './tests/unit/TestBase.php';
  */
 class FrontEndControllerTest extends TestBase
 {
+    /**
+     * The test subject.
+     *
+     * @var Chess_Controller
+     */
     private $_subject;
+
+    /**
+     * The game view.
+     *
+     * @var Chess_GameView
+     */
+    private $_gameView;
+
+    /**
+     * The game view factory mock.
+     *
+     * @var object
+     */
+    private $_gameViewFactory;
 
     /**
      * Sets up the test fixture.
@@ -52,6 +71,11 @@ class FrontEndControllerTest extends TestBase
             )
         );
         $this->_subject = new Chess_Controller();
+        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+            ->disableOriginalConstructor()->getMock();
+        $this->_gameViewFactory = new PHPUnit_Extensions_MockStaticMethod(
+            'Chess_GameView::make', $this->_subject
+        );
     }
 
     /**
@@ -80,15 +104,10 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChess()
     {
-        $gameViewMock = $this->getMockBuilder('Chess_GameView')
-            ->disableOriginalConstructor()->getMock();
-        $gameViewMock->expects($this->once())->method('render')
+        $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $gameViewMockFactory = new PHPUnit_Extensions_MockStaticMethod(
-            'Chess_GameView::make', $this->_subject
-        );
-        $gameViewMockFactory->expects($this->once())
-            ->will($this->returnValue($gameViewMock));
+        $this->_gameViewFactory->expects($this->once())
+            ->will($this->returnValue($this->_gameView));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
@@ -122,6 +141,24 @@ class FrontEndControllerTest extends TestBase
         );
         $this->assertTag($matcher, $this->_subject->chess('foo'));
         runkit_function_rename('XH_message_ORIG', 'XH_message');
+    }
+
+    /**
+     * Tests the chess() for Ajax.
+     *
+     * @return void
+     */
+    public function testChessAjax()
+    {
+        $_GET['chess_ajax'] = '1';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->will($this->returnValue($this->_gameView));
+        $exit = new PHPUnit_Extensions_MockFunction('XH_exit', $this->_subject);
+        $exit->expects($this->once());
+        $this->expectOutputString('foo');
+        $this->_subject->chess('italian');
     }
 }
 

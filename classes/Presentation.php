@@ -92,6 +92,8 @@ class Chess_Controller
      * @param string $basename A basename of a data file.
      *
      * @return string (X)HTML.
+     *
+     * @todo Add fallback for XH_exit().
      */
     public function chess($basename)
     {
@@ -103,7 +105,13 @@ class Chess_Controller
         $flipped = isset($_GET['chess_flip'])
             ? (bool) $_GET['chess_flip'] : false;
         $gameView = Chess_GameView::make($game, $ply, $flipped);
-        return $gameView->render();
+        if (isset($_GET['chess_ajax'])) {
+            header('Content-Type:text/html; charset=UTF-8');
+            echo $gameView->render();
+            XH_exit();
+        } else {
+            return $gameView->render();
+        }
     }
 
     /**
@@ -205,9 +213,32 @@ class Chess_GameView
      */
     public function render()
     {
+        $this->_renderScript();
         return '<div class="chess_view">'
             . $this->_renderControlPanel() . $this->_renderBoard()
             . '</div>';
+    }
+
+    /**
+     * Renders the script element.
+     *
+     * @return void
+     *
+     * @global array  The paths of system files and folders.
+     * @global string The (X)HTML to insert at the bottom of the body.
+     * @global string The (X)HTML to insert in the head.
+     */
+    private function _renderScript()
+    {
+        global $pth, $bjs, $hjs;
+
+        $script = '<script type="text/javascript" src="'
+            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
+        if (isset($bjs)) {
+            $bjs .= $script;
+        } else {
+            $hjs .= $script;
+        }
     }
 
     /**

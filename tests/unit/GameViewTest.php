@@ -398,6 +398,31 @@ class GameViewTest extends TestBase
             )
         );
     }
+
+    /**
+     * Tests that the script is rendered.
+     *
+     * @return void
+     *
+     * @global string The (X)HTML to insert at the bottom of the body.
+     */
+    public function testRendersScript()
+    {
+        global $bjs;
+
+        $bjs = '';
+        $this->subject->render();
+        $this->assertTag(
+            array(
+                'tag' => 'script',
+                'attributes' => array(
+                    'type' => 'text/javascript',
+                    'src' => './chess/chess.js'
+                )
+            ),
+            $bjs
+        );
+    }
 }
 
 ?>
