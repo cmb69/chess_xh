@@ -168,7 +168,7 @@ class Chess_Game
         $result = '';
         for ($i = 0; $i < $this->getPlyCount(); ++$i) {
             if ($i % 2 == 0) {
-                $result .= ($i + 1) . '. ';
+                $result .= (int) ($i / 2) + 1 . '. ';
             }
             $result .= $this->_moves[$i]->getSan($this->getPosition($i)) . ' ';
         }

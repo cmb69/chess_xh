@@ -177,7 +177,7 @@ class GameTest extends TestBase
 [Black "?"]
 [Result "*"]
 
-1. e4 e5 3. Nf3 Nc6 5. Bc4 Bc5 *
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *
 EOT;
         $this->assertEquals($expected, (string) Chess_Game::load('italian'));
     }
