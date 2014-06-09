@@ -54,15 +54,36 @@ class Chess_Controller
     {
         global $admin, $action, $o;
 
-        $o .= print_plugin_admin('off');
+        $o .= print_plugin_admin('on');
         switch ($admin) {
         case '':
             $infoView = Chess_InfoView::make();
             $o .= $infoView->render();
             break;
+        case 'plugin_main':
+            $this->_handleImport();
+            break;
         default:
             $o .= plugin_admin_common($action, $admin, 'chess');
         }
+    }
+
+    /**
+     * Creates and executes an import command.
+     *
+     * @return void
+     *
+     * @global array  The paths of system files and folders.
+     */
+    private function _handleImport()
+    {
+        global $pth;
+
+        $importer = new Chess_PgnImporter(
+            $pth['folder']['plugins'] . 'chess/data/'
+        );
+        $importCommand = Chess_ImportCommand::make($importer);
+        $importCommand->execute();
     }
 
     /**
@@ -454,6 +475,166 @@ General Public License along with this program. If not, see <a
 href="http://www.gnu.org/licenses/" target="_blank">http://www.gnu.org/licenses/</a>.
 </p>
 EOT;
+    }
+}
+
+/**
+ * The import commands.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_ImportCommand
+{
+    /**
+     * The PGN importer.
+     *
+     * @var Chess_PgnImporter.
+     */
+    private $_importer;
+
+    /**
+     * Returns a new self instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return Chess_ImportCommand
+     */
+    public static function make(Chess_PgnImporter $importer)
+    {
+        return new self($importer);
+    }
+
+    /**
+     * Initializes a new instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return void
+     */
+    public function __construct(Chess_PgnImporter $importer)
+    {
+        $this->_importer = $importer;
+    }
+
+    /**
+     * Executes the command.
+     *
+     * @return void
+     *
+     * @global string The value of the <var>action</var> GP parameter.
+     * @global string The HTML of the contents area.
+     */
+    public function execute()
+    {
+        global $action, $o;
+
+        if ($action == 'import') {
+            $game = stsl($_POST['chess_game']);
+            $this->_importer->import($game);
+        }
+        $view = Chess_ImportView::make($this->_importer);
+        $o .= $view->render();
+    }
+}
+
+/**
+ * The import views.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_ImportView
+{
+    /**
+     * The PGN importer.
+     *
+     * @var Chess_PgnImporter
+     */
+    private $_importer;
+
+    /**
+     * Returns a new self instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return Chess_ImportView
+     */
+    public static function make(Chess_PgnImporter $importer)
+    {
+        return new self($importer);
+    }
+
+    /**
+     * Initializes a new instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return void
+     */
+    public function __construct(Chess_PgnImporter $importer)
+    {
+        $this->_importer = $importer;
+    }
+
+    /**
+     * Renders the view.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The localization of the plugins.
+     */
+    public function render()
+    {
+        global $plugin_tx;
+
+        return '<h1>Chess &ndash; ' . $plugin_tx['chess']['label_import'] . '</h1>'
+            . $this->_renderForm();
+    }
+
+    /**
+     * Renders the form.
+     *
+     * @return string (X)HTML.
+     *
+     * @global string The script name.
+     */
+    private function _renderForm()
+    {
+        global $sn;
+
+        return '<form action="' . $sn . '?chess" method="post">'
+            . tag('input type="hidden" name="admin" value="plugin_main"')
+            . tag('input type="hidden" name="action" value="import"')
+            . $this->_renderList()
+            . '</form>';
+    }
+
+    /**
+     * Renders the list.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The localization of the plugins.
+     */
+    private function _renderList()
+    {
+        global $plugin_tx;
+
+        $result = '<ul>';
+        foreach ($this->_importer->findAll() as $name) {
+            $result .= '<li><button name="chess_game" value="' . $name . '">'
+                . $plugin_tx['chess']['label_import'] . '</button>' . $name
+                . '</li>';
+        }
+        $result .= '</ul>';
+        return $result;
     }
 }
 

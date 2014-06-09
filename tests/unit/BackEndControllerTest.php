@@ -5,7 +5,7 @@
  *
  * PHP version 5
  *
- * @category  CMSimple_XH
+ * @category  Testing
  * @package   Chess
  * @author    Christoph M. Becker <cmbecker69@gmx.de>
  * @copyright 2014 Christoph M. Becker <http://3-magi.net>
@@ -17,13 +17,14 @@
 require_once './vendor/autoload.php';
 require_once '../../cmsimple/functions.php';
 require_once '../../cmsimple/adminfuncs.php';
+require_once './classes/Service.php';
 require_once './classes/Presentation.php';
 require_once './tests/unit/TestBase.php';
 
 /**
  * Testing the back end functionality of the controllers.
  *
- * @category CMSimple_XH
+ * @category Testing
  * @package  Chess
  * @author   Christoph M. Becker <cmbecker69@gmx.de>
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
@@ -77,6 +78,29 @@ class BackEndControllerTest extends TestBase
         $infoViewMock->expects($this->once())->method('render');
         $infoViewFactory->expects($this->once())
             ->will($this->returnValue($infoViewMock));
+        $this->_subject->dispatch();
+    }
+
+    /**
+     * Tests the import command.
+     *
+     * @return void
+     *
+     * @global string The value of the <var>admin</var> GP parameter.
+     */
+    public function testImportCommand()
+    {
+        global $admin;
+
+        $admin = 'plugin_main';
+        $importCommandFactory = new PHPUnit_Extensions_MockStaticMethod(
+            'Chess_ImportCommand::make', $this->_subject
+        );
+        $importCommand = $this->getMockBuilder('Chess_ImportCommand')
+            ->disableOriginalConstructor()->getMock();
+        $importCommand->expects($this->once())->method('execute');
+        $importCommandFactory->expects($this->once())->with($this->anything())
+            ->will($this->returnValue($importCommand));
         $this->_subject->dispatch();
     }
 

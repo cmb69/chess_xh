@@ -28,6 +28,11 @@ if (!defined('CMSIMPLE_XH_VERSION')) {
 require_once $pth['folder']['plugin_classes'] . 'Domain.php';
 
 /**
+ * The service layer.
+ */
+require_once $pth['folder']['plugin_classes'] . 'Service.php';
+
+/**
  * The presentation layer.
  */
 require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
