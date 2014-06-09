@@ -42,13 +42,17 @@ class InfoViewTest extends TestBase
      * @return void
      *
      * @global array The paths of system files and folders.
+     * @global array The localization of the plugins.
      */
     public function setUp()
     {
-        global $pth;
+        global $pth, $plugin_tx;
 
         $pth = array(
             'folder' => array('plugins' => './plugins/')
+        );
+        $plugin_tx = array(
+            'chess' => array('alt_icon' => 'Knight on chess board fragment')
         );
         $this->defineConstant('CHESS_VERSION', '1.0');
         $this->subject = new Chess_InfoView();
@@ -93,7 +97,8 @@ class InfoViewTest extends TestBase
                 'tag' => 'img',
                 'attributes' => array(
                     'src' => './plugins/chess/chess.png',
-                    'class' => 'chess_icon'
+                    'class' => 'chess_icon',
+                    'alt' => 'Knight on chess board fragment'
                 )
             )
         );

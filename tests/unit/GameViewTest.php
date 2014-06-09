@@ -154,7 +154,8 @@ class GameViewTest extends TestBase
                 'child' => array(
                     'tag' => 'img',
                     'attributes' => array(
-                        'src' => './chess/images/wq.png'
+                        'src' => './chess/images/wq.png',
+                        'alt' => 'wq'
                     )
                 )
             )
@@ -175,7 +176,8 @@ class GameViewTest extends TestBase
                 'child' => array(
                     'tag' => 'img',
                     'attributes' => array(
-                        'src' => './chess/images/bq.png'
+                        'src' => './chess/images/bq.png',
+                        'alt' => 'bq'
                     )
                 )
             )
@@ -200,7 +202,8 @@ class GameViewTest extends TestBase
             'child' => array(
                 'tag' => 'img',
                 'attributes' => array(
-                    'src' => './chess/images/wk.png'
+                    'src' => './chess/images/wk.png',
+                    'alt' => 'wk'
                 )
             )
         );

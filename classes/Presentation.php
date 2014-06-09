@@ -335,7 +335,7 @@ class Chess_GameView
         global $pth;
 
         $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
-        return tag('img src="' . $src . '"');
+        return tag('img src="' . $src . '" alt="' . $piece . '"');
     }
 
     /**
@@ -460,14 +460,18 @@ class Chess_InfoView
      * Renders the plugin icon.
      *
      * @return (X)HTML.
+     *
+     * @global array The paths of system files and folders.
+     * @global array The localization of the plugins.
      */
     private function _renderIcon()
     {
-        global $pth;
+        global $pth, $plugin_tx;
 
         return tag(
             'img src="' . $pth['folder']['plugins'] . 'chess/chess.png"'
-            . ' class="chess_icon"'
+            . ' class="chess_icon" alt="' . $plugin_tx['chess']['alt_icon']
+            . '"'
         );
     }
 
