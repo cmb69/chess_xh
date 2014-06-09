@@ -108,6 +108,73 @@ class Chess_Game
     {
         $this->_moves[] = new Chess_Move($from, $to, $promotion);
     }
+
+    /**
+     * Returns the game in PGN.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->_exportTagPairs() . "\n" . $this->_exportMoveText();
+    }
+
+    /**
+     * Returns the PGN tag pairs.
+     *
+     * @return string
+     */
+    private function _exportTagPairs()
+    {
+        $result = '';
+        $tagNames = array(
+            'event', 'site', 'date', 'round', 'white', 'black', 'result'
+        );
+        foreach ($tagNames as $tagName) {
+            $result .= $this->_exportTagPair($tagName);
+        }
+        return $result;
+    }
+
+    /**
+     * Returns a PGN tag pair.
+     *
+     * @param string $name A tag name.
+     *
+     * @return string
+     */
+    private function _exportTagPair($name)
+    {
+        switch ($name) {
+        case 'date':
+            $value = '??.??.??';
+            break;
+        case 'result':
+            $value = '*';
+            break;
+        default:
+            $value = '?';
+        }
+        return sprintf('[%s "%s"]' . "\n", ucfirst($name), $value);
+    }
+
+    /**
+     * Returns the PGN movetext.
+     *
+     * @return string
+     */
+    private function _exportMoveText()
+    {
+        $result = '';
+        for ($i = 0; $i < $this->getPlyCount(); ++$i) {
+            if ($i % 2 == 0) {
+                $result .= ($i + 1) . '. ';
+            }
+            $result .= $this->_moves[$i]->getSan($this->getPosition($i)) . ' ';
+        }
+        $result .= '*';
+        return $result;
+    }
 }
 
 /**

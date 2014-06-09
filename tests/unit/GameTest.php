@@ -58,6 +58,48 @@ class GameTest extends TestBase
     }
 
     /**
+     * Tests loading of a stored game.
+     *
+     * @return void
+     */
+    public function testLoad()
+    {
+        $this->_subject = Chess_Game::load('italian');
+        $this->assertEquals(
+            'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
+            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
+        );
+    }
+
+    /**
+     * Tests that loading of a non existing game returns null.
+     *
+     * @return void
+     */
+    public function testLoadNotExistingReturnsNull()
+    {
+        $this->assertNull(Chess_Game::load('doesntexist'));
+    }
+
+    /**
+     * Tests that loading of an empty file returns null.
+     *
+     * @return void
+     */
+    public function testLoadEmptyFileReturnsNull()
+    {
+        global $pth;
+
+        vfsStreamWrapper::register();
+        vfsStreamWrapper::setRoot(new vfsStreamDirectory('test'));
+        $pth['folder']['plugins'] = vfsStream::url('test/');
+        $dataFolder = $pth['folder']['plugins'] . 'chess/data/';
+        mkdir($dataFolder, 0777, true);
+        touch($dataFolder . 'foo.dat');
+        $this->assertNull(Chess_Game::load('foo'));
+    }
+
+    /**
      * Tests that getPosition() returns a Chess_Position.
      *
      * @return void
@@ -120,45 +162,24 @@ class GameTest extends TestBase
     }
 
     /**
-     * Tests loading of a stored game.
+     * Tests that __toString() returns PGN.
      *
      * @return void
      */
-    public function testLoad()
+    public function testToStringReturnsPGN()
     {
-        $this->_subject = Chess_Game::load('italian');
-        $this->assertEquals(
-            'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
-            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
-        );
-    }
+        $expected = <<<EOT
+[Event "?"]
+[Site "?"]
+[Date "??.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
 
-    /**
-     * Tests that loading of a non existing game returns null.
-     *
-     * @return void
-     */
-    public function testLoadNotExistingReturnsNull()
-    {
-        $this->assertNull(Chess_Game::load('doesntexist'));
-    }
-
-    /**
-     * Tests that loading of an empty file returns null.
-     *
-     * @return void
-     */
-    public function testLoadEmptyFileReturnsNull()
-    {
-        global $pth;
-
-        vfsStreamWrapper::register();
-        vfsStreamWrapper::setRoot(new vfsStreamDirectory('test'));
-        $pth['folder']['plugins'] = vfsStream::url('test/');
-        $dataFolder = $pth['folder']['plugins'] . 'chess/data/';
-        mkdir($dataFolder, 0777, true);
-        touch($dataFolder . 'foo.dat');
-        $this->assertNull(Chess_Game::load('foo'));
+1. e4 e5 3. Nf3 Nc6 5. Bc4 Bc5 *
+EOT;
+        $this->assertEquals($expected, (string) Chess_Game::load('italian'));
     }
 }
 
