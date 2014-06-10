@@ -120,7 +120,7 @@ EOT;
     public function testImport()
     {
         $this->_subject->import('test');
-        $this->assertFileExists($this->_dataFolder . 'test_0.dat');
+        $this->assertFileExists($this->_dataFolder . 'test.dat');
         $this->assertFileExists($this->_dataFolder . 'test_1.dat');
     }
 }

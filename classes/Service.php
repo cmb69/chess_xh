@@ -97,8 +97,9 @@ class Chess_PgnImporter
                 }
                 $game->move($move['from'], $move['to'], $promotion);
             }
+            $suffix = ($i > 0) ? '_' . $i : '';
             file_put_contents(
-                $this->_dataFolder . $name . '_' . $i . '.dat', serialize($game)
+                $this->_dataFolder . $name . $suffix . '.dat', serialize($game)
             );
         }
     }
