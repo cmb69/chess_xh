@@ -26,6 +26,13 @@
 class Chess_Game
 {
     /**
+     * The name of the game (no pun intended ;).
+     *
+     * @var string.
+     */
+    private $_name;
+
+    /**
      * The moves.
      *
      * @var array A list of records.
@@ -51,6 +58,7 @@ class Chess_Game
         }
         $result = unserialize(file_get_contents($filename));
         if ($result) {
+            $result->_name = $basename;
             return $result;
         } else {
             return null;
@@ -64,7 +72,18 @@ class Chess_Game
      */
     public function __construct()
     {
+        $this->_name = '';
         $this->_moves = array();
+    }
+
+    /**
+     * Returns the name of the game.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->_name;
     }
 
     /**

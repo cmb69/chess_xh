@@ -100,6 +100,7 @@ class GameViewTest extends TestBase
         $this->assertRenders(
             array(
                 'tag' => 'div',
+                'id' => 'chess_view_',
                 'attributes' => array('class' => 'chess_view')
             )
         );
@@ -259,7 +260,7 @@ class GameViewTest extends TestBase
                 'tag' => 'form',
                 'attributes' => array(
                     'class' => 'chess_control_panel',
-                    'action' => '/xh/',
+                    'action' => '/xh/#chess_view_',
                     'method' => 'get'
                 ),
                 'child' => array(
@@ -287,7 +288,7 @@ class GameViewTest extends TestBase
                 'tag' => 'form',
                 'attributes' => array(
                     'class' => 'chess_control_panel',
-                    'action' => '/xh/',
+                    'action' => '/xh/#chess_view_',
                     'method' => 'post'
                 )
             )

@@ -92,8 +92,6 @@ class Chess_Controller
      * @param string $basename A basename of a data file.
      *
      * @return string (X)HTML.
-     *
-     * @todo Add fallback for XH_exit().
      */
     public function chess($basename)
     {
@@ -263,7 +261,8 @@ class Chess_GameView
     public function render()
     {
         $this->_renderScript();
-        return '<div class="chess_view">'
+        return '<div id="chess_view_' . $this->_game->getName()
+            . '" class="chess_view">'
             . $this->_renderBoard() . $this->_renderControlPanel()
             . '</div>';
     }
@@ -412,7 +411,8 @@ class Chess_GameView
         global $sn, $su;
 
         return '<form class="chess_control_panel" action="' . $sn
-            . '" method="' . $this->_getMethod() . '">'
+            . '#chess_view_' . $this->_game->getName() . '" method="'
+            . $this->_getMethod() . '">'
             . $this->_renderHiddenInput('selected', $su)
             . $this->_renderHiddenInput('chess_flipped', (int) $this->_flipped)
             . $this->_renderButton('goto')

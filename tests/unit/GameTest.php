@@ -65,6 +65,7 @@ class GameTest extends TestBase
     public function testLoad()
     {
         $this->_subject = Chess_Game::load('italian');
+        $this->assertEquals('italian', $this->_subject->getName());
         $this->assertEquals(
             'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
             (string) $this->_subject->getPosition($this->_subject->getPlyCount())
@@ -120,6 +121,16 @@ class GameTest extends TestBase
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
             $this->_subject->getPosition(0)
         );
+    }
+
+    /**
+     * Tests getName().
+     *
+     * @return void
+     */
+    public function testGetName()
+    {
+        $this->assertEmpty($this->_subject->getName());
     }
 
     /**
