@@ -133,6 +133,27 @@ class GameTest extends TestBase
     }
 
     /**
+     * Tests getMove().
+     *
+     * @return void
+     */
+    public function testGetMove()
+    {
+        $this->_subject->move('e2', 'e4');
+        $this->assertEquals(new Chess_Move('e2', 'e4'), $this->_subject->getMove(0));
+    }
+
+    /**
+     * Tests getting an invalid move.
+     *
+     * @return void
+     */
+    public function testGetInvalidMove()
+    {
+        $this->assertNull($this->_subject->getMove(42));
+    }
+
+    /**
      * Tests that a move changes the position.
      *
      * @return void

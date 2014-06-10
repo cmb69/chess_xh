@@ -12,7 +12,7 @@
     width: 55px;
     height: 55px;
     text-align: center;
-    vertical-align: bottom;
+    vertical-align: middle;
 }
 .chess_light {
     background: #fdb;
@@ -20,11 +20,14 @@
 .chess_dark {
     background: #c95;
 }
-/*.chess_move {
-    background: rgba(128, 160, 64, 0.7);
+.chess_move {
+    background: #8a4;
     border-radius: 28px;
+    display: inline-block;
+    width: 45px;
+    height: 45px;
 }
-*/
+
 .chess_control_panel {
     display: table;
     margin: 1em auto;

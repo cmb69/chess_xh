@@ -95,6 +95,22 @@ class Chess_Game
     }
 
     /**
+     * Returns a certain move.
+     *
+     * @param int $ply A ply number.
+     *
+     * @return Chess_Move
+     */
+    public function getMove($ply)
+    {
+        if ($ply >= 0 && $ply < $this->getPlyCount()) {
+            return $this->_moves[$ply];
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Registers a move.
      *
      * We're assuming valid moves only for now.
@@ -789,6 +805,19 @@ class Chess_Move
     public function getPromotion()
     {
         return $this->_promotion;
+    }
+
+    /**
+     * Returns whether a square is the source or destination of this move.
+     *
+     * @param string $square A square in AN.
+     *
+     * @return bool
+     */
+    public function isSourceOrDestination($square)
+    {
+        return $square == $this->getSource()
+            || $square == $this->getDestination();
     }
 
     /**

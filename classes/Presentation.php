@@ -361,10 +361,18 @@ class Chess_GameView
         $square = "$file$rank";
         $class = ($rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
         $result = '<td class="' . $class . '">';
+        $move = $this->_game->getMove($this->_ply - 1);
+        $moved = isset($move) && $move->isSourceOrDestination($square);
         if ($this->_position->hasPieceOn($square)) {
-            $result .= $this->_renderPiece($this->_position->getPieceOn($square));
+            $result .= $this->_renderPiece(
+                $this->_position->getPieceOn($square), $moved
+            );
         } else {
-            $result .= '&nbsp;';
+            if ($moved) {
+                $result .= '<span class="chess_move">&nbsp;</span>';
+            } else {
+                $result .= '&nbsp;';
+            }
         }
         $result .= '</td>';
         return $result;
@@ -374,17 +382,19 @@ class Chess_GameView
      * Renders a piece.
      *
      * @param string $piece A piece.
+     * @param bool   $moved Whether the piece is moved.
      *
      * @return string (X)HTML.
      *
      * @global array The paths of system files and folders.
      */
-    private function _renderPiece($piece)
+    private function _renderPiece($piece, $moved)
     {
         global $pth;
 
         $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
-        return tag('img src="' . $src . '" alt="' . $piece . '"');
+        $class = $moved ? 'class="chess_move"' : '';
+        return tag('img ' . $class . ' src="' . $src . '" alt="' . $piece . '"');
     }
 
     /**
