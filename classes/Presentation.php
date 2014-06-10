@@ -489,7 +489,7 @@ class Chess_GameView
             $disabled = false;
             break;
         }
-        return '<button name="chess_action" value="' . $value . '"'
+        return '<button type="submit" name="chess_action" value="' . $value . '"'
             . ($disabled ? ' disabled="disabled"' : '') . '>'
             . $plugin_tx['chess']["label_$which"] . '</button>';
     }
