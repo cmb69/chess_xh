@@ -29,12 +29,22 @@ if (typeof window.addEventListener === "function") {
                 form = container.querySelector(".chess_control_panel");
                 form.addEventListener("click", onSubmit);
             }
-            var target = event.target, form, request;
+            var target = event.target, form, request, method, url, body;
             if (target.nodeName === "BUTTON") {
                 form = target.form;
+                method = form.method.toUpperCase();
+                url = location.pathname;
+                if (method === "GET") {
+                    url += "?" + getParams(target);
+                } else {
+                    body = getParams(target);
+                }
                 request = new XMLHttpRequest();
-                request.open("GET",
-                        location.pathname + "?" + getParams(target));
+                request.open(method, url);
+                if (method === "POST") {
+                    request.setRequestHeader("Content-Type",
+                            "application/x-www-form-urlencoded");
+                }
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
                         if (request.status === 200) {
@@ -44,7 +54,7 @@ if (typeof window.addEventListener === "function") {
                         }
                     }
                 };
-                request.send(null);
+                request.send(body);
                 event.preventDefault();
             }
         }

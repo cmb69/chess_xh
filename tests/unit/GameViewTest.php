@@ -58,6 +58,7 @@ class GameViewTest extends TestBase
     {
         global $pth, $sn, $su, $plugin_tx;
 
+        $this->defineConstant('CMSIMPLE_XH_VERSION', 'CMSimple_XH 1.6.2');
         $pth = array(
             'folder' => array('plugins' => './')
         );
@@ -268,6 +269,26 @@ class GameViewTest extends TestBase
                         'name' => 'selected',
                         'value' => 'Chess'
                     )
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that the control panel is rendered in old CMSimples.
+     *
+     * @return void
+     */
+    public function testRendersControlPanelOldCMSimple()
+    {
+        $this->defineConstant('CMSIMPLE_XH_VERSION', 'CMSimple 4.4.3');
+        $this->assertRenders(
+            array(
+                'tag' => 'form',
+                'attributes' => array(
+                    'class' => 'chess_control_panel',
+                    'action' => '/xh/',
+                    'method' => 'post'
                 )
             )
         );

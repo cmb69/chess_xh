@@ -118,8 +118,8 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessFlipped()
     {
-        $_GET['chess_flipped'] = '1';
-        $_GET['chess_action'] = 'flip';
+        $_REQUEST['chess_flipped'] = '1';
+        $_REQUEST['chess_action'] = 'flip';
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
@@ -135,8 +135,8 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessStartAction()
     {
-        $_GET['chess_ply'] = '1';
-        $_GET['chess_action'] = 'start';
+        $_REQUEST['chess_ply'] = '1';
+        $_REQUEST['chess_action'] = 'start';
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
@@ -152,7 +152,7 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessNextAction()
     {
-        $_GET['chess_action'] = 'next';
+        $_REQUEST['chess_action'] = 'next';
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
@@ -168,8 +168,8 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessPreviousAction()
     {
-        $_GET['chess_ply'] = '1';
-        $_GET['chess_action'] = 'previous';
+        $_REQUEST['chess_ply'] = '1';
+        $_REQUEST['chess_action'] = 'previous';
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
@@ -185,7 +185,7 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessEndAction()
     {
-        $_GET['chess_action'] = 'end';
+        $_REQUEST['chess_action'] = 'end';
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->_gameViewFactory->expects($this->once())
@@ -233,7 +233,7 @@ class FrontEndControllerTest extends TestBase
      */
     public function testChessAjax()
     {
-        $_GET['chess_ajax'] = '1';
+        $_REQUEST['chess_ajax'] = '1';
         $header = new PHPUnit_Extensions_MockFunction('header', $this->_subject);
         $header->expects($this->once())->with($this->stringContains('Content-Type'));
         $this->_gameView->expects($this->once())->method('render')

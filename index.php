@@ -42,6 +42,20 @@ require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
  */
 define('CHESS_VERSION', '@CHESS_VERSION@');
 
+if (!function_exists('XH_exit')) {
+    /**
+     * Exits the script.
+     *
+     * Fallback for CMSimple_XH < 1.6.2.
+     *
+     * @return void
+     */
+    function XH_exit()
+    {
+        exit;
+    }
+}
+
 /**
  * Renders a game view.
  *

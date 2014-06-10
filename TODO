@@ -1,4 +1,3 @@
-* fall back to POST form for old CMSimple versions
 * add labels for files and ranks
 * CSRF protection
 * German manual and localization
@@ -7,3 +6,4 @@
 * configurable data folder
 * make work for newsbox/template
 * multiple viewers on a single page
+* make Ajax response handling more resilient (check, if response text makes sense)

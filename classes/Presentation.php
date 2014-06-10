@@ -104,7 +104,7 @@ class Chess_Controller
         $gameView = Chess_GameView::make(
             $game, $this->_getPly($game), $this->_isFlipped()
         );
-        if (isset($_GET['chess_ajax'])) {
+        if (isset($_REQUEST['chess_ajax'])) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
             XH_exit();
@@ -122,9 +122,9 @@ class Chess_Controller
      */
     private function _getPly(Chess_Game $game)
     {
-        $result = isset($_GET['chess_ply']) ? $_GET['chess_ply'] : 0;
-        if (isset($_GET['chess_action'])) {
-            switch ($_GET['chess_action']) {
+        $result = isset($_REQUEST['chess_ply']) ? $_REQUEST['chess_ply'] : 0;
+        if (isset($_REQUEST['chess_action'])) {
+            switch ($_REQUEST['chess_action']) {
             case 'start':
                 $result = 0;
                 break;
@@ -148,12 +148,14 @@ class Chess_Controller
      */
     private function _isFlipped()
     {
-        if (isset($_GET['chess_flipped'])) {
-            $result = (bool) $_GET['chess_flipped'];
+        if (isset($_REQUEST['chess_flipped'])) {
+            $result = (bool) $_REQUEST['chess_flipped'];
         } else {
             $result =  false;
         }
-        if (isset($_GET['chess_action']) && $_GET['chess_action'] == 'flip') {
+        if (isset($_REQUEST['chess_action'])
+            && $_REQUEST['chess_action'] == 'flip'
+        ) {
             $result = !$result;
         }
         return $result;
@@ -410,7 +412,7 @@ class Chess_GameView
         global $sn, $su;
 
         return '<form class="chess_control_panel" action="' . $sn
-            . '" method="get">'
+            . '" method="' . $this->_getMethod() . '">'
             . $this->_renderHiddenInput('selected', $su)
             . $this->_renderHiddenInput('chess_flipped', (int) $this->_flipped)
             . $this->_renderButton('goto')
@@ -419,6 +421,22 @@ class Chess_GameView
             . $this->_renderButton('next') . $this->_renderButton('end')
             . $this->_renderButton('flip')
             . '</form>';
+    }
+
+    /**
+     * Returns the appropriate form method according to the CMSimple version.
+     *
+     * @return bool
+     */
+    private function _getMethod()
+    {
+        if (strpos(CMSIMPLE_XH_VERSION, 'CMSimple_XH') === 0
+            && version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.6', 'ge')
+        ) {
+            return 'get';
+        } else {
+            return 'post';
+        }
     }
 
     /**
