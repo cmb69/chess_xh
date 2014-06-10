@@ -13,7 +13,6 @@
         <exclude id="chess">
             <directory name="test"/>
             <directory name="vendor"/>
-            <directory name="chessParser"/>
         </exclude>
     </excludes>
 </phpcompatinfo>

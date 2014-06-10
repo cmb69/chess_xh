@@ -12,7 +12,10 @@
 <h1>Chess_XH – a CMSimple_XH Plugin</h1>
 <img src="../chess.png" style="float:left; margin-right:1em" alt="Knight on
 chess board fragment">
-<p></p>
+<p>Chess_XH facilitates to display simple chess game viewers on your website.
+Contrary to many other viewers it doesn't require JavaScript or Flash. The chess
+games have to be imported from <a
+href="http://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a> files.</p>
 
 <ul id="nav">
 <li><a href="#requirements">Requirements</a></li>
@@ -30,8 +33,8 @@ chess board fragment">
 problems!</strong></p>
 
 <h2 id="requirements">Requirements</h2>
-<p>Chess_XH is a plugin for CMSimple_XH. It requires CMSimple_XH &ge; 1.5.4 and
-PHP &ge; 5.0.0.</p>
+<p>Chess_XH is a plugin for CMSimple_XH. It requires a UTF-8 encoded CMSimple_XH
+and PHP &ge; 5.2.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="installation">Installation</h2>
@@ -62,9 +65,25 @@ to your own language, or customize them according to your needs.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="usage">Usage</h2>
+<p>At first you have to import some PGN files into a proprietary format for
+faster processing. This can be done in the website's back-end (Plugins &rarr;
+Chess &rarr; Import). It is recommended to keep the PGN files after the import,
+as you will likely need to import them again for future versions of the
+plugin.</p>
+<p>To display a chess game on a page, insert</p>
+<pre>{{{PLUGIN:chess('italian');}}}</pre>
+<p>where 'italian' is the name of a chess game in .dat format.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="limitations">Limitations</h2>
+<p>Currently only a small subset of the information available in PGN is used
+by the plugin, namely the moves without comments or other anotations.</p>
+<p>The import of a PGN file is quite time consuming, so very large PGN files
+might cause timeout issues (blank page). In this case you have to split the PGN
+file manually before importing it.</p>
+<p>The JavaScript support for improved viewing of the games requires a
+contemporary browser. Old browsers, such as IE 8 will fall back to plain HTML
+forms.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="license">License</h2>
@@ -75,6 +94,10 @@ to your own language, or customize them according to your needs.</p>
 
 <h2 id="credits">Credits</h2>
 <p>This plugin has been inspired by Bulkington.</p>
+<p>The plugin uses <a
+href="https://github.com/DHTMLGoodies/chessParser">chessParser</a> for the PGN
+import. Many thanks to <a href="http://dhtml-chess.com/">Alf Magne Kalleland</a>
+for publishing this library under LGPL.</p>
 <p>The plugin icon is designed by <a href="http://www.mentalrey.it/">Alessandro
 Rei</a>. Many thanks for publishing this icon under GPL.</p>
 <p>The images of the chess pieces are designed by <a
