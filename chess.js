@@ -10,21 +10,12 @@ if (typeof window.addEventListener === "function") {
         }
 
         function getParams(button) {
-            function getValue(form, param) {
-                var result, selector;
-                if (button.name === "chess_" + param) {
-                    result = button.value;
-                } else {
-                    selector = "input[name=chess_" + param + "]";
-                    result = form.querySelector(selector).value;
-                }
-                return result;
-            }
             var form = button.form,
                 params = {
                     selected: form.selected.value,
-                    chess_ply: getValue(form, "ply"),
-                    chess_flip: getValue(form, "flip"),
+                    chess_ply: form.chess_ply.value,
+                    chess_flipped: form.chess_flipped.value,
+                    chess_action: button.value,
                     chess_ajax: 1
                 };
             return serialize(params);

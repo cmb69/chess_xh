@@ -68,6 +68,7 @@ class GameViewTest extends TestBase
                 'label_flip' => 'Flip',
                 'label_start' => 'Start',
                 'label_next' => 'Next',
+                'label_goto' => 'Go to',
                 'label_previous' => 'Previous',
                 'label_end' => 'End'
             )
@@ -277,14 +278,14 @@ class GameViewTest extends TestBase
      *
      * @return void
      */
-    public function testRendersFlipInput()
+    public function testRendersFlippedInput()
     {
         $this->assertRenders(
             array(
                 'tag' => 'input',
                 'attributes' => array(
                     'type' => 'hidden',
-                    'name' => 'chess_flip',
+                    'name' => 'chess_flipped',
                     'value' => '0'
                 ),
                 'parent' => array('tag' => 'form')
@@ -303,9 +304,31 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'input',
                 'attributes' => array(
-                    'type' => 'hidden',
+                    'type' => 'text',
                     'name' => 'chess_ply',
                     'value' => '0'
+                ),
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the ply input field doesn't top the maximum.
+     *
+     * @return void
+     */
+    public function testRendersPlyInputDoesntTopMax()
+    {
+        $_GET['chess_action'] = 'goto';
+        $_GET['chess_ply'] = '23';
+        $this->assertRenders(
+            array(
+                'tag' => 'input',
+                'attributes' => array(
+                    'type' => 'text',
+                    'name' => 'chess_ply',
+                    //'value' => '23'
                 ),
                 'parent' => array('tag' => 'form')
             )
@@ -323,8 +346,8 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'button',
                 'attributes' => array(
-                    'name' => 'chess_flip',
-                    'value' => '1'
+                    'name' => 'chess_action',
+                    'value' => 'flip'
                 ),
                 'content' => 'Flip',
                 'parent' => array('tag' => 'form')
@@ -343,8 +366,8 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'button',
                 'attributes' => array(
-                    'name' => 'chess_ply',
-                    'value' => '0',
+                    'name' => 'chess_action',
+                    'value' => 'start',
                     'disabled' => 'disabled'
                 ),
                 'content' => 'Start',
@@ -364,11 +387,32 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'button',
                 'attributes' => array(
-                    'name' => 'chess_ply',
-                    'value' => '0',
+                    'name' => 'chess_action',
+                    'value' => 'previous',
                     'disabled' => 'disabled'
                 ),
                 'content' => 'Previous',
+                'parent' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the "go to" button is rendered.
+     *
+     * @return void
+     */
+    public function testRendersGotoButton()
+    {
+        $this->_game->move('e2', 'e4');
+        $this->assertRenders(
+            array(
+                'tag' => 'button',
+                'attributes' => array(
+                    'name' => 'chess_action',
+                    'value' => 'goto'
+                ),
+                'content' => 'Go to',
                 'parent' => array('tag' => 'form')
             )
         );
@@ -386,8 +430,8 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'button',
                 'attributes' => array(
-                    'name' => 'chess_ply',
-                    'value' => '1'
+                    'name' => 'chess_action',
+                    'value' => 'next'
                 ),
                 'content' => 'Next',
                 'parent' => array('tag' => 'form')
@@ -408,8 +452,8 @@ class GameViewTest extends TestBase
             array(
                 'tag' => 'button',
                 'attributes' => array(
-                    'name' => 'chess_ply',
-                    'value' => '2'
+                    'name' => 'chess_action',
+                    'value' => 'end'
                 ),
                 'content' => 'End',
                 'parent' => array('tag' => 'form')

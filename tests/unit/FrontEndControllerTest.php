@@ -112,6 +112,89 @@ class FrontEndControllerTest extends TestBase
     }
 
     /**
+     * Tests the chess method for a board flipped twice.
+     *
+     * @return void
+     */
+    public function testChessFlipped()
+    {
+        $_GET['chess_flipped'] = '1';
+        $_GET['chess_action'] = 'flip';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->with($this->anything(), $this->anything(), false)
+            ->will($this->returnValue($this->_gameView));
+        $this->assertEquals('foo', $this->_subject->chess('italian'));
+    }
+
+    /**
+     * Tests the chess method for the "start" action.
+     *
+     * @return void
+     */
+    public function testChessStartAction()
+    {
+        $_GET['chess_ply'] = '1';
+        $_GET['chess_action'] = 'start';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->with($this->anything(), 0, $this->anything())
+            ->will($this->returnValue($this->_gameView));
+        $this->assertEquals('foo', $this->_subject->chess('italian'));
+    }
+
+    /**
+     * Tests the chess method for the "next" action.
+     *
+     * @return void
+     */
+    public function testChessNextAction()
+    {
+        $_GET['chess_action'] = 'next';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->with($this->anything(), 1, $this->anything())
+            ->will($this->returnValue($this->_gameView));
+        $this->assertEquals('foo', $this->_subject->chess('italian'));
+    }
+
+    /**
+     * Tests the chess method for the "previous" action.
+     *
+     * @return void
+     */
+    public function testChessPreviousAction()
+    {
+        $_GET['chess_ply'] = '1';
+        $_GET['chess_action'] = 'previous';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->with($this->anything(), 0, $this->anything())
+            ->will($this->returnValue($this->_gameView));
+        $this->assertEquals('foo', $this->_subject->chess('italian'));
+    }
+
+    /**
+     * Tests the chess method for the "end" action.
+     *
+     * @return void
+     */
+    public function testChessEndAction()
+    {
+        $_GET['chess_action'] = 'end';
+        $this->_gameView->expects($this->once())->method('render')
+            ->will($this->returnValue('foo'));
+        $this->_gameViewFactory->expects($this->once())
+            ->with($this->anything(), 6, $this->anything())
+            ->will($this->returnValue($this->_gameView));
+        $this->assertEquals('foo', $this->_subject->chess('italian'));
+    }
+
+    /**
      * Test the chess method when failing.
      *
      * @return void

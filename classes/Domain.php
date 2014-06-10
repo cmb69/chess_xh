@@ -87,6 +87,7 @@ class Chess_Game
     public function getPosition($ply)
     {
         $position = new Chess_Position();
+        $ply = min($ply, $this->getPlyCount());
         for ($i = 0; $i < $ply; ++$i) {
             $position->applyMove($this->_moves[$i]);
         }

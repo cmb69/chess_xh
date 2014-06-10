@@ -20,10 +20,23 @@
 .chess_dark {
     background: #c95;
 }
-
+/*.chess_move {
+    background: rgba(128, 160, 64, 0.7);
+    border-radius: 28px;
+}
+*/
 .chess_control_panel {
     display: table;
     margin: 1em auto;
+}
+/* Unfortunately, IE doesn't like this.
+.chess_control_panel button[value="goto"] {
+    display: none;
+}
+*/
+.chess_control_panel input[name="chess_ply"] {
+    width: 3em;
+    text-align: right;
 }
 
 /*

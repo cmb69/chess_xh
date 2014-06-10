@@ -5,6 +5,7 @@ $plugin_tx['chess']['menu_main']="Import";
 $plugin_tx['chess']['label_flip']="Flip";
 $plugin_tx['chess']['label_start']="Start";
 $plugin_tx['chess']['label_previous']="Previous";
+$plugin_tx['chess']['label_goto']="Go to";
 $plugin_tx['chess']['label_next']="Next";
 $plugin_tx['chess']['label_end']="End";
 $plugin_tx['chess']['label_import']="Import";

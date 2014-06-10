@@ -101,10 +101,9 @@ class Chess_Controller
         if (!$game) {
             return $this->_renderFailure('load_error', $basename);
         }
-        $ply = isset($_GET['chess_ply']) ? $_GET['chess_ply'] : 0;
-        $flipped = isset($_GET['chess_flip'])
-            ? (bool) $_GET['chess_flip'] : false;
-        $gameView = Chess_GameView::make($game, $ply, $flipped);
+        $gameView = Chess_GameView::make(
+            $game, $this->_getPly($game), $this->_isFlipped()
+        );
         if (isset($_GET['chess_ajax'])) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
@@ -112,6 +111,52 @@ class Chess_Controller
         } else {
             return $gameView->render();
         }
+    }
+
+    /**
+     * Returns the requested ply.
+     *
+     * @param Chess_Game $game A game.
+     *
+     * @return int
+     */
+    private function _getPly(Chess_Game $game)
+    {
+        $result = isset($_GET['chess_ply']) ? $_GET['chess_ply'] : 0;
+        if (isset($_GET['chess_action'])) {
+            switch ($_GET['chess_action']) {
+            case 'start':
+                $result = 0;
+                break;
+            case 'next':
+                $result = min($result + 1, $game->getPlyCount());
+                break;
+            case 'previous':
+                $result = max($result - 1, 0);
+                break;
+            case 'end':
+                $result = $game->getPlyCount();
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Returns whether the board shall be flipped.
+     *
+     * @return bool
+     */
+    private function _isFlipped()
+    {
+        if (isset($_GET['chess_flipped'])) {
+            $result = (bool) $_GET['chess_flipped'];
+        } else {
+            $result =  false;
+        }
+        if (isset($_GET['chess_action']) && $_GET['chess_action'] == 'flip') {
+            $result = !$result;
+        }
+        return $result;
     }
 
     /**
@@ -202,7 +247,9 @@ class Chess_GameView
     {
         $this->_game = $game;
         $this->_ply = (int) $ply;
-        $this->_position = $game->getPosition($this->_ply);
+        $this->_position = $game->getPosition(
+            min($this->_ply, $this->_game->getPlyCount())
+        );
         $this->_flipped = (bool) $flipped;
     }
 
@@ -355,12 +402,27 @@ class Chess_GameView
         return '<form class="chess_control_panel" action="' . $sn
             . '" method="get">'
             . $this->_renderHiddenInput('selected', $su)
-            . $this->_renderHiddenInput('chess_ply', $this->_ply)
-            . $this->_renderHiddenInput('chess_flip', (int) $this->_flipped)
-            . $this->_renderButton('flip')
+            . $this->_renderHiddenInput('chess_flipped', (int) $this->_flipped)
+            . $this->_renderButton('goto')
             . $this->_renderButton('start') . $this->_renderButton('previous')
+            . $this->_renderPlyInput($this->_ply)
             . $this->_renderButton('next') . $this->_renderButton('end')
+            . $this->_renderButton('flip')
             . '</form>';
+    }
+
+    /**
+     * Renders the ply input field.
+     *
+     * @param string $value A ply.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderPlyInput($value)
+    {
+        return tag(
+            'input type="text" name="chess_ply" value="' . $value . '"'
+        );
     }
 
     /**
@@ -392,33 +454,32 @@ class Chess_GameView
         global $plugin_tx;
 
         switch ($which) {
-        case 'flip':
-            $name = 'chess_flip';
-            $value = (int) !$this->_flipped;
-            $disabled = false;
-            break;
         case 'start':
-            $name = 'chess_ply';
-            $value = 0;
+            $value = 'start';
             $disabled = ($this->_ply == 0);
             break;
         case 'previous':
-            $name = 'chess_ply';
-            $value = max($this->_ply - 1, 0);
+            $value = 'previous';
             $disabled = ($this->_ply == 0);
             break;
+        case 'goto':
+            $value = 'goto';
+            $disabled = false;
+            break;
         case 'next':
-            $name = 'chess_ply';
-            $value = min($this->_ply + 1, $this->_game->getPlyCount());
+            $value = 'next';
             $disabled = ($this->_ply == $this->_game->getPlyCount());
             break;
         case 'end';
-            $name = 'chess_ply';
-            $value = $this->_game->getPlyCount();
+            $value = 'end';
             $disabled = ($this->_ply == $this->_game->getPlyCount());
             break;
+        case 'flip':
+            $value = 'flip';
+            $disabled = false;
+            break;
         }
-        return '<button name="' . $name . '" value="' . $value . '"'
+        return '<button name="chess_action" value="' . $value . '"'
             . ($disabled ? ' disabled="disabled"' : '') . '>'
             . $plugin_tx['chess']["label_$which"] . '</button>';
     }
