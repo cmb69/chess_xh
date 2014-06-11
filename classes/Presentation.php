@@ -95,6 +95,11 @@ class Chess_Controller
      */
     public function chess($basename)
     {
+        if (isset($_REQUEST['chess_ajax']) && isset($_REQUEST['chess_game'])
+            && $_REQUEST['chess_game'] != $basename
+        ) {
+            return;
+        }
         $game = Chess_Game::load($basename);
         if (!$game) {
             return $this->_renderFailure('load_error', $basename);
@@ -414,6 +419,7 @@ class Chess_GameView
             . '#chess_view_' . $this->_game->getName() . '" method="'
             . $this->_getMethod() . '">'
             . $this->_renderHiddenInput('selected', $su)
+            . $this->_renderHiddenInput('chess_game', $this->_game->getName())
             . $this->_renderHiddenInput('chess_flipped', (int) $this->_flipped)
             . $this->_renderButton('goto')
             . $this->_renderButton('start') . $this->_renderButton('previous')

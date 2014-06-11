@@ -262,14 +262,6 @@ class GameViewTest extends TestBase
                     'class' => 'chess_control_panel',
                     'action' => '/xh/#chess_view_',
                     'method' => 'get'
-                ),
-                'child' => array(
-                    'tag' => 'input',
-                    'attributes' => array(
-                        'type' => 'hidden',
-                        'name' => 'selected',
-                        'value' => 'Chess'
-                    )
                 )
             )
         );
@@ -290,6 +282,44 @@ class GameViewTest extends TestBase
                     'class' => 'chess_control_panel',
                     'action' => '/xh/#chess_view_',
                     'method' => 'post'
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that the "selected" input field is rendered.
+     *
+     * @return void
+     */
+    public function testRendersSelectedInput()
+    {
+        $this->assertRenders(
+            array(
+                'tag' => 'input',
+                'attributes' => array(
+                    'type' => 'hidden',
+                    'name' => 'selected',
+                    'value' => 'Chess'
+                )
+            )
+        );
+    }
+
+    /**
+     * Tests that the game input field is rendered.
+     *
+     * @return void
+     */
+    public function testRendersGameInput()
+    {
+        $this->assertRenders(
+            array(
+                'tag' => 'input',
+                'attributes' => array(
+                    'type' => 'hidden',
+                    'name' => 'chess_game',
+                    'value' => ''
                 )
             )
         );
@@ -342,15 +372,15 @@ class GameViewTest extends TestBase
      */
     public function testRendersPlyInputDoesntTopMax()
     {
-        $_GET['chess_action'] = 'goto';
-        $_GET['chess_ply'] = '23';
+        $_REQUEST['chess_action'] = 'goto';
+        $_REQUEST['chess_ply'] = '23';
         $this->assertRenders(
             array(
                 'tag' => 'input',
                 'attributes' => array(
                     'type' => 'text',
                     'name' => 'chess_ply',
-                    //'value' => '23'
+                    'value' => '0'
                 ),
                 'parent' => array('tag' => 'form')
             )

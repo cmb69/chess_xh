@@ -15,6 +15,7 @@
  */
 
 require_once './vendor/autoload.php';
+require_once '../../cmsimple/functions.php';
 require_once './classes/Presentation.php';
 require_once './tests/unit/TestBase.php';
 
@@ -70,6 +71,7 @@ class FrontEndControllerTest extends TestBase
                 'message_load_error' => 'The chess file "%s" can\'t be loaded!'
             )
         );
+        new PHPUnit_Extensions_MockFunction('XH_exit', $this->_subject);
         $this->_subject = new Chess_Controller();
         $this->_gameView = $this->getMockBuilder('Chess_GameView')
             ->disableOriginalConstructor()->getMock();
@@ -243,6 +245,22 @@ class FrontEndControllerTest extends TestBase
         $exit = new PHPUnit_Extensions_MockFunction('XH_exit', $this->_subject);
         $exit->expects($this->once());
         $this->expectOutputString('foo');
+        $this->_subject->chess('italian');
+    }
+
+    /**
+     * Tests calling chess() with Ajax on irrelevant game.
+     *
+     * @return void
+     */
+    public function testIrrelevantAjax()
+    {
+        $_REQUEST['chess_ajax'] = '1';
+        $_REQUEST['chess_game'] = 'spanish';
+        $header = new PHPUnit_Extensions_MockFunction('header', $this->_subject);
+        $header->expects($this->never());
+        $this->_gameViewFactory->expects($this->never());
+        $this->expectOutputString('');
         $this->_subject->chess('italian');
     }
 }

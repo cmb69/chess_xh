@@ -6,5 +6,4 @@
 * configurable data folder
 * add some of the meta data (seven tag roster)
 * make work for newsbox/template
-* multiple viewers on a single page
 * make Ajax response handling more resilient (check, if response text makes sense)

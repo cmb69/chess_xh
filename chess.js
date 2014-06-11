@@ -13,6 +13,7 @@ if (typeof window.addEventListener === "function") {
             var form = button.form,
                 params = {
                     selected: form.selected.value,
+                    chess_game: form.chess_game.value,
                     chess_ply: form.chess_ply.value,
                     chess_flipped: form.chess_flipped.value,
                     chess_action: button.value,
