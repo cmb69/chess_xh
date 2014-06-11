@@ -81,6 +81,31 @@ class FrontEndControllerTest extends TestBase
     }
 
     /**
+     * Tests that the script element is emitted.
+     *
+     * @return void
+     *
+     * @global string The (X)HTML to insert at the bottom of the body.
+     */
+    public function testDispatchEmitsScript()
+    {
+        global $bjs;
+
+        $bjs = '';
+        $this->_subject->dispatch();
+        $this->assertTag(
+            array(
+                'tag' => 'script',
+                'attributes' => array(
+                    'type' => 'text/javascript',
+                    'src' => '../chess/chess.js'
+                )
+            ),
+            $bjs
+        );
+    }
+
+    /**
      * Tests that the back end can't be accessed.
      *
      * @return void

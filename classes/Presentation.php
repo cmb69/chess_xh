@@ -36,8 +36,31 @@ class Chess_Controller
     {
         global $chess;
 
+        $this->_emitScript();
         if (XH_ADM && isset($chess) && $chess == 'true') {
             $this->_handleAdministration();
+        }
+    }
+
+    /**
+     * Emits the script element.
+     *
+     * @return void
+     *
+     * @global array  The paths of system files and folders.
+     * @global string The (X)HTML to insert at the bottom of the body.
+     * @global string The (X)HTML to insert in the head.
+     */
+    private function _emitScript()
+    {
+        global $pth, $bjs, $hjs;
+
+        $script = '<script type="text/javascript" src="'
+            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
+        if (isset($bjs)) {
+            $bjs .= $script;
+        } else {
+            $hjs .= $script;
         }
     }
 
@@ -265,33 +288,10 @@ class Chess_GameView
      */
     public function render()
     {
-        $this->_renderScript();
         return '<div id="chess_view_' . $this->_game->getName()
             . '" class="chess_view">'
             . $this->_renderBoard() . $this->_renderControlPanel()
             . '</div>';
-    }
-
-    /**
-     * Renders the script element.
-     *
-     * @return void
-     *
-     * @global array  The paths of system files and folders.
-     * @global string The (X)HTML to insert at the bottom of the body.
-     * @global string The (X)HTML to insert in the head.
-     */
-    private function _renderScript()
-    {
-        global $pth, $bjs, $hjs;
-
-        $script = '<script type="text/javascript" src="'
-            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
-        if (isset($bjs)) {
-            $bjs .= $script;
-        } else {
-            $hjs .= $script;
-        }
     }
 
     /**

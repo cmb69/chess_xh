@@ -5,5 +5,4 @@
 * synapsis
 * configurable data folder
 * add some of the meta data (seven tag roster)
-* make work for newsbox/template
 * make Ajax response handling more resilient (check, if response text makes sense)
