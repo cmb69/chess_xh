@@ -15,6 +15,7 @@
  */
 
 require_once '../../cmsimple/functions.php';
+require_once '../../cmsimple/classes/CSRFProtection.php';
 require_once './classes/Service.php';
 require_once './classes/Presentation.php';
 require_once './tests/unit/TestBase.php';
@@ -54,7 +55,7 @@ class ImportViewTest extends TestBase
      */
     public function setUp()
     {
-        global $sn, $plugin_tx;
+        global $sn, $plugin_tx, $_XH_csrfProtection;
 
         $sn = '/xh/';
         $plugin_tx = array(
@@ -63,6 +64,8 @@ class ImportViewTest extends TestBase
                 'menu_main' => 'Import'
             )
         );
+        $_XH_csrfProtection = $this->getMockBuilder('XH_CSRFProtection')
+            ->disableOriginalConstructor()->getMock();
         $this->_importer = $this->getMockBuilder('Chess_PgnImporter')
             ->disableOriginalConstructor()->getMock();
         $this->_importer->expects($this->any())->method('findAll')
@@ -198,6 +201,20 @@ class ImportViewTest extends TestBase
         );
     }
 
+    /**
+     * Tests that the CSRF token input is rendered.
+     *
+     * @return void
+     *
+     * @global XH_CSRFProtection The CSRF protection.
+     */
+    public function testRendersCSRFTokenInput()
+    {
+        global $_XH_csrfProtection;
+
+        $_XH_csrfProtection->expects($this->once())->method('tokenInput');
+        $this->subject->render();
+    }
 }
 
 ?>

@@ -14,6 +14,7 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+require_once '../../cmsimple/classes/CSRFProtection.php';
 require_once './classes/Domain.php';
 require_once './classes/Service.php';
 require_once './classes/Presentation.php';
@@ -62,14 +63,17 @@ class ImportCommandTest extends TestBase
      *
      * @return void
      *
-     * @global string The value of the <var>admin</var> GP parameter.
+     * @global string            The value of the <var>admin</var> GP parameter.
+     * @global XH_CSRFProtection The CSRF protector.
      */
     public function setUp()
     {
-        global $admin;
+        global $admin, $_XH_csrfProtection;
 
         $this->defineConstant('XH_ADM', true);
         $admin = 'plugin_main';
+        $_XH_csrfProtection = $this->getMockBuilder('XH_CSRFProtection')
+            ->disableOriginalConstructor()->getMock();
         $this->_importer = $this->getMockBuilder('Chess_PgnImporter')
             ->disableOriginalConstructor()->getMock();
         $this->_subject = new Chess_ImportCommand($this->_importer);
@@ -116,14 +120,16 @@ class ImportCommandTest extends TestBase
      *
      * @return void
      *
-     * @global string The value of the <var>action</var> GP parameter.
+     * @global string            The value of the <var>action</var> GP parameter.
+     * @global XH_CSRFProtection The CSRF protector.
      */
     public function testImport()
     {
-        global $action;
+        global $action, $_XH_csrfProtection;
 
         $action = 'import';
         $_POST['chess_game'] = 'foo';
+        $_XH_csrfProtection->expects($this->once())->method('check');
         $this->_importer->expects($this->once())->method('import')->with('foo');
         $this->_importView->expects($this->once())->method('render');
         $this->_importViewFactory->expects($this->once())->with($this->anything())

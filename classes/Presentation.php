@@ -657,14 +657,18 @@ class Chess_ImportCommand
      *
      * @return void
      *
-     * @global string The value of the <var>action</var> GP parameter.
-     * @global string The HTML of the contents area.
+     * @global string            The value of the <var>action</var> GP parameter.
+     * @global string            The HTML of the contents area.
+     * @global XH_CSRFProtection The CSRF protector.
      */
     public function execute()
     {
-        global $action, $o;
+        global $action, $o, $_XH_csrfProtection;
 
         if ($action == 'import') {
+            if (isset($_XH_csrfProtection)) {
+                $_XH_csrfProtection->check();
+            }
             $game = stsl($_POST['chess_game']);
             $this->_importer->import($game);
         }
@@ -735,18 +739,23 @@ class Chess_ImportView
      *
      * @return string (X)HTML.
      *
-     * @global string The script name.
+     * @global string            The script name.
+     * @global XH_CSRFProtection The CSRF protector.
      */
     private function _renderForm()
     {
-        global $sn;
+        global $sn, $_XH_csrfProtection;
 
-        return '<form class="chess_import_form" action="' . $sn
-            . '?chess" method="post">'
-            . tag('input type="hidden" name="admin" value="plugin_main"')
+        $result = '<form class="chess_import_form" action="' . $sn
+            . '?chess" method="post">';
+        if (isset($_XH_csrfProtection)) {
+            $result .= $_XH_csrfProtection->tokenInput();
+        }
+        $result .= tag('input type="hidden" name="admin" value="plugin_main"')
             . tag('input type="hidden" name="action" value="import"')
             . $this->_renderList()
             . '</form>';
+        return $result;
     }
 
     /**
