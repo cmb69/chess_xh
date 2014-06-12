@@ -19,6 +19,10 @@
         <include name="*Test.php"/>
     </fileset>
 
+    <fileset id="attack-tests" dir="tests/attack">
+        <include name="*Test.php"/>
+    </fileset>
+
 
     <!-- Checks -->
 
@@ -26,6 +30,7 @@
         <phpcodesniffer standard="PEAR" format="full">
             <fileset refid="php-sources"/>
             <fileset refid="unit-tests"/>
+            <fileset refid="attack-tests"/>
         </phpcodesniffer>
     </target>
 
@@ -51,9 +56,7 @@
         <phpunit haltonerror="true" haltonfailure="true">
             <formatter type="plain" usefile="false"/>
             <batchtest>
-                <fileset dir="tests/attack">
-                    <include name="*Test.php"/>
-                </fileset>
+                <fileset refid="attack-tests"/>
             </batchtest>
         </phpunit>
     </target>
