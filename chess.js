@@ -24,6 +24,12 @@ if (window.addEventListener) {
         function onSubmit(event) {
             var target, form, request, method;
 
+            function isSuccess() {
+                return request.status === 200 &&
+                        /^<div id="chess_view_/.test(request.responseText) &&
+                        /<\/div>$/.test(request.responseText);
+            }
+
             function onSuccess(form, html) {
                 var container = form.parentNode.parentNode;
                 container.innerHTML = html;
@@ -33,7 +39,7 @@ if (window.addEventListener) {
 
             function onReadyStateChange() {
                 if (request.readyState === 4) {
-                    if (request.status === 200) {
+                    if (isSuccess()) {
                         onSuccess(form, request.responseText);
                     } else {
                         form.removeEventListener("click", onSubmit);
