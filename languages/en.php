@@ -10,6 +10,7 @@ $plugin_tx['chess']['label_next']="Next";
 $plugin_tx['chess']['label_end']="End";
 $plugin_tx['chess']['label_import']="Import";
 
+$plugin_tx['chess']['message_invalid_name']="The name \"%s\" is invalid";
 $plugin_tx['chess']['message_load_error']="The chess file \"%s\" can't be loaded!";
 
 $plugin_tx['chess']['alt_icon']="Knight on chess board fragment";

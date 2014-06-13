@@ -136,6 +136,35 @@ class ImportCommandTest extends TestBase
             ->will($this->returnValue($this->_importView));
         $this->_subject->execute();
     }
+
+    /**
+     * Tests the import.
+     *
+     * @return void
+     *
+     * @global string            The value of the <var>action</var> GP parameter.
+     * @global XH_CSRFProtection The CSRF protector.
+     */
+    public function testImportFailsForInvalidName()
+    {
+        global $o, $action, $_XH_csrfProtection;
+
+        $o = '';
+        $action = 'import';
+        $_POST['chess_game'] = 'foo!';
+        $_XH_csrfProtection->expects($this->once())->method('check');
+        $this->_importView->expects($this->once())->method('render');
+        $this->_importViewFactory->expects($this->once())->with($this->anything())
+            ->will($this->returnValue($this->_importView));
+        $this->_subject->execute();
+        $this->assertTag(
+            array(
+                'tag' => 'p',
+
+            ),
+            $o
+        );
+    }
 }
 
 ?>

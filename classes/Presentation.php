@@ -15,6 +15,58 @@
  */
 
 /**
+ * The abstract base class for all presentation classes.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+abstract class Chess_Presenter
+{
+    /**
+     * The localization.
+     *
+     * @var array
+     */
+    protected $lang;
+
+    /**
+     * Initializes a new instance.
+     *
+     * @return void
+     *
+     * @global array The localization of the plugins.
+     */
+    public function __construct()
+    {
+        global $plugin_tx;
+
+        $this->lang = $plugin_tx['chess'];
+    }
+
+    /**
+     * Returns a failure message.
+     *
+     * @param string $key A message key.
+     *
+     * @return string (X)HTML.
+     */
+    protected function renderFailure($key)
+    {
+        $args = func_get_args();
+        array_shift($args);
+        $message = vsprintf($this->lang['message_' . $key], $args);
+        if (function_exists('XH_message')) {
+            return XH_message('fail', $message);
+        } else {
+            return '<p class="cmsimplecore_warning">' . $message . '<p>';
+        }
+    }
+}
+
+/**
  * The controllers.
  *
  * @category CMSimple_XH
@@ -23,8 +75,69 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_Controller
+class Chess_Controller extends Chess_Presenter
 {
+    /**
+     * The name of the requested game.
+     *
+     * @var string
+     */
+    private $_requestedGame;
+
+    /**
+     * The requested ply.
+     *
+     * @var int
+     */
+    private $_requestedPly;
+
+    /**
+     * Whether the board is flipped.
+     *
+     * @var bool
+     */
+    private $_isFlipped;
+
+    /**
+     * The requested action.
+     *
+     * @var string
+     */
+    private $_requestedAction;
+
+    /**
+     * Whether we're responding to an Ajax request.
+     *
+     * @var bool
+     */
+    private $_isAjaxRequest;
+
+    /**
+     * Initializes a new instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_requestedGame = isset($_REQUEST['chess_game'])
+            ? stsl($_REQUEST['chess_game']) : false;
+        if (!Chess_Game::isValidName($this->_requestedGame)) {
+            $this->_requestedGame = false;
+        }
+        $this->_requestedPly = isset($_REQUEST['chess_ply'])
+            ? (int) stsl($_REQUEST['chess_ply']) : 0;
+        $this->_isFlipped = isset($_REQUEST['chess_flipped'])
+            ? (bool) $_REQUEST['chess_flipped'] : false;
+        $this->_requestedAction = isset($_REQUEST['chess_action'])
+            ? stsl($_REQUEST['chess_action']) : false;
+        $actions = array('start', 'previous', 'next', 'end', 'flip');
+        if (!in_array($this->_requestedAction, $actions)) {
+            $this->_requestedAction = false;
+        }
+        $this->_isAjaxRequest = isset($_REQUEST['chess_ajax']);
+    }
+
     /**
      * Dispatch according to the request.
      *
@@ -118,19 +231,20 @@ class Chess_Controller
      */
     public function chess($basename)
     {
-        if (isset($_REQUEST['chess_ajax']) && isset($_REQUEST['chess_game'])
-            && $_REQUEST['chess_game'] != $basename
-        ) {
+        if ($this->_isAjaxRequest && $this->_requestedGame != $basename) {
             return;
+        }
+        if (!Chess_Game::isValidName($basename)) {
+            return $this->renderFailure('invalid_name', $basename);
         }
         $game = Chess_Game::load($basename);
         if (!$game) {
-            return $this->_renderFailure('load_error', $basename);
+            return $this->renderFailure('load_error', $basename);
         }
         $gameView = Chess_GameView::make(
             $game, $this->_getPly($game), $this->_isFlipped()
         );
-        if (isset($_REQUEST['chess_ajax'])) {
+        if ($this->_isAjaxRequest) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
             XH_exit();
@@ -148,21 +262,19 @@ class Chess_Controller
      */
     private function _getPly(Chess_Game $game)
     {
-        $result = isset($_REQUEST['chess_ply']) ? $_REQUEST['chess_ply'] : 0;
-        if (isset($_REQUEST['chess_action'])) {
-            switch ($_REQUEST['chess_action']) {
-            case 'start':
-                $result = 0;
-                break;
-            case 'next':
-                $result = min($result + 1, $game->getPlyCount());
-                break;
-            case 'previous':
-                $result = max($result - 1, 0);
-                break;
-            case 'end':
-                $result = $game->getPlyCount();
-            }
+        $result = $this->_requestedPly;
+        switch ($this->_requestedAction) {
+        case 'start':
+            $result = 0;
+            break;
+        case 'next':
+            $result = min($result + 1, $game->getPlyCount());
+            break;
+        case 'previous':
+            $result = max($result - 1, 0);
+            break;
+        case 'end':
+            $result = $game->getPlyCount();
         }
         return $result;
     }
@@ -174,38 +286,11 @@ class Chess_Controller
      */
     private function _isFlipped()
     {
-        if (isset($_REQUEST['chess_flipped'])) {
-            $result = (bool) $_REQUEST['chess_flipped'];
-        } else {
-            $result =  false;
-        }
-        if (isset($_REQUEST['chess_action'])
-            && $_REQUEST['chess_action'] == 'flip'
-        ) {
+        $result = $this->_isFlipped;
+        if ($this->_requestedAction == 'flip') {
             $result = !$result;
         }
         return $result;
-    }
-
-    /**
-     * Returns a failure message.
-     *
-     * @param string $key A message key.
-     *
-     * @return string (X)HTML.
-     */
-    private function _renderFailure($key)
-    {
-        global $plugin_tx;
-
-        $args = func_get_args();
-        array_shift($args);
-        $message = vsprintf($plugin_tx['chess']['message_' . $key], $args);
-        if (function_exists('XH_message')) {
-            return XH_message('fail', $message);
-        } else {
-            return '<p class="cmsimplecore_warning">' . $message . '<p>';
-        }
     }
 }
 
@@ -619,7 +704,7 @@ EOT;
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_ImportCommand
+class Chess_ImportCommand extends Chess_Presenter
 {
     /**
      * The PGN importer.
@@ -649,6 +734,7 @@ class Chess_ImportCommand
      */
     public function __construct(Chess_PgnImporter $importer)
     {
+        parent::__construct();
         $this->_importer = $importer;
     }
 
@@ -660,6 +746,8 @@ class Chess_ImportCommand
      * @global string            The value of the <var>action</var> GP parameter.
      * @global string            The HTML of the contents area.
      * @global XH_CSRFProtection The CSRF protector.
+     *
+     * @todo Add success message.
      */
     public function execute()
     {
@@ -670,7 +758,11 @@ class Chess_ImportCommand
                 $_XH_csrfProtection->check();
             }
             $game = stsl($_POST['chess_game']);
-            $this->_importer->import($game);
+            if (Chess_Game::isValidName($game)) {
+                $this->_importer->import($game);
+            } else {
+                $o .= $this->renderFailure('invalid_name', $game);
+            }
         }
         $view = Chess_ImportView::make($this->_importer);
         $o .= $view->render();

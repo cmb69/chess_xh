@@ -40,6 +40,18 @@ class Chess_Game
     private $_moves;
 
     /**
+     * Returns whether a name is a valid game name.
+     *
+     * @param string $basename A basename.
+     *
+     * @return bool
+     */
+    public static function isValidName($basename)
+    {
+        return (bool) preg_match('/^[a-z0-9_-]+$/ui', $basename);
+    }
+
+    /**
      * Returns a game loaded from a file; <var>null</var> if the game can't be
      * loaded.
      *
