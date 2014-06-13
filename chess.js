@@ -24,6 +24,17 @@ if (window.addEventListener) {
         function onSubmit(event) {
             var target, form, request, method;
 
+            function displayLoader() {
+                var table, img;
+                table = form.previousSibling;
+                if (!table.querySelector(".chess_loader")) {
+                    img = document.createElement("img");
+                    img.src = "./plugins/chess/images/ajax-loader.gif";
+                    img.className = "chess_loader";
+                    table.appendChild(img);
+                }
+            }
+
             function isSuccess() {
                 return request.status === 200 &&
                         /^<div id="chess_view_/.test(request.responseText) &&
@@ -32,9 +43,18 @@ if (window.addEventListener) {
 
             function onSuccess(form, html) {
                 var container = form.parentNode.parentNode;
+
+                function removeMoveClasses() {
+                    var elements = container.querySelectorAll(".chess_move");
+                    Array.prototype.forEach.call(elements, function (element) {
+                        element.className = "";
+                    });
+                }
+
                 container.innerHTML = html;
                 form = container.querySelector(".chess_control_panel");
                 form.addEventListener("click", onSubmit);
+                setTimeout(removeMoveClasses, 1000);
             }
 
             function onReadyStateChange() {
@@ -64,7 +84,7 @@ if (window.addEventListener) {
             }
 
             target = event.target;
-            if (target.nodeName === "BUTTON") {
+            if (target.nodeName === "BUTTON" && !target.disabled) {
                 form = target.form;
                 method = form.method.toUpperCase();
                 request = new XMLHttpRequest();
@@ -76,6 +96,7 @@ if (window.addEventListener) {
                 request.onreadystatechange = onReadyStateChange;
                 request.send(getBody());
                 event.preventDefault();
+                displayLoader();
             }
         }
 
@@ -88,6 +109,5 @@ if (window.addEventListener) {
         }
 
         registerClickHandlers();
-
     });
 }

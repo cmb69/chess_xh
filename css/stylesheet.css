@@ -5,6 +5,7 @@
 .chess_view {}
 
 .chess_board {
+    position: relative;
     border-collapse: collapse;
     margin: 1em auto;
 }
@@ -21,11 +22,17 @@
     background: #c95;
 }
 .chess_move {
-    background: #8a4;
-    border-radius: 28px;
     display: inline-block;
     width: 45px;
     height: 45px;
+    background: #8a4;
+    border-radius: 28px;
+}
+.chess_loader {
+    position: absolute;
+    top: 196px;
+    left: 196px;
+    z-index: 1;
 }
 
 .chess_control_panel {
