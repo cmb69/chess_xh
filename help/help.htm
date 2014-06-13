@@ -13,8 +13,9 @@
 <img src="../chess.png" style="float:left; margin-right:1em" alt="Knight on
 chess board fragment">
 <p>Chess_XH facilitates to display simple chess game viewers on your website.
-Contrary to many other viewers it doesn't require JavaScript or Flash. The chess
-games have to be imported from <a
+Contrary to many other viewers it doesn't require JavaScript or Flash.</p>
+<p>The chess games can't be entered in CMSimple_XH's back-end; instead they have
+to be imported from <a
 href="http://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a> files.</p>
 
 <ul id="nav">
@@ -67,9 +68,10 @@ to your own language, or customize them according to your needs.</p>
 <h2 id="usage">Usage</h2>
 <p>At first you have to import some PGN files into a proprietary format for
 faster processing. This can be done in the website's back-end (Plugins &rarr;
-Chess &rarr; Import). It is recommended to keep the PGN files after the import,
-as you will likely need to import them again for future versions of the
-plugin.</p>
+Chess &rarr; Import). PGN files containing multiple games will result in
+multiple .dat files with a single game each.</p>
+<p>It is recommended to keep the PGN files after the import, as you will likely
+need to import them again for future versions of the plugin.</p>
 <p>To display a chess game on a page, insert</p>
 <pre>{{{PLUGIN:chess('italian');}}}</pre>
 <p>where 'italian' is the name of a chess game in .dat format.</p>
@@ -79,10 +81,10 @@ plugin.</p>
 <p>Currently only a small subset of the information available in PGN is used
 by the plugin, namely the moves without comments or other anotations.</p>
 <p>The import of a PGN file is quite time consuming, so very large PGN files
-might cause timeout issues (blank page). In this case you have to split the PGN
-file manually before importing it.</p>
+with many games might cause timeout issues (blank page). In this case you have
+to split the PGN file manually before importing it.</p>
 <p>The JavaScript support for improved viewing of the games requires a
-contemporary browser. Old browsers, such as IE 8 will fall back to plain HTML
+contemporary browser. Old browsers such as IE 8 will fall back to plain HTML
 forms.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
@@ -93,7 +95,8 @@ forms.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="credits">Credits</h2>
-<p>This plugin has been inspired by Bulkington.</p>
+<p>This plugin has been inspired by <a
+href="http://www.scroterturm.de/">Bulkington</a>.</p>
 <p>The plugin uses <a
 href="https://github.com/DHTMLGoodies/chessParser">chessParser</a> for the PGN
 import. Many thanks to <a href="http://dhtml-chess.com/">Alf Magne Kalleland</a>
@@ -105,6 +108,9 @@ href="http://en.wikipedia.org/wiki/User:Cburnett">Colin M.L. Burnett</a>. Many
 thanks for publishing them on <a
 href="http://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard_transparent">Wikimedia</a>
 under GPL.</p>
+<p>The animated loading image is taken from <a
+href="http://preloaders.net/">preloaders.net</a>. Many thanks for making this
+service available.</p>
 <!--<p>This plugin uses free applications icons from <a
 href="http://www.aha-soft.com/">Aha-Soft</a>. Many thanks to making these icons
 freely available.</p>
