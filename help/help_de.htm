@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<title>Chess_XH – Handbuch</title>
+<link rel="stylesheet" type="text/css" href="./stylesheet.css">
+</head>
+
+<body>
+
+<h1>Chess_XH - ein CMSimple_XH Plugin</h1>
+<img src="../chess.png" style="float:left; margin-right:1em" alt="Springer auf
+Schachbrettfragment">
+<p>Chess_XH ermöglicht die Anzeige von einfachen Schachspiel-Viewern auf Ihrer
+Website. Im Gegensatz zu vielen anderen Viewern wird weder JavaScript noch Flash
+benötigt.</p>
+<p>Die Schachspiele können nicht in CMSimple_XHs Back-End eingegeben,
+sondern müssen aus <a
+href="http://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a> Dateien
+importiert werden.</p>
+
+<ul id="nav">
+<li><a href="#notice">Wichtiger Hinweis</a></li>
+<li><a href="#requirements">Voraussetzungen</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#settings">Einstellungen</a></li>
+<li><a href="#usage">Verwendung</a></li>
+<li><a href="#limitations">Beschränkungen</a></li>
+<li><a href="#license">Lizenz</a></li>
+<li><a href="#credits">Danksagung</a></li>
+</ul>
+
+<div id="body">
+
+<p><strong>Bitte lesen Sie diese Dokumentation <em>bevor</em> Sie auf Probleme
+stoßen!</strong></p>
+
+<h2 id="notice">Wichtiger Hinweis</h2>
+<p><strong>Chess_XH konnte bisher noch nicht in diversen Umgebungen getestet
+werden. Es handelt sich um eine so genannte Beta Version. Vorsicht bei der
+Verwendung!</strong></p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="requirements">Voraussetzungen</h2>
+<p>Chess_XH ist ein Plugin für CMSimple_XH. Es benötigt eine UTF-8 kodierte
+Version und PHP &ge; 5.2.</p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="installation">Installation</h2>
+<p>Die Installation erfolgt wie bei vielen anderen CMSimple_XH-Plugins auch. Im
+<a href="http://www.cmsimple-xh.org/wiki/doku.php/de:installation">CMSimple_XH
+Wiki</a> finden sie ausführliche Hinweise.</p>
+<ol>
+<li>Sichern Sie die Daten auf Ihrem Server.</li>
+<li>Entpacken Sie die ZIP-Datei auf Ihrem Computer.</li>
+<li>Laden Sie das gesamte Verzeichnis chess/ auf Ihren Server in das
+plugins/ Verzeichnis von CMSimple_XH hoch.</li>
+<li>Vergeben Sie Schreibrechte für die Unterverzeichnisse css/<!--, config/,-->,
+data/ und languages/.</li>
+<li>Schützen Sie den Daten-Ordner von Chess_XH vor direktem Zugriff auf eine
+Weise, die Ihr Webserver unterstützt. Eine .htaccess-Datei für Apache Server ist
+bereits enthalten.</li>
+<!--<li>Navigieren Sie zur Administration von Chess, und prüfen Sie, ob alle-->
+<!--Voraussetzungen für den Betrieb erfüllt sind.</li>-->
+</ol>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="settings">Einstellungen</h2>
+<p>Die Konfiguration des Plugins erfolgt wie bei vielen anderen
+CMSimple_XH-Plugins auch im Administrationsbereich der Homepage. Wählen Sie
+Plugins &rarr; Chess.</p>
+<!--<p>Sie können die Original-Einstellungen von Chess_XH unter "Konfiguration"-->
+<!--ändern. Beim Überfahren der Hilfe-Icons mit der Maus werden Hinweise zu den-->
+<!--Einstellungen angezeigt.</p>-->
+<p>Die Lokalisierung wird unter "Sprache" vorgenommen. Sie können die
+Zeichenketten in Ihre eigene Sprache übersetzen, oder sie entsprechend Ihren
+Anforderungen anpassen.</p>
+<p>Das Aussehen von Chess_XH kann unter "Stylesheet" angepasst werden. </p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="usage">Verwendung</h2>
+<p>Zunächst müssen Sie PGN Dateien in ein proprietäres Format zwecks schnellerer
+Verarbeitung konvertieren. Dies erfolgt im Back-End der Website (Plugins &rarr;
+Chess &rarr; Import). PGN Dateien mit mehreren Spielen ergeben mehrere .dat
+Dateien mit jeweils einem Spiel.</p>
+<p>Es wird empfohlen die PGN Dateien nach dem Import zu erhalten, da Sie diese
+vermutlich für zukünftige Versionen des Plugins erneut importieren müssen.</p>
+<p>Um ein Schachspiel auf einer Seite anzuzeigen, notieren Sie</p>
+<pre>{{{PLUGIN:chess('italian');}}}</pre>
+<p>wobei 'italian' der Name eines Schachspiels im .dat Format ist.</p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2><a name="limitations">Beschränkungen</a></h2>
+<p>Derzeit wird nur eine kleine Menge der Informationen, die in PGN verfügbar
+sind, vom Plugin genutzt, und zwar lediglich die Züge ohne Kommentare oder
+andere Anmerkungen.</p>
+<p>Der Import einer PGN Datei ist recht zeitaufwendig, so dass sehr große PGN
+Dateien mit vielen Spielen einen Timeout (leere Seite) verursachen könnten. In
+diesem Fall müssen Sie die PGN Datei vor dem Import manuell aufteilen.</p>
+<p>Die JavaScript Unterstützung zum verbesserten Betrachten der Spiele erfordert
+einen zeitgemäßen Browser. Alte Browser wie der IE 8 fallen auf einfache HTML
+Formulare zurück.</p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="license">Lizenz</h2>
+<p>Chess_XH kann unter Einhaltung der <a
+href="http://www.gnu.org/licenses/gpl.html">GPLv3</a> verwendet werden.</p>
+<p>&copy; 2014 Christoph M. Becker</p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+<h2 id="credits">Danksagung</h2>
+<p>Dieses Plugin wurde von <a
+href="http://www.scroterturm.de/">Bulkington</a> angeregt.</p>
+<p>Das Plugin verwendet <a
+href="https://github.com/DHTMLGoodies/chessParser">chessParser</a> für den PGN
+Import. Vielen Dank an <a href="http://dhtml-chess.com/">Alf Magne Kalleland</a>
+für die Veröffentlichung dieser Bibliothek unter LGPL.</p>
+<p>Das Plugin-Icon wurde von <a href="http://www.mentalrey.it/">Alessandro
+Rei</a> gestaltet. Vielen Dank für die Veröffentlichung unter GPL.</p>
+<p>Die Bilder der Schachsteine wurden von <a
+href="http://en.wikipedia.org/wiki/User:Cburnett">Colin M.L. Burnett</a>
+gestaltet. Vielen Dank für die Veröffentlichung auf <a
+href="http://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard_transparent">Wikimedia</a>
+unter GPL.</p>
+<p>Das animierte Lade-Bild stammt von <a
+href="http://preloaders.net/">preloaders.net</a>. Vielen Dank für das zur
+Verfügung stellen dieses Dienstes</p>
+<!--<p>Dieses Plugin verwendet "free applications icons" von <a-->
+<!--href="http://www.aha-soft.com/">Aha-Soft</a>. Vielen Dank für die freie-->
+<!--Verwendbarkeit dieser Icons.</p>-->
+<!--<p>Vielen Dank an die Gemeinschaft im <a-->
+<!--href="http://www.cmsimpleforum.com/">CMSimple_XH-Forum</a> für Tipps, Anregungen-->
+<!--und das Testen.</p>-->
+<p>Zu guter Letzt vielen Dank an <a href="http://harteg.dk/">Peter Harteg</a>,
+den "Vater" von CMSimple, und allen Entwicklern von <a
+href="http://www.cmsimple-xh.org/">CMSimple_XH</a>, ohne die dieses fantastische
+CMS nicht existieren würde.</p>
+<div class="toplink"><a href="#">zum Seitenanfang</a></div>
+
+</div>
+
+</body>
+
+</html>
