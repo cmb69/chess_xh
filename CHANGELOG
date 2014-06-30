@@ -1,4 +1,4 @@
-Version 1.0beta2 -- released 2014-06-30
+Version 1.0beta2 -- released 2014-07-01
 * fixed vulnerability under unsupported CMSimple_XH versions, where the plugin
   administration didn't require authentication
 
