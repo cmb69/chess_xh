@@ -1,3 +1,4 @@
+* fix bug, where loading.gif doesn't work in second languages
 * make loading.gif more decent
 * XH_registerStandardPluginMenuItems
 * add labels for files and ranks
