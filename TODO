@@ -1,6 +1,8 @@
 * fix bug, where loading.gif doesn't work in second languages
 * make loading.gif more decent
 * XH_registerStandardPluginMenuItems
+* change color of loading.gif to something more decent
+* import: report success/failure
 * add labels for files and ranks
 * System check
 * synapsis
