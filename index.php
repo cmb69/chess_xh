@@ -48,7 +48,7 @@ require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
 /**
  * The plugin version.
  */
-define('CHESS_VERSION', '@CHESS_VERSION@');
+define('CHESS_VERSION', '1.0beta2');
 
 if (!function_exists('XH_exit')) {
     /**

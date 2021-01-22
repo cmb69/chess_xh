@@ -92,17 +92,6 @@
     <target name="build">
         <fail unless="version" message="version is not defined!"/>
         <svnexport revision="" repositoryurl="." todir="export"/>
-        <move todir="dist">
-            <fileset dir="export">
-                <include name="index.php"/>
-                <include name="version.nfo"/>
-            </fileset>
-            <filterchain>
-                <replacetokens>
-                    <token key="CHESS_VERSION" value="${version}"/>
-                </replacetokens>
-            </filterchain>
-        </move>
         <jsMin targetDir="dist" suffix="" failOnError="false">
             <fileset dir="export">
                 <include name="chess.js"/>
