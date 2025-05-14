@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id$ -->
-
 <project name="Chess" default="default">
-
-  <!-- Properties -->
-
-  <property name="styledir" value="C:\xampp\php\data\phing\etc"/>
-
-  <!-- Filesets -->
-
-  <fileset id="php-sources" dir=".">
-    <include name="classes/*.php"/>
-    <include name="index.php"/>
-  </fileset>
 
   <fileset id="unit-tests" dir="tests/unit">
     <include name="*Test.php"/>
@@ -22,9 +9,6 @@
   <fileset id="attack-tests" dir="tests/attack">
     <include name="*Test.php"/>
   </fileset>
-
-
-  <!-- Checks -->
 
   <target name="sniff" description="checks adherence to coding standards">
     <exec executable="phpcs" passthru="true" checkreturn="true">
@@ -35,14 +19,6 @@
       <arg file="classes"/>
     </exec>
   </target>
-
-  <target name="compat">
-    <exec command="phpcompatinfo --configuration phpcompatinfo.xml print
-                   --exclude-pattern chess ."
-        logoutput="true"/>
-  </target>
-
-  <!-- Tests -->
 
   <target name="unit-tests">
     <phpunit haltonerror="true" haltonfailure="true">
@@ -63,33 +39,9 @@
     </phpunit>
   </target>
 
-  <!-- Code coverage -->
-
   <target name="coverage">
     <exec command="phpunit --configuration coverage.xml" logoutput="true"/>
   </target>
-
-  <!-- Documentation -->
-
-  <target name="php-doc">
-    <phpdoc title="Chess_XH Developer Documentation" destdir="doc/php"
-        output="HTML:Smarty:HandS" defaultpackagename="Chess"
-        defaultcategoryname="CMSimple_XH">
-      <fileset refid="php-sources"/>
-      <projdocfileset dir=".">
-         <include name="README"/>
-         <include name="CHANGELOG"/>
-      </projdocfileset>
-    </phpdoc>
-  </target>
-
-<!--    <target name="js-doc">
-    <exec command="jsdoc -destination doc/js pagemanager.js" checkreturn="true"/>
-  </target>
--->
-  <target name="doc" depends="php-doc"/>
-
-  <!-- Build -->
 
   <target name="build">
     <fail unless="version" message="version is not defined!"/>
