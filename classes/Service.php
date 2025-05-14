@@ -76,7 +76,7 @@ class Chess_PgnImporter
     {
         global $pth;
 
-        $folder = $pth['folder']['plugins'] . 'chess/classes/chessParser/';
+        $folder = $pth['folder']['plugins'] . 'chess/parser/';
         include_once $folder . 'Board0x88Config.php';
         include_once $folder . 'CHESS_JSON.php';
         include_once $folder . 'FenParser0x88.php';
