@@ -57,7 +57,7 @@ class Chess_Game
      *
      * @param string $basename A basename of a data file.
      *
-     * @return Chess_Game
+     * @return ?Chess_Game
      */
     public static function load($basename)
     {
@@ -113,7 +113,7 @@ class Chess_Game
      *
      * @param int $ply A ply number.
      *
-     * @return array A map from squares to pieces.
+     * @return Chess_Position
      */
     public function getPosition($ply)
     {
@@ -130,7 +130,7 @@ class Chess_Game
      *
      * @param int $ply A ply number.
      *
-     * @return Chess_Move
+     * @return ?Chess_Move
      */
     public function getMove($ply)
     {
@@ -262,7 +262,7 @@ class Chess_Position
                 --$rank;
                 $file = 'a';
             } elseif ($char >= '1' && $char <= '8') {
-                $file = chr(ord($file) + $char);
+                $file = chr(ord($file) + (int) $char);
             } else {
                 $color = ($char >= 'A' && $char <= 'Z') ? 'w' : 'b';
                 $result->_pieces[$file . $rank] = $color . strtolower($char);
@@ -636,7 +636,7 @@ class Chess_Position
      *
      * @param Chess_Move $move A move.
      *
-     * @return void
+     * @return bool
      */
     public function isEnPassant($move)
     {
@@ -688,7 +688,7 @@ class Chess_Position
     /**
      * Returns the FEN piece placement of a certain rank.
      *
-     * @param string $rank A rank.
+     * @param int $rank A rank.
      *
      * @return string
      */
@@ -748,7 +748,7 @@ class Chess_Move
     /**
      * The piece to promote to.
      *
-     * @var string
+     * @var ?string
      */
     private $_promotion;
 

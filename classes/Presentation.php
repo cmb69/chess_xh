@@ -121,19 +121,19 @@ class Chess_Controller extends Chess_Presenter
     {
         parent::__construct();
         $this->_requestedGame = isset($_REQUEST['chess_game'])
-            ? stsl($_REQUEST['chess_game']) : false;
+            ? stsl($_REQUEST['chess_game']) : "";
         if (!Chess_Game::isValidName($this->_requestedGame)) {
-            $this->_requestedGame = false;
+            $this->_requestedGame = "";
         }
         $this->_requestedPly = isset($_REQUEST['chess_ply'])
             ? (int) stsl($_REQUEST['chess_ply']) : 0;
         $this->_isFlipped = isset($_REQUEST['chess_flipped'])
             ? (bool) $_REQUEST['chess_flipped'] : false;
         $this->_requestedAction = isset($_REQUEST['chess_action'])
-            ? stsl($_REQUEST['chess_action']) : false;
+            ? stsl($_REQUEST['chess_action']) : "";
         $actions = array('start', 'previous', 'next', 'end', 'flip');
         if (!in_array($this->_requestedAction, $actions)) {
-            $this->_requestedAction = false;
+            $this->_requestedAction = "";
         }
         $this->_isAjaxRequest = isset($_REQUEST['chess_ajax']);
     }
@@ -150,7 +150,10 @@ class Chess_Controller extends Chess_Presenter
         global $chess;
 
         $this->_emitScript();
-        if (XH_ADM && isset($chess) && $chess == 'true') {
+        if (XH_ADM // @phpstan-ignore-line
+            && isset($chess)
+            && $chess == 'true'
+        ) {
             $this->_handleAdministration();
         }
     }
@@ -200,7 +203,7 @@ class Chess_Controller extends Chess_Presenter
             $this->_handleImport();
             break;
         default:
-            $o .= plugin_admin_common($action, $admin, 'chess');
+            $o .= plugin_admin_common($action, $admin, 'chess'); // @phpstan-ignore-line
         }
     }
 
@@ -227,7 +230,7 @@ class Chess_Controller extends Chess_Presenter
      *
      * @param string $basename A basename of a data file.
      *
-     * @return string (X)HTML.
+     * @return string|void
      */
     public function chess($basename)
     {
@@ -443,17 +446,17 @@ class Chess_GameView
      * Renders a certain square.
      *
      * @param string $file A file.
-     * @param string $rank A rank.
+     * @param int $rank A rank.
      *
      * @return string (X)HTML.
      */
     private function _renderSquare($file, $rank)
     {
         $square = "$file$rank";
-        $class = ($rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
+        $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
         $result = '<td class="' . $class . '">';
         $move = $this->_game->getMove($this->_ply - 1);
-        $moved = isset($move) && $move->isSourceOrDestination($square);
+        $moved = $move !== null && $move->isSourceOrDestination($square);
         if ($this->_position->hasPieceOn($square)) {
             $result .= $this->_renderPiece(
                 $this->_position->getPieceOn($square), $moved
@@ -505,7 +508,7 @@ class Chess_GameView
             . $this->_getMethod() . '">'
             . $this->_renderHiddenInput('selected', $su)
             . $this->_renderHiddenInput('chess_game', $this->_game->getName())
-            . $this->_renderHiddenInput('chess_flipped', (int) $this->_flipped)
+            . $this->_renderHiddenInput('chess_flipped', (string) (int) $this->_flipped)
             . $this->_renderButton('goto')
             . $this->_renderButton('start') . $this->_renderButton('previous')
             . $this->_renderPlyInput($this->_ply)
@@ -517,12 +520,12 @@ class Chess_GameView
     /**
      * Returns the appropriate form method according to the CMSimple version.
      *
-     * @return bool
+     * @return string
      */
     private function _getMethod()
     {
         if (strpos(CMSIMPLE_XH_VERSION, 'CMSimple_XH') === 0
-            && version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.6', 'ge')
+            && version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.6', 'ge') // @phpstan-ignore-line
         ) {
             return 'get';
         } else {
@@ -533,7 +536,7 @@ class Chess_GameView
     /**
      * Renders the ply input field.
      *
-     * @param string $value A ply.
+     * @param int $value A ply.
      *
      * @return string (X)HTML.
      */
@@ -597,6 +600,9 @@ class Chess_GameView
             $value = 'flip';
             $disabled = false;
             break;
+        default:
+            $value = "";
+            $disabled = true;
         }
         return '<button type="submit" name="chess_action" value="' . $value . '"'
             . ($disabled ? ' disabled="disabled"' : '') . '>'
@@ -641,7 +647,7 @@ class Chess_InfoView
     /**
      * Renders the plugin icon.
      *
-     * @return (X)HTML.
+     * @return string (X)HTML.
      *
      * @global array The paths of system files and folders.
      * @global array The localization of the plugins.
@@ -660,7 +666,7 @@ class Chess_InfoView
     /**
      * Renders the copyright info.
      *
-     * @return (X)HTML.
+     * @return string (X)HTML.
      */
     private function _renderCopyright()
     {
@@ -674,7 +680,7 @@ EOT;
     /**
      * Renders the license info.
      *
-     * @return (X)HTML.
+     * @return string (X)HTML.
      */
     private function _renderLicense()
     {
