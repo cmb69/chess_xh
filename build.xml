@@ -24,6 +24,8 @@
     <exec executable="phpunit" passthru="true" checkreturn="true"/>
   </target>
 
+  <target name="check" description="runs all checks" depends="sniff,stan,test"/>
+
   <target name="attack-tests">
     <fail unless="env.CMSIMPLEDIR" message="CMSIMPLEDIR undefined!"/>
     <phpunit haltonerror="true" haltonfailure="true">
