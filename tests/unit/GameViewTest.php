@@ -14,11 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once '../../cmsimple/functions.php';
-require_once './classes/Domain.php';
-require_once './classes/Presentation.php';
-require_once './tests/unit/TestBase.php';
-
 /**
  * Testing the game views.
  *
@@ -28,7 +23,7 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class GameViewTest extends TestBase
+class GameViewTest extends TestCase
 {
     /**
      * The test subject.
@@ -54,11 +49,11 @@ class GameViewTest extends TestBase
      * @global string The selected URL.
      * @global array  The localization of the plugins.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth, $sn, $su, $plugin_tx;
 
-        $this->defineConstant('CMSIMPLE_XH_VERSION', 'CMSimple_XH 1.6.2');
+        $this->setConstant('CMSIMPLE_XH_VERSION', 'CMSimple_XH 1.6.2');
         $pth = array(
             'folder' => array('plugins' => './')
         );
@@ -274,7 +269,7 @@ class GameViewTest extends TestBase
      */
     public function testRendersControlPanelOldCMSimple()
     {
-        $this->defineConstant('CMSIMPLE_XH_VERSION', 'CMSimple 4.4.3');
+        $this->setConstant('CMSIMPLE_XH_VERSION', 'CMSimple 4.4.3');
         $this->assertRenders(
             array(
                 'tag' => 'form',

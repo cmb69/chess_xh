@@ -14,9 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once './classes/Domain.php';
-require_once './tests/unit/TestBase.php';
-
 /**
  * Testing the moves.
  *
@@ -26,7 +23,7 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class MoveTest extends TestBase
+class MoveTest extends TestCase
 {
     /**
      * The test subject.
@@ -40,7 +37,7 @@ class MoveTest extends TestBase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->_subject = new Chess_Move('e7', 'd8', 'q');
     }

@@ -14,12 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once '../../cmsimple/functions.php';
-require_once '../../cmsimple/classes/CSRFProtection.php';
-require_once './classes/Service.php';
-require_once './classes/Presentation.php';
-require_once './tests/unit/TestBase.php';
-
 /**
  * Testing the import views.
  *
@@ -29,7 +23,7 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class ImportViewTest extends TestBase
+class ImportViewTest extends TestCase
 {
     /**
      * The test subject.
@@ -53,7 +47,7 @@ class ImportViewTest extends TestBase
      * @global string The script name.
      * @global array  The localization of the plugins.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $sn, $plugin_tx, $_XH_csrfProtection;
 
@@ -64,7 +58,7 @@ class ImportViewTest extends TestBase
                 'menu_main' => 'Import'
             )
         );
-        $_XH_csrfProtection = $this->getMockBuilder('XH_CSRFProtection')
+        $_XH_csrfProtection = $this->getMockBuilder(XH\CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
         $this->_importer = $this->getMockBuilder('Chess_PgnImporter')
             ->disableOriginalConstructor()->getMock();

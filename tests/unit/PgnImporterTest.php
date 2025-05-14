@@ -14,10 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once './vendor/autoload.php';
-require_once './classes/Service.php';
-require_once './tests/unit/TestBase.php';
-
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStream;
@@ -31,7 +27,7 @@ use org\bovigo\vfs\vfsStream;
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class PgnImporterTest extends TestBase
+class PgnImporterTest extends TestCase
 {
     /**
      * Test PGN.
@@ -89,7 +85,7 @@ EOT;
      *
      * @global array The paths of system files and folders.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth;
 

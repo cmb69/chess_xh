@@ -2,10 +2,6 @@
 
 <project name="Chess" default="default">
 
-  <fileset id="unit-tests" dir="tests/unit">
-    <include name="*Test.php"/>
-  </fileset>
-
   <fileset id="attack-tests" dir="tests/attack">
     <include name="*Test.php"/>
   </fileset>
@@ -20,13 +16,8 @@
     </exec>
   </target>
 
-  <target name="unit-tests">
-    <phpunit haltonerror="true" haltonfailure="true">
-      <formatter type="plain" usefile="false"/>
-      <batchtest>
-        <fileset refid="unit-tests"/>
-      </batchtest>
-    </phpunit>
+  <target name="test" description="runs all tests">
+    <exec executable="phpunit" passthru="true" checkreturn="true"/>
   </target>
 
   <target name="attack-tests">
@@ -39,8 +30,11 @@
     </phpunit>
   </target>
 
-  <target name="coverage">
-    <exec command="phpunit --configuration coverage.xml" logoutput="true"/>
+  <target name="coverage" description="generates coverage report">
+    <exec executable="phpunit" passthru="true" checkreturn="true">
+      <arg value="--coverage-html"/>
+      <arg file="coverage"/>
+    </exec>
   </target>
 
   <target name="build">

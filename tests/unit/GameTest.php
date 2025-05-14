@@ -31,7 +31,7 @@ use org\bovigo\vfs\vfsStream;
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class GameTest extends TestBase
+class GameTest extends TestCase
 {
     /**
      * The test subject.
@@ -47,7 +47,7 @@ class GameTest extends TestBase
      *
      * @global array The paths of system files and folders.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth;
 

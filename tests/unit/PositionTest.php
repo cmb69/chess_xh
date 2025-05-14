@@ -14,9 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once './classes/Domain.php';
-require_once './tests/unit/TestBase.php';
-
 /**
  * Testing the positions.
  *
@@ -26,14 +23,14 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class PositionTest extends TestBase
+class PositionTest extends TestCase
 {
     /**
      * Sets up the test fixture.
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->_subject = new Chess_Position();
     }

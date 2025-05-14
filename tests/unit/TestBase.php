@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * The abstract base class for all test cases.
  *
@@ -23,7 +25,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-abstract class TestBase extends PHPUnit_Framework_TestCase
+abstract class TestBase extends TestCase
 {
     /**
      * (Re)defines a constant.

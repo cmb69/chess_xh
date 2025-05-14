@@ -14,10 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once './vendor/autoload.php';
-require_once './classes/Presentation.php';
-require_once './tests/unit/TestBase.php';
-
 /**
  * Testing the info views.
  *
@@ -27,7 +23,7 @@ require_once './tests/unit/TestBase.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class InfoViewTest extends TestBase
+class InfoViewTest extends TestCase
 {
     /**
      * The subject under test.
@@ -44,7 +40,7 @@ class InfoViewTest extends TestBase
      * @global array The paths of system files and folders.
      * @global array The localization of the plugins.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth, $plugin_tx;
 
@@ -54,7 +50,7 @@ class InfoViewTest extends TestBase
         $plugin_tx = array(
             'chess' => array('alt_icon' => 'Knight on chess board fragment')
         );
-        $this->defineConstant('CHESS_VERSION', '1.0');
+        $this->setConstant('CHESS_VERSION', '1.0');
         $this->subject = new Chess_InfoView();
     }
 
