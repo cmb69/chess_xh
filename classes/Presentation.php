@@ -446,7 +446,7 @@ class Chess_GameView
      * Renders a certain square.
      *
      * @param string $file A file.
-     * @param int $rank A rank.
+     * @param int    $rank A rank.
      *
      * @return string (X)HTML.
      */

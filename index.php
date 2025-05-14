@@ -23,14 +23,15 @@ if (!defined('CMSIMPLE_XH_VERSION')
 ) {
     header('HTTP/1.1 403 Forbidden');
     header('Content-Type: text/plain; charset=UTF-8');
-    die(<<<EOT
-Chess_XH detected an unsupported CMSimple_XH version.
-Uninstall Chess_XH or upgrade to a supported CMSimple_XH version!
-EOT
+    die(
+        "Chess_XH detected an unsupported CMSimple_XH version. "
+        . "Uninstall Chess_XH or upgrade to a supported CMSimple_XH version!"
     );
 }
 
 /**
+ * The paths.
+ *
  * @var array{folder:array<string,string>,file:array<string,string>} $pth
  */
 
