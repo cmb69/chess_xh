@@ -121,16 +121,16 @@ class Chess_Controller extends Chess_Presenter
     {
         parent::__construct();
         $this->_requestedGame = isset($_REQUEST['chess_game'])
-            ? stsl($_REQUEST['chess_game']) : "";
+            ? $_REQUEST['chess_game'] : "";
         if (!Chess_Game::isValidName($this->_requestedGame)) {
             $this->_requestedGame = "";
         }
         $this->_requestedPly = isset($_REQUEST['chess_ply'])
-            ? (int) stsl($_REQUEST['chess_ply']) : 0;
+            ? (int) $_REQUEST['chess_ply'] : 0;
         $this->_isFlipped = isset($_REQUEST['chess_flipped'])
             ? (bool) $_REQUEST['chess_flipped'] : false;
         $this->_requestedAction = isset($_REQUEST['chess_action'])
-            ? stsl($_REQUEST['chess_action']) : "";
+            ? $_REQUEST['chess_action'] : "";
         $actions = array('start', 'previous', 'next', 'end', 'flip');
         if (!in_array($this->_requestedAction, $actions)) {
             $this->_requestedAction = "";
@@ -757,7 +757,7 @@ class Chess_ImportCommand extends Chess_Presenter
             if (isset($_XH_csrfProtection)) {
                 $_XH_csrfProtection->check();
             }
-            $game = stsl($_POST['chess_game']);
+            $game = $_POST['chess_game'];
             if (Chess_Game::isValidName($game)) {
                 $this->_importer->import($game);
             } else {
