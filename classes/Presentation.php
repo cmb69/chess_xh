@@ -505,7 +505,7 @@ class Chess_GameView
 
         return '<form class="chess_control_panel" action="' . $sn
             . '#chess_view_' . $this->_game->getName() . '" method="'
-            . $this->_getMethod() . '">'
+            . 'get' . '">'
             . $this->_renderHiddenInput('selected', $su)
             . $this->_renderHiddenInput('chess_game', $this->_game->getName())
             . $this->_renderHiddenInput('chess_flipped', (string) (int) $this->_flipped)
@@ -515,22 +515,6 @@ class Chess_GameView
             . $this->_renderButton('next') . $this->_renderButton('end')
             . $this->_renderButton('flip')
             . '</form>';
-    }
-
-    /**
-     * Returns the appropriate form method according to the CMSimple version.
-     *
-     * @return string
-     */
-    private function _getMethod()
-    {
-        if (strpos(CMSIMPLE_XH_VERSION, 'CMSimple_XH') === 0
-            && version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.6', 'ge') // @phpstan-ignore-line
-        ) {
-            return 'get';
-        } else {
-            return 'post';
-        }
     }
 
     /**
