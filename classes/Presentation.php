@@ -151,8 +151,7 @@ class Chess_Controller extends Chess_Presenter
 
         $this->_emitScript();
         if (XH_ADM // @phpstan-ignore-line
-            && isset($chess)
-            && $chess == 'true'
+            && XH_wantsPluginAdministration("chess")
         ) {
             $this->_handleAdministration();
         }
