@@ -488,7 +488,7 @@ class Chess_GameView
 
         $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
         $class = $moved ? 'class="chess_move"' : '';
-        return tag('img ' . $class . ' src="' . $src . '" alt="' . $piece . '"');
+        return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
     }
 
     /**
@@ -542,9 +542,7 @@ class Chess_GameView
      */
     private function _renderPlyInput($value)
     {
-        return tag(
-            'input type="text" name="chess_ply" value="' . $value . '"'
-        );
+        return '<input type="text" name="chess_ply" value="' . $value . '">';
     }
 
     /**
@@ -557,9 +555,7 @@ class Chess_GameView
      */
     private function _renderHiddenInput($name, $value)
     {
-        return tag(
-            'input type="hidden" name="' . $name . '" value="' . $value . '"'
-        );
+        return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
     }
 
     /**
@@ -656,11 +652,9 @@ class Chess_InfoView
     {
         global $pth, $plugin_tx;
 
-        return tag(
-            'img src="' . $pth['folder']['plugins'] . 'chess/chess.png"'
+        return '<img src="' . $pth['folder']['plugins'] . 'chess/chess.png"'
             . ' class="chess_icon" alt="' . $plugin_tx['chess']['alt_icon']
-            . '"'
-        );
+            . '">';
     }
 
     /**
@@ -849,8 +843,8 @@ class Chess_ImportView
         if (isset($_XH_csrfProtection)) {
             $result .= $_XH_csrfProtection->tokenInput();
         }
-        $result .= tag('input type="hidden" name="admin" value="plugin_main"')
-            . tag('input type="hidden" name="action" value="import"')
+        $result .= '<input type="hidden" name="admin" value="plugin_main">'
+            . '<input type="hidden" name="action" value="import">'
             . $this->_renderList()
             . '</form>';
         return $result;
