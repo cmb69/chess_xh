@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * The presentation layer.
+ *
+ * PHP version 5
+ *
+ * @category  CMSimple_XH
+ * @package   Chess
+ * @author    Christoph M. Becker <cmbecker69@gmx.de>
+ * @copyright 2014 Christoph M. Becker <http://3-magi.net>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @version   SVN: $Id$
+ * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+
+/**
+ * The import views.
+ *
+ * @category CMSimple_XH
+ * @package  Chess
+ * @author   Christoph M. Becker <cmbecker69@gmx.de>
+ * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
+ * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
+ */
+class Chess_ImportView
+{
+    /**
+     * The PGN importer.
+     *
+     * @var Chess_PgnImporter
+     */
+    private $_importer;
+
+    /**
+     * Returns a new self instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return Chess_ImportView
+     */
+    public static function make(Chess_PgnImporter $importer)
+    {
+        return new self($importer);
+    }
+
+    /**
+     * Initializes a new instance.
+     *
+     * @param Chess_PgnImporter $importer A PGN importer.
+     *
+     * @return void
+     */
+    public function __construct(Chess_PgnImporter $importer)
+    {
+        $this->_importer = $importer;
+    }
+
+    /**
+     * Renders the view.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The localization of the plugins.
+     */
+    public function render()
+    {
+        global $plugin_tx;
+
+        return '<h1>Chess &ndash; ' . $plugin_tx['chess']['menu_main'] . '</h1>'
+            . $this->_renderForm();
+    }
+
+    /**
+     * Renders the form.
+     *
+     * @return string (X)HTML.
+     *
+     * @global string            The script name.
+     * @global XH_CSRFProtection The CSRF protector.
+     */
+    private function _renderForm()
+    {
+        global $sn, $_XH_csrfProtection;
+
+        $result = '<form class="chess_import_form" action="' . $sn
+            . '?chess" method="post">';
+        if (isset($_XH_csrfProtection)) {
+            $result .= $_XH_csrfProtection->tokenInput();
+        }
+        $result .= '<input type="hidden" name="admin" value="plugin_main">'
+            . '<input type="hidden" name="action" value="import">'
+            . $this->_renderList()
+            . '</form>';
+        return $result;
+    }
+
+    /**
+     * Renders the list.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderList()
+    {
+        $result = '<ul>';
+        foreach ($this->_importer->findAll() as $name) {
+            $result .= $this->_renderListItem($name);
+        }
+        $result .= '</ul>';
+        return $result;
+    }
+
+    /**
+     * Renders a list item.
+     *
+     * @param string $name A basename.
+     *
+     * @return string (X)HTML
+     *
+     * @global array The localization of the plugins.
+     */
+    private function _renderListItem($name)
+    {
+        global $plugin_tx;
+
+        return '<li>'
+            . $name
+            . '<button name="chess_game" value="' . $name . '">'
+            . $plugin_tx['chess']['label_import'] . '</button>'
+            . '</li>';
+    }
+}

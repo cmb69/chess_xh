@@ -6,9 +6,16 @@ require_once '../../cmsimple/classes/CSRFProtection.php';
 require_once '../../cmsimple/functions.php';
 require_once '../../cmsimple/adminfuncs.php';
 
-require_once './classes/Domain.php';
-require_once './classes/Service.php';
-require_once './classes/Presentation.php';
+require_once './classes/Game.php';
+require_once './classes/Position.php';
+require_once './classes/Move.php';
+require_once './classes/PgnImporter.php';
+require_once './classes/Presenter.php';
+require_once './classes/ChessController.php';
+require_once './classes/GameView.php';
+require_once './classes/InfoView.php';
+require_once './classes/ImportCommand.php';
+require_once './classes/ImportView.php';
 
 require_once './tests/unit/FunctionMock.php';
 require_once './tests/unit/UopzFunctionMock.php';

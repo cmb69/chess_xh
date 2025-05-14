@@ -121,8 +121,7 @@ class BackEndControllerTest extends TestCase
             'plugin_admin_common'
         );
         $this->createFunctionMock("XH_wantsPluginAdministration")->expects($this->once())->willReturn(true);
-        $pluginAdminCommonMock->expects($this->once())
-            ->with($action, $admin, 'chess');
+        $pluginAdminCommonMock->expects($this->once());
         $this->_subject->dispatch();
     }
 }

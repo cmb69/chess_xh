@@ -14,10 +14,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-require_once './vendor/autoload.php';
-require_once './classes/Domain.php';
-require_once './tests/unit/TestBase.php';
-
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStream;
