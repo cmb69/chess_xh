@@ -14,19 +14,9 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
-/*
- * Prevent direct access and usage from unsupported CMSimple_XH versions.
- */
-if (!defined('CMSIMPLE_XH_VERSION')
-    || strpos(CMSIMPLE_XH_VERSION, 'CMSimple_XH') !== 0
-    || version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.7.0', 'lt') // @phpstan-ignore-line
-) {
-    header('HTTP/1.1 403 Forbidden');
-    header('Content-Type: text/plain; charset=UTF-8');
-    die(
-        "Chess_XH detected an unsupported CMSimple_XH version. "
-        . "Uninstall Chess_XH or upgrade to a supported CMSimple_XH version!"
-    );
+if (!defined('CMSIMPLE_XH_VERSION')) {
+    http_response_code(403);
+    exit;
 }
 
 /**
