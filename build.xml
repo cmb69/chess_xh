@@ -26,12 +26,14 @@
 
   <!-- Checks -->
 
-  <target name="sniff">
-    <phpcodesniffer standard="PEAR" format="full">
-      <fileset refid="php-sources"/>
-      <fileset refid="unit-tests"/>
-      <fileset refid="attack-tests"/>
-    </phpcodesniffer>
+  <target name="sniff" description="checks adherence to coding standards">
+    <exec executable="phpcs" passthru="true" checkreturn="true">
+      <arg value="--standard=PEAR"/>
+      <arg line="--runtime-set ignore_warnings_on_exit true"/>
+      <arg file="admin.php"/>
+      <arg file="index.php"/>
+      <arg file="classes"/>
+    </exec>
   </target>
 
   <target name="compat">

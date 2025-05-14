@@ -1,7 +1,7 @@
 <?php
 
 /**
- * main ;)
+ * Main ;)
  *
  * PHP version 5
  *
