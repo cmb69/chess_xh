@@ -202,7 +202,7 @@ class Chess_Controller extends Chess_Presenter
             $this->_handleImport();
             break;
         default:
-            $o .= plugin_admin_common($action, $admin, 'chess'); // @phpstan-ignore-line
+            $o .= plugin_admin_common();
         }
     }
 
