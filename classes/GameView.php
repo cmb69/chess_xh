@@ -35,11 +35,6 @@ class GameView
     /** @var bool */
     private $flipped;
 
-    public static function make(Game $game, int $ply = 0, bool $flipped = false): GameView
-    {
-        return new self($game, $ply, $flipped);
-    }
-
     public function __construct(Game $game, int $ply = 0, bool $flipped = false)
     {
         $this->game = $game;

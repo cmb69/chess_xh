@@ -36,11 +36,6 @@ class GameViewTest extends TestCase
         $this->subject = new GameView($this->game);
     }
 
-    public function testFactory(): void
-    {
-        $this->assertInstanceOf(GameView::class, GameView::make(new Game()));
-    }
-
     public function testRendersView(): void
     {
         Approvals::verifyHtml($this->subject->render());
