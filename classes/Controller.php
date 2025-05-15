@@ -33,9 +33,6 @@ class Controller extends Presenter
     /** @var string */
     private $requestedAction;
 
-    /** @var bool */
-    private $isAjaxRequest;
-
     public function __construct(Factory $factory)
     {
         parent::__construct();
@@ -55,7 +52,6 @@ class Controller extends Presenter
         if (!in_array($this->requestedAction, $actions)) {
             $this->requestedAction = "";
         }
-        $this->isAjaxRequest = isset($_REQUEST['chess_ajax']);
     }
 
     public function dispatch(): void
@@ -108,7 +104,7 @@ class Controller extends Presenter
     /** @return string|void */
     public function chess(string $basename)
     {
-        if ($this->isAjaxRequest && $this->requestedGame != $basename) {
+        if (isset($_REQUEST['chess_ajax']) && $this->requestedGame != $basename) {
             return;
         }
         if (!Game::isValidName($basename)) {
@@ -119,7 +115,7 @@ class Controller extends Presenter
             return $this->renderFailure('load_error', $basename);
         }
         $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
-        if ($this->isAjaxRequest) {
+        if (isset($_REQUEST['chess_ajax'])) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
             XH_exit();
