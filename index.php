@@ -45,5 +45,5 @@ define('CHESS_VERSION', '1.0beta2');
  */
 function chess($basename)
 {
-    return Dic::chessController()->chess($basename);
+    return Dic::chessController()->chess($basename)();
 }

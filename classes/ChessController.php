@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\Response;
 use Plib\View;
 
 class ChessController
@@ -37,8 +38,7 @@ class ChessController
         $this->view = $view;
     }
 
-    /** @return string|void */
-    public function chess(string $basename)
+    public function chess(string $basename): Response
     {
         $requestedGame = isset($_REQUEST['chess_game'])
             ? $_REQUEST['chess_game'] : "";
@@ -46,23 +46,24 @@ class ChessController
             $requestedGame = "";
         }
         if (isset($_REQUEST['chess_ajax']) && $requestedGame != $basename) {
-            return;
+            return Response::create();
         }
         if (!Game::isValidName($basename)) {
-            return $this->view->message("fail", "message_invalid_name", $basename);
+            return Response::create($this->view->message("fail", "message_invalid_name", $basename));
         }
         $game = Game::load($basename);
         if (!$game) {
-            return $this->view->message("fail", "message_load_error", $basename);
+            return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
         $this->emitScript();
         $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
         if (isset($_REQUEST['chess_ajax'])) {
-            header('Content-Type:text/html; charset=UTF-8');
-            echo $gameView->render();
-            XH_exit();
+            // header('Content-Type:text/html; charset=UTF-8');
+            // echo $gameView->render();
+            // XH_exit();
+            return Response::create($gameView->render())->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return $gameView->render();
+            return Response::create($gameView->render());
         }
     }
 
