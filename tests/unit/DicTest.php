@@ -2,6 +2,8 @@
 
 namespace Chess;
 
+use PHPUnit\Framework\TestCase;
+
 /** @small */
 class DicTest extends TestCase
 {

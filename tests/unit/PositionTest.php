@@ -16,6 +16,8 @@
 
 namespace Chess;
 
+use PHPUnit\Framework\TestCase;
+
 class PositionTest extends TestCase
 {
     public function setUp(): void

@@ -17,6 +17,7 @@
 namespace Chess;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Plib\View;
 use XH\CSRFProtection;
 
@@ -38,7 +39,6 @@ class ImportCommandTest extends TestCase
     {
         global $admin, $_XH_csrfProtection, $plugin_tx;
 
-        $this->setConstant('XH_ADM', true);
         $admin = 'plugin_main';
         $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();

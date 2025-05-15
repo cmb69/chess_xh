@@ -19,6 +19,7 @@ namespace Chess;
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {

@@ -16,6 +16,8 @@
 
 namespace Chess;
 
+use PHPUnit\Framework\TestCase;
+
 class MoveTest extends TestCase
 {
     /** @var Move */

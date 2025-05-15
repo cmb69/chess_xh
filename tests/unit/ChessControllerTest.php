@@ -16,6 +16,7 @@
 
 namespace Chess;
 
+use PHPUnit\Framework\TestCase;
 use Plib\View;
 
 class ChessControllerTest extends TestCase
@@ -36,7 +37,6 @@ class ChessControllerTest extends TestCase
     {
         global $pth, $plugin_tx;
 
-        $this->setConstant('XH_ADM', false);
         $pth = array(
             'folder' => array('plugins' => '../')
         );
