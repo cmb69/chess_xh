@@ -32,6 +32,7 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
  * @var string $admin
  */
 
+XH_registerStandardPluginMenuItems(true);
 if (XH_wantsPluginAdministration("chess")) {
     $o .= print_plugin_admin("on");
     switch ($admin) {
