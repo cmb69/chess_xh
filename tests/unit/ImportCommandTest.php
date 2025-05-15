@@ -25,10 +25,9 @@ class ImportCommandTest extends TestCase
 
     public function setUp(): void
     {
-        global $admin, $plugin_tx;
+        global $admin;
 
         $admin = 'plugin_main';
-        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
         $this->importer->expects($this->any())->method('findAll')
