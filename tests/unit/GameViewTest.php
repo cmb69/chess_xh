@@ -25,7 +25,7 @@ class GameViewTest extends TestCase
     protected $subject;
 
     /** @var Game */
-    private $_game;
+    private $game;
 
     public function setUp(): void
     {
@@ -46,15 +46,13 @@ class GameViewTest extends TestCase
                 'label_end' => 'End'
             )
         );
-        $this->_game = new Game();
-        $this->subject = new GameView($this->_game);
+        $this->game = new Game();
+        $this->subject = new GameView($this->game);
     }
 
     public function testFactory(): void
     {
-        $this->assertInstanceOf(
-            GameView::class, GameView::make(new Game())
-        );
+        $this->assertInstanceOf(GameView::class, GameView::make(new Game()));
     }
 
     public function testRendersView(): void

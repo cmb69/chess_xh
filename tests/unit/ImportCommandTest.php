@@ -24,13 +24,13 @@ use XH\CSRFProtection;
 class ImportCommandTest extends TestCase
 {
     /** @var ImportCommand */
-    private $_subject;
+    private $subject;
 
     /** @var PgnImporter */
-    private $_importer;
+    private $importer;
 
     /** @var ImportView&MockObject */
-    private $_importView;
+    private $importView;
 
     /** @var View */
     private $view;
@@ -43,11 +43,11 @@ class ImportCommandTest extends TestCase
         $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->_importer = $this->getMockBuilder(PgnImporter::class)
+        $this->importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_importView = $this->createMock(ImportView::class);
+        $this->importView = $this->createMock(ImportView::class);
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->_subject = new ImportCommand($this->_importer, $this->_importView, $this->view);
+        $this->subject = new ImportCommand($this->importer, $this->importView, $this->view);
     }
 
     // public function testFactory(): void
@@ -62,9 +62,9 @@ class ImportCommandTest extends TestCase
         global $action;
 
         $action = 'plugin_text';
-        $this->_importer->expects($this->never())->method('import');
-        $this->_importView->expects($this->once())->method('render');
-        $this->_subject->execute();
+        $this->importer->expects($this->never())->method('import');
+        $this->importView->expects($this->once())->method('render');
+        $this->subject->execute();
     }
 
     public function testImport(): void
@@ -74,9 +74,9 @@ class ImportCommandTest extends TestCase
         $action = 'import';
         $_POST['chess_game'] = 'foo';
         $_XH_csrfProtection->expects($this->once())->method('check');
-        $this->_importer->expects($this->once())->method('import')->with('foo');
-        $this->_importView->expects($this->once())->method('render');
-        $this->_subject->execute();
+        $this->importer->expects($this->once())->method('import')->with('foo');
+        $this->importView->expects($this->once())->method('render');
+        $this->subject->execute();
     }
 
     public function testImportFailsForInvalidName(): void
@@ -87,8 +87,8 @@ class ImportCommandTest extends TestCase
         $action = 'import';
         $_POST['chess_game'] = 'foo!';
         $_XH_csrfProtection->expects($this->once())->method('check');
-        $this->_importView->expects($this->once())->method('render');
-        $this->_subject->execute();
+        $this->importView->expects($this->once())->method('render');
+        $this->subject->execute();
         $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $o);
     }
 }

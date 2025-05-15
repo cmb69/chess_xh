@@ -56,10 +56,10 @@ Na5 14.Qa3 Nc4 15.Qb3 Na5 16.Qa3 Nc4 1/2-1/2
 EOT;
 
     /** @var PgnImporter */
-    private $_subject;
+    private $subject;
 
     /** @var string */
-    private $_dataFolder;
+    private $dataFolder;
 
     public function setUp(): void
     {
@@ -68,21 +68,21 @@ EOT;
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('test'));
         $pth['folder']['plugins'] = '../';
-        $this->_dataFolder = vfsStream::url('test/chess/data/');
-        mkdir($this->_dataFolder, 0777, true);
-        file_put_contents($this->_dataFolder . 'test.pgn', self::PGN);
-        $this->_subject = new PgnImporter($this->_dataFolder);
+        $this->dataFolder = vfsStream::url('test/chess/data/');
+        mkdir($this->dataFolder, 0777, true);
+        file_put_contents($this->dataFolder . 'test.pgn', self::PGN);
+        $this->subject = new PgnImporter($this->dataFolder);
     }
 
     public function testFindAll(): void
     {
-        $this->assertEquals(array('test'), $this->_subject->findAll());
+        $this->assertEquals(array('test'), $this->subject->findAll());
     }
 
     public function testImport(): void
     {
-        $this->_subject->import('test');
-        $this->assertFileExists($this->_dataFolder . 'test.dat');
-        $this->assertFileExists($this->_dataFolder . 'test_1.dat');
+        $this->subject->import('test');
+        $this->assertFileExists($this->dataFolder . 'test.dat');
+        $this->assertFileExists($this->dataFolder . 'test_1.dat');
     }
 }

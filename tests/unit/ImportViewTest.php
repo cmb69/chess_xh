@@ -17,15 +17,16 @@
 namespace Chess;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\TestCase;
 use XH\CSRFProtection;
 
-class ImportViewTest
+class ImportViewTest extends TestCase
 {
     /** @var ImportView */
     protected $subject;
 
     /** @var PgnImporter */
-    private $_importer;
+    private $importer;
 
     public function setUp(): void
     {
@@ -40,18 +41,16 @@ class ImportViewTest
         );
         $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_importer = $this->getMockBuilder(PgnImporter::class)
+        $this->importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_importer->expects($this->any())->method('findAll')
+        $this->importer->expects($this->any())->method('findAll')
             ->will($this->returnValue(array('foo', 'bar', 'baz')));
-        $this->subject = new ImportView($this->_importer);
+        $this->subject = new ImportView($this->importer);
     }
 
     public function testFactory(): void
     {
-        $this->assertInstanceOf(
-            ImportView::class, ImportView::make($this->_importer)
-        );
+        $this->assertInstanceOf(ImportView::class, ImportView::make($this->importer));
     }
 
     public function testRendersHtml(): void

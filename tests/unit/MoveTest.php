@@ -21,54 +21,52 @@ use PHPUnit\Framework\TestCase;
 class MoveTest extends TestCase
 {
     /** @var Move */
-    private $_subject;
+    private $subject;
 
     public function setUp(): void
     {
-        $this->_subject = new Move('e7', 'd8', 'q');
+        $this->subject = new Move('e7', 'd8', 'q');
     }
 
     public function testGetSource(): void
     {
-        $this->assertEquals('e7', $this->_subject->getSource());
+        $this->assertEquals('e7', $this->subject->getSource());
     }
 
     public function testGetSourceFile(): void
     {
-        $this->assertEquals('e', $this->_subject->getSourceFile());
+        $this->assertEquals('e', $this->subject->getSourceFile());
     }
 
     public function testGetSourceRank(): void
     {
-        $this->assertEquals('7', $this->_subject->getSourceRank());
+        $this->assertEquals('7', $this->subject->getSourceRank());
     }
 
     public function testGetDestination(): void
     {
-        $this->assertEquals('d8', $this->_subject->getDestination());
+        $this->assertEquals('d8', $this->subject->getDestination());
     }
 
     public function testGetDestinationFile(): void
     {
-        $this->assertEquals('d', $this->_subject->getDestinationFile());
+        $this->assertEquals('d', $this->subject->getDestinationFile());
     }
 
     public function testGetFileDistance(): void
     {
-        $this->assertEquals(1, $this->_subject->getFileDistance());
+        $this->assertEquals(1, $this->subject->getFileDistance());
     }
 
     public function testGetPromotion(): void
     {
-        $this->assertEquals('q', $this->_subject->getPromotion());
+        $this->assertEquals('q', $this->subject->getPromotion());
     }
 
     /** @dataProvider dataForGetSan */
     public function testGetSan(Move $move, string $fen, string $expected): void
     {
-        $this->assertEquals(
-            $expected, $move->getSan(Position::makeFromFen($fen))
-        );
+        $this->assertEquals($expected, $move->getSan(Position::makeFromFen($fen)));
     }
 
     /** @todo Test for ambiguous moves */
