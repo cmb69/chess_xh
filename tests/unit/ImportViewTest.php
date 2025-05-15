@@ -16,9 +16,10 @@
 
 namespace Chess;
 
+use ApprovalTests\Approvals;
 use XH\CSRFProtection;
 
-class ImportViewTest extends TestCase
+class ImportViewTest
 {
     /** @var ImportView */
     protected $subject;
@@ -53,89 +54,10 @@ class ImportViewTest extends TestCase
         );
     }
 
-    public function testRendersHeading(): void
-    {
-        $this->assertRenders(
-            array(
-                'tag' => 'h1',
-                'content' => "Chess \xE2\x80\x93 Import"
-            )
-        );
-    }
-
-    public function testRendersForm(): void
-    {
-        $this->assertRenders(
-            array(
-                'tag' => 'form',
-                'attributes' => array(
-                    'action' => '/xh/?chess',
-                    'method' => 'post'
-                ),
-                'class' => 'chess_import_form'
-            )
-        );
-    }
-
-    public function testRendersAdminInput(): void
-    {
-        $this->_testRendersInput('admin', 'plugin_main');
-    }
-
-    public function testRendersActionInput(): void
-    {
-        $this->_testRendersInput('action', 'import');
-    }
-
-    private function _testRendersInput(string $name, string $value): void
-    {
-        $this->assertRenders(
-            array(
-                'tag' => 'input',
-                'attributes' => array(
-                    'type' => 'hidden',
-                    'name' => $name,
-                    'value' => $value
-                ),
-                'parent' => array('tag' => 'form')
-            )
-        );
-    }
-
-    public function testRendersList(): void
-    {
-        $this->assertRenders(
-            array(
-                'tag' => 'ul',
-                'children' => array(
-                    'only' => array('tag' => 'li'),
-                    'count' => 3
-                ),
-                'parent' => array('tag' => 'form')
-            )
-        );
-    }
-
-    public function testRendersListItemWithButton(): void
-    {
-        $this->assertRenders(
-            array(
-                'tag' => 'button',
-                'attributes' => array(
-                    'name' => 'chess_game',
-                    'value' => 'foo'
-                ),
-                'content' => 'Import',
-                'parent' => array('tag' => 'li')
-            )
-        );
-    }
-
-    public function testRendersCSRFTokenInput(): void
+    public function testRendersHtml(): void
     {
         global $_XH_csrfProtection;
-
         $_XH_csrfProtection->expects($this->once())->method('tokenInput');
-        $this->subject->render();
+        Approvals::verifyHtml($this->subject->render());
     }
 }
