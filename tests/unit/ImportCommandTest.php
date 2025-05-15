@@ -3,6 +3,7 @@
 namespace Chess;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\CsrfProtector;
@@ -11,10 +12,7 @@ use Plib\View;
 
 class ImportCommandTest extends TestCase
 {
-    /** @var ImportCommand */
-    private $subject;
-
-    /** @var PgnImporter */
+    /** @var PgnImporter&MockObject */
     private $importer;
 
     /** @var CsrfProtector&Stub */
@@ -25,32 +23,34 @@ class ImportCommandTest extends TestCase
 
     public function setUp(): void
     {
-        $this->importer = $this->getMockBuilder(PgnImporter::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->importer->expects($this->any())->method('findAll')
-            ->will($this->returnValue(array('foo', 'bar', 'baz')));
+        $this->importer = $this->createMock(PgnImporter::class);
+        $this->importer->expects($this->any())->method("findAll")->willReturn(["foo", "bar", "baz"]);
         $this->csrfProtector = $this->createStub(CsrfProtector::class);
+        $this->csrfProtector->method("token")->willReturn("0123456789ABCDEF");
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->subject = new ImportCommand($this->importer, $this->csrfProtector, $this->view);
+    }
+
+    private function sut(): ImportCommand
+    {
+        return new ImportCommand($this->importer, $this->csrfProtector, $this->view);
     }
 
     public function testViewOnly(): void
     {
-        $this->importer->expects($this->never())->method('import');
         $request = new FakeRequest(["url" => "http://example.com/?&action=plugin_text"]);
-        $response = $this->subject->execute($request);
+        $response = $this->sut()->execute($request);
         Approvals::verifyHtml($response->output());
     }
 
     public function testImport(): void
     {
+        $this->importer->expects($this->once())->method("import")->with("foo");
         $this->csrfProtector->method("check")->willReturn(true);
-        $this->importer->expects($this->once())->method('import')->with('foo');
         $request = new FakeRequest([
             "url" => "http://example.com/?&action=import",
             "post" => ["chess_game" => "foo"],
         ]);
-        $this->subject->execute($request);
+        $this->sut()->execute($request);
     }
 
     public function testImportFailsForInvalidName(): void
@@ -60,7 +60,7 @@ class ImportCommandTest extends TestCase
             "url" => "http://example.com/?&action=import",
             "post" => ["chess_game" => "foo!"],
         ]);
-        $response = $this->subject->execute($request);
+        $response = $this->sut()->execute($request);
         $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $response->output());
     }
 }
