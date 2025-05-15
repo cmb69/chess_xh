@@ -70,15 +70,10 @@ class Controller extends Presenter
 
     private function emitScript(): void
     {
-        global $pth, $bjs, $hjs;
+        global $pth, $bjs;
 
-        $script = '<script type="text/javascript" src="'
+        $bjs = '<script type="text/javascript" src="'
             . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
-        if (isset($bjs)) {
-            $bjs .= $script;
-        } else {
-            $hjs .= $script;
-        }
     }
 
     private function handleAdministration(): void

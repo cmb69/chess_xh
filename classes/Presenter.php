@@ -33,10 +33,6 @@ abstract class Presenter
         $args = func_get_args();
         array_shift($args);
         $message = vsprintf($this->lang['message_' . $key], $args);
-        if (function_exists('XH_message')) {
-            return XH_message('fail', $message);
-        } else {
-            return '<p class="cmsimplecore_warning">' . $message . '<p>';
-        }
+        return XH_message('fail', $message);
     }
 }

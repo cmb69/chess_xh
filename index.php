@@ -55,20 +55,6 @@ require_once $pth['folder']['plugin_classes'] . 'ImportView.php';
  */
 define('CHESS_VERSION', '1.0beta2');
 
-if (!function_exists('XH_exit')) {
-    /**
-     * Exits the script.
-     *
-     * Fallback for CMSimple_XH < 1.6.2.
-     *
-     * @return void
-     */
-    function XH_exit()
-    {
-        exit;
-    }
-}
-
 /**
  * Renders a game view.
  *

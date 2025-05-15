@@ -150,20 +150,6 @@ class FrontEndControllerTest extends TestCase
         );
     }
 
-    public function testChessFailureOldCMSimple(): void
-    {
-        global $plugin_tx;
-        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $messageMock = $this->createFunctionMock("function_exists");
-        $messageMock->expects($this->any())->willReturn(false);
-        $output = $this->_subject->chess('foo');
-        $messageMock->restore();
-        $this->assertSame(
-            '<p class="cmsimplecore_warning">The chess file "foo" can\'t be loaded!<p>',
-            $output
-        );
-    }
-
     public function testChessAjax(): void
     {
         $_REQUEST['chess_ajax'] = '1';
