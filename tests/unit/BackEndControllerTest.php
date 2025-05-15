@@ -16,15 +16,6 @@
 
 namespace Chess;
 
-/**
- * Testing the back end functionality of the controllers.
- *
- * @category Testing
- * @package  Chess
- * @author   Christoph M. Becker <cmbecker69@gmx.de>
- * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
- * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
- */
 class BackEndControllerTest extends TestCase
 {
     /**

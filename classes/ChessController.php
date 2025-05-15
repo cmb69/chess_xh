@@ -16,15 +16,6 @@
 
 namespace Chess;
 
-/**
- * The controllers.
- *
- * @category CMSimple_XH
- * @package  Chess
- * @author   Christoph M. Becker <cmbecker69@gmx.de>
- * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
- * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
- */
 class Controller extends Presenter
 {
     /**
