@@ -30,9 +30,6 @@ class Controller extends Presenter
     /** @var bool */
     private $isFlipped;
 
-    /** @var string */
-    private $requestedAction;
-
     public function __construct(Factory $factory)
     {
         parent::__construct();
@@ -46,12 +43,6 @@ class Controller extends Presenter
             ? (int) $_REQUEST['chess_ply'] : 0;
         $this->isFlipped = isset($_REQUEST['chess_flipped'])
             ? (bool) $_REQUEST['chess_flipped'] : false;
-        $this->requestedAction = isset($_REQUEST['chess_action'])
-            ? $_REQUEST['chess_action'] : "";
-        $actions = array('start', 'previous', 'next', 'end', 'flip');
-        if (!in_array($this->requestedAction, $actions)) {
-            $this->requestedAction = "";
-        }
     }
 
     public function dispatch(): void
@@ -127,7 +118,7 @@ class Controller extends Presenter
     private function getPly(Game $game): int
     {
         $result = $this->requestedPly;
-        switch ($this->requestedAction) {
+        switch ($this->requestedAction()) {
             case 'start':
                 $result = 0;
                 break;
@@ -146,9 +137,20 @@ class Controller extends Presenter
     private function isFlipped(): bool
     {
         $result = $this->isFlipped;
-        if ($this->requestedAction == 'flip') {
+        if ($this->requestedAction() == 'flip') {
             $result = !$result;
         }
         return $result;
+    }
+
+    private function requestedAction(): string
+    {
+        $res = isset($_REQUEST['chess_action'])
+            ? $_REQUEST['chess_action'] : "";
+        $actions = array('start', 'previous', 'next', 'end', 'flip');
+        if (!in_array($res, $actions)) {
+            $res = "";
+        }
+        return $res;
     }
 }
