@@ -18,11 +18,6 @@ namespace Chess;
 
 class InfoView
 {
-    public static function make(): self
-    {
-        return new InfoView();
-    }
-
     public function render(): string
     {
         return '<h1>Chess</h1>'

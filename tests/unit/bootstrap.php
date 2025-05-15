@@ -6,6 +6,7 @@ require_once '../../cmsimple/classes/CSRFProtection.php';
 require_once '../../cmsimple/functions.php';
 require_once '../../cmsimple/adminfuncs.php';
 
+require_once "./classes/Dic.php";
 require_once './classes/Game.php';
 require_once './classes/Position.php';
 require_once './classes/Move.php';

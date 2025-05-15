@@ -84,7 +84,7 @@ class Controller extends Presenter
         $o .= print_plugin_admin('on');
         switch ($admin) {
             case '':
-                $infoView = InfoView::make();
+                $infoView = Dic::infoView();
                 $o .= $infoView->render();
                 break;
             case 'plugin_main':
