@@ -16,6 +16,8 @@
 
 namespace Chess;
 
+use Plib\View;
+
 class ChessControllerTest extends TestCase
 {
     /** @var Controller */
@@ -26,6 +28,9 @@ class ChessControllerTest extends TestCase
 
     /** @var object */
     private $_gameViewFactory;
+
+    /** @var View */
+    private $view;
 
     public function setUp(): void
     {
@@ -47,7 +52,8 @@ class ChessControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createStub(Factory::class);
         $this->_gameViewFactory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new ChessController($this->_gameViewFactory);
+        $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
+        $this->_subject = new ChessController($this->_gameViewFactory, $this->view);
     }
 
     public function testChess(): void
@@ -59,8 +65,8 @@ class ChessControllerTest extends TestCase
 
     public function testChessInvalidName(): void
     {
-        $this->assertSame(
-            '<p class="xh_fail">The name &quot;italian!&quot; is invalid</p>',
+        $this->assertStringContainsString(
+            "The name &quot;italian!&quot; is invalid",
             $this->_subject->chess('italian!')
         );
     }
@@ -69,7 +75,7 @@ class ChessControllerTest extends TestCase
     {
         $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
-        $this->_subject = new ChessController($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory, $this->view);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -79,7 +85,7 @@ class ChessControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
-        $this->_subject = new ChessController($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory, $this->view);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -88,7 +94,7 @@ class ChessControllerTest extends TestCase
     public function testChessNextAction(): void
     {
         $_REQUEST['chess_action'] = 'next';
-        $this->_subject = new ChessController($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory, $this->view);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -102,7 +108,7 @@ class ChessControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new ChessController($factory);
+        $this->_subject = new ChessController($factory, $this->view);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -115,7 +121,7 @@ class ChessControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new ChessController($factory);
+        $this->_subject = new ChessController($factory, $this->view);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -123,8 +129,8 @@ class ChessControllerTest extends TestCase
 
     public function testChessFailure(): void
     {
-        $this->assertSame(
-            '<p class="xh_fail">The chess file &quot;foo&quot; can\'t be loaded!</p>',
+        $this->assertStringContainsString(
+            "The chess file &quot;foo&quot; can't be loaded!",
             $this->_subject->chess('foo')
         );
     }
@@ -137,7 +143,7 @@ class ChessControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new ChessController($factory);
+        $this->_subject = new ChessController($factory, $this->view);
         $header = $this->createFunctionMock('header');
         $header->expects($this->once())->with($this->stringContains('Content-Type'));
         $this->_gameView->expects($this->once())->method('render')
@@ -153,7 +159,7 @@ class ChessControllerTest extends TestCase
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
         $factory = $this->createStub(Factory::class);
-        $this->_subject = new ChessController($factory);
+        $this->_subject = new ChessController($factory, $this->view);
         $header = $this->createFunctionMock('header');
         $header->expects($this->never());
         $this->expectOutputString('');

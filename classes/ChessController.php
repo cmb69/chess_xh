@@ -21,15 +21,20 @@
 
 namespace Chess;
 
-class ChessController extends Presenter
+use Plib\View;
+
+class ChessController
 {
     /** @var Factory */
     private $factory;
 
-    public function __construct(Factory $factory)
+    /** @var View */
+    private $view;
+
+    public function __construct(Factory $factory, View $view)
     {
-        parent::__construct();
         $this->factory = $factory;
+        $this->view = $view;
     }
 
     /** @return string|void */
@@ -44,11 +49,11 @@ class ChessController extends Presenter
             return;
         }
         if (!Game::isValidName($basename)) {
-            return $this->renderFailure('invalid_name', $basename);
+            return $this->view->message("fail", "message_invalid_name", $basename);
         }
         $game = Game::load($basename);
         if (!$game) {
-            return $this->renderFailure('load_error', $basename);
+            return $this->view->message("fail", "message_load_error", $basename);
         }
         $this->emitScript();
         $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());

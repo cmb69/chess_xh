@@ -18,7 +18,7 @@ namespace Chess;
 
 use Plib\View;
 
-class ImportCommand extends Presenter
+class ImportCommand
 {
     /** @var PgnImporter */
     private $importer;
@@ -34,7 +34,6 @@ class ImportCommand extends Presenter
         ImportView $importView,
         View $view
     ) {
-        parent::__construct();
         $this->importer = $importer;
         $this->importView = $importView;
         $this->view = $view;

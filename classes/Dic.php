@@ -27,7 +27,7 @@ class Dic
 {
     public static function chessController(): ChessController
     {
-        return new ChessController(new Factory());
+        return new ChessController(new Factory(), self::view());
     }
 
     public static function importCommand(): ImportCommand
