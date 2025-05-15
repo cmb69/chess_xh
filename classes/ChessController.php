@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The controllers.
  *
@@ -23,7 +25,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_Controller extends Chess_Presenter
+class Controller extends Presenter
 {
     /**
      * The name of the requested game.
@@ -70,7 +72,7 @@ class Chess_Controller extends Chess_Presenter
         parent::__construct();
         $this->_requestedGame = isset($_REQUEST['chess_game'])
             ? $_REQUEST['chess_game'] : "";
-        if (!Chess_Game::isValidName($this->_requestedGame)) {
+        if (!Game::isValidName($this->_requestedGame)) {
             $this->_requestedGame = "";
         }
         $this->_requestedPly = isset($_REQUEST['chess_ply'])
@@ -143,7 +145,7 @@ class Chess_Controller extends Chess_Presenter
         $o .= print_plugin_admin('on');
         switch ($admin) {
         case '':
-            $infoView = Chess_InfoView::make();
+            $infoView = InfoView::make();
             $o .= $infoView->render();
             break;
         case 'plugin_main':
@@ -165,10 +167,10 @@ class Chess_Controller extends Chess_Presenter
     {
         global $pth;
 
-        $importer = new Chess_PgnImporter(
+        $importer = new PgnImporter(
             $pth['folder']['plugins'] . 'chess/data/'
         );
-        $importCommand = Chess_ImportCommand::make($importer);
+        $importCommand = ImportCommand::make($importer);
         $importCommand->execute();
     }
 
@@ -184,14 +186,14 @@ class Chess_Controller extends Chess_Presenter
         if ($this->_isAjaxRequest && $this->_requestedGame != $basename) {
             return;
         }
-        if (!Chess_Game::isValidName($basename)) {
+        if (!Game::isValidName($basename)) {
             return $this->renderFailure('invalid_name', $basename);
         }
-        $game = Chess_Game::load($basename);
+        $game = Game::load($basename);
         if (!$game) {
             return $this->renderFailure('load_error', $basename);
         }
-        $gameView = Chess_GameView::make(
+        $gameView = GameView::make(
             $game, $this->_getPly($game), $this->_isFlipped()
         );
         if ($this->_isAjaxRequest) {
@@ -206,11 +208,11 @@ class Chess_Controller extends Chess_Presenter
     /**
      * Returns the requested ply.
      *
-     * @param Chess_Game $game A game.
+     * @param Game $game A game.
      *
      * @return int
      */
-    private function _getPly(Chess_Game $game)
+    private function _getPly(Game $game)
     {
         $result = $this->_requestedPly;
         switch ($this->_requestedAction) {

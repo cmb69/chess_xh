@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The game views.
  *
@@ -23,12 +25,12 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_GameView
+class GameView
 {
     /**
      * The game.
      *
-     * @var Chess_Game
+     * @var Game
      */
     private $_game;
 
@@ -42,7 +44,7 @@ class Chess_GameView
     /**
      * The current position.
      *
-     * @var Chess_Position
+     * @var Position
      */
     private $_position;
 
@@ -56,13 +58,13 @@ class Chess_GameView
     /**
      * Makes a new game view.
      *
-     * @param Chess_Game $game    A game.
-     * @param int        $ply     A ply number.
-     * @param bool       $flipped Whether the board is flipped.
+     * @param Game $game    A game.
+     * @param int  $ply     A ply number.
+     * @param bool $flipped Whether the board is flipped.
      *
-     * @return Chess_GameView
+     * @return GameView
      */
-    public static function make(Chess_Game $game, $ply = 0, $flipped = false)
+    public static function make(Game $game, $ply = 0, $flipped = false)
     {
         return new self($game, $ply, $flipped);
     }
@@ -70,13 +72,13 @@ class Chess_GameView
     /**
      * Initializes a new instance.
      *
-     * @param Chess_Game $game    A game.
-     * @param int        $ply     A ply number.
-     * @param bool       $flipped Whether the board is flipped.
+     * @param Game $game    A game.
+     * @param int  $ply     A ply number.
+     * @param bool $flipped Whether the board is flipped.
      *
      * @return void
      */
-    public function __construct(Chess_Game $game, $ply = 0, $flipped = false)
+    public function __construct(Game $game, $ply = 0, $flipped = false)
     {
         $this->_game = $game;
         $this->_ply = (int) $ply;

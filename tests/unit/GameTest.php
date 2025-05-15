@@ -1,5 +1,7 @@
 <?php
 
+namespace Chess;
+
 /**
  * Testing the games.
  *
@@ -32,7 +34,7 @@ class GameTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_Game
+     * @var Game
      */
     private $_subject;
 
@@ -50,7 +52,7 @@ class GameTest extends TestCase
         $pth = array(
             'folder' => array('plugins' => '../')
         );
-        $this->_subject = new Chess_Game();
+        $this->_subject = new Game();
     }
 
     /**
@@ -60,7 +62,7 @@ class GameTest extends TestCase
      */
     public function testLoad()
     {
-        $this->_subject = Chess_Game::load('italian');
+        $this->_subject = Game::load('italian');
         $this->assertEquals('italian', $this->_subject->getName());
         $this->assertEquals(
             'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
@@ -75,7 +77,7 @@ class GameTest extends TestCase
      */
     public function testLoadNotExistingReturnsNull()
     {
-        $this->assertNull(Chess_Game::load('doesntexist'));
+        $this->assertNull(Game::load('doesntexist'));
     }
 
     /**
@@ -93,7 +95,7 @@ class GameTest extends TestCase
         $dataFolder = $pth['folder']['plugins'] . 'chess/data/';
         mkdir($dataFolder, 0777, true);
         touch($dataFolder . 'foo.dat');
-        $this->assertNull(Chess_Game::load('foo'));
+        $this->assertNull(Game::load('foo'));
     }
 
     /**
@@ -103,7 +105,7 @@ class GameTest extends TestCase
      */
     public function testgetPositionReturnsChessPosition()
     {
-        $this->assertInstanceOf('Chess_Position', $this->_subject->getPosition(0));
+        $this->assertInstanceOf(Position::class, $this->_subject->getPosition(0));
     }
 
     /**
@@ -147,7 +149,7 @@ class GameTest extends TestCase
     public function testGetMove()
     {
         $this->_subject->move('e2', 'e4');
-        $this->assertEquals(new Chess_Move('e2', 'e4'), $this->_subject->getMove(0));
+        $this->assertEquals(new Move('e2', 'e4'), $this->_subject->getMove(0));
     }
 
     /**
@@ -207,7 +209,7 @@ class GameTest extends TestCase
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *
 EOT;
-        $this->assertEquals($expected, (string) Chess_Game::load('italian'));
+        $this->assertEquals($expected, (string) Game::load('italian'));
     }
 }
 

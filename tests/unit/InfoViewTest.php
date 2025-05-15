@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the info views.
  *
@@ -28,7 +30,7 @@ class InfoViewTest extends TestCase
     /**
      * The subject under test.
      *
-     * @var Chess_InfoView
+     * @var InfoView
      */
     protected $subject;
 
@@ -51,7 +53,7 @@ class InfoViewTest extends TestCase
             'chess' => array('alt_icon' => 'Knight on chess board fragment')
         );
         $this->setConstant('CHESS_VERSION', '1.0');
-        $this->subject = new Chess_InfoView();
+        $this->subject = new InfoView();
     }
 
     /**
@@ -62,7 +64,7 @@ class InfoViewTest extends TestCase
     public function testFactory()
     {
         $this->assertInstanceOf(
-            'Chess_InfoView', Chess_InfoView::make()
+            InfoView::class, InfoView::make()
         );
     }
 

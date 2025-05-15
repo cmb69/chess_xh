@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the positions.
  *
@@ -32,7 +34,7 @@ class PositionTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->_subject = new Chess_Position();
+        $this->_subject = new Position();
     }
 
     /**
@@ -43,7 +45,7 @@ class PositionTest extends TestCase
     public function testMakeFromFen()
     {
         $fen = 'r1bq1rk1/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1';
-        $position = Chess_Position::makeFromFen($fen);
+        $position = Position::makeFromFen($fen);
         $this->assertEquals($fen, (string) $position);
     }
 
@@ -64,7 +66,7 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterMove()
     {
-        $this->_subject->applyMove(new Chess_Move('e2', 'e4'));
+        $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_assertPosition('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR');
     }
 
@@ -75,9 +77,9 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterCapture()
     {
-        $this->_subject->applyMove(new Chess_Move('e2', 'e4'));
-        $this->_subject->applyMove(new Chess_Move('d7', 'd5'));
-        $this->_subject->applyMove(new Chess_Move('e4', 'd5'));
+        $this->_subject->applyMove(new Move('e2', 'e4'));
+        $this->_subject->applyMove(new Move('d7', 'd5'));
+        $this->_subject->applyMove(new Move('e4', 'd5'));
         $this->_assertPosition('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR');
     }
 
@@ -88,14 +90,14 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterKingSideCastling()
     {
-        $this->_subject->applyMove(new Chess_Move('e2', 'e4'));
-        $this->_subject->applyMove(new Chess_Move('e7', 'e5'));
-        $this->_subject->applyMove(new Chess_Move('g1', 'f3'));
-        $this->_subject->applyMove(new Chess_Move('b8', 'c6'));
-        $this->_subject->applyMove(new Chess_Move('f1', 'c4'));
-        $this->_subject->applyMove(new Chess_Move('f8', 'c5'));
-        $this->_subject->applyMove(new Chess_Move('e1', 'g1'));
-        $this->_subject->applyMove(new Chess_Move('e8', 'g8'));
+        $this->_subject->applyMove(new Move('e2', 'e4'));
+        $this->_subject->applyMove(new Move('e7', 'e5'));
+        $this->_subject->applyMove(new Move('g1', 'f3'));
+        $this->_subject->applyMove(new Move('b8', 'c6'));
+        $this->_subject->applyMove(new Move('f1', 'c4'));
+        $this->_subject->applyMove(new Move('f8', 'c5'));
+        $this->_subject->applyMove(new Move('e1', 'g1'));
+        $this->_subject->applyMove(new Move('e8', 'g8'));
         $this->_assertPosition(
             'r1bq1rk1/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1'
         );
@@ -108,16 +110,16 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterQueenSideCastling()
     {
-        $this->_subject->applyMove(new Chess_Move('d2', 'd4'));
-        $this->_subject->applyMove(new Chess_Move('d7', 'd5'));
-        $this->_subject->applyMove(new Chess_Move('b1', 'c3'));
-        $this->_subject->applyMove(new Chess_Move('b8', 'c6'));
-        $this->_subject->applyMove(new Chess_Move('c1', 'f4'));
-        $this->_subject->applyMove(new Chess_Move('c8', 'f5'));
-        $this->_subject->applyMove(new Chess_Move('d1', 'd2'));
-        $this->_subject->applyMove(new Chess_Move('d8', 'd7'));
-        $this->_subject->applyMove(new Chess_Move('e1', 'c1'));
-        $this->_subject->applyMove(new Chess_Move('e8', 'c8'));
+        $this->_subject->applyMove(new Move('d2', 'd4'));
+        $this->_subject->applyMove(new Move('d7', 'd5'));
+        $this->_subject->applyMove(new Move('b1', 'c3'));
+        $this->_subject->applyMove(new Move('b8', 'c6'));
+        $this->_subject->applyMove(new Move('c1', 'f4'));
+        $this->_subject->applyMove(new Move('c8', 'f5'));
+        $this->_subject->applyMove(new Move('d1', 'd2'));
+        $this->_subject->applyMove(new Move('d8', 'd7'));
+        $this->_subject->applyMove(new Move('e1', 'c1'));
+        $this->_subject->applyMove(new Move('e8', 'c8'));
         $this->_assertPosition(
             '2kr1bnr/pppqpppp/2n5/3p1b2/3P1B2/2N5/PPPQPPPP/2KR1BNR'
         );
@@ -130,11 +132,11 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterEnPassant()
     {
-        $this->_subject->applyMove(new Chess_Move('e2', 'e4'));
-        $this->_subject->applyMove(new Chess_Move('a7', 'a5'));
-        $this->_subject->applyMove(new Chess_Move('e4', 'e5'));
-        $this->_subject->applyMove(new Chess_Move('f7', 'f5'));
-        $this->_subject->applyMove(new Chess_Move('e5', 'f6'));
+        $this->_subject->applyMove(new Move('e2', 'e4'));
+        $this->_subject->applyMove(new Move('a7', 'a5'));
+        $this->_subject->applyMove(new Move('e4', 'e5'));
+        $this->_subject->applyMove(new Move('f7', 'f5'));
+        $this->_subject->applyMove(new Move('e5', 'f6'));
         $this->_assertPosition('rnbqkbnr/1pppp1pp/5P2/p7/8/8/PPPP1PPP/RNBQKBNR');
     }
 
@@ -145,15 +147,15 @@ class PositionTest extends TestCase
      */
     public function testPositionAfterPromotion()
     {
-        $this->_subject->applyMove(new Chess_Move('e2', 'e4'));
-        $this->_subject->applyMove(new Chess_Move('f7', 'f5'));
-        $this->_subject->applyMove(new Chess_Move('e4', 'f5'));
-        $this->_subject->applyMove(new Chess_Move('g7', 'g6'));
-        $this->_subject->applyMove(new Chess_Move('f5', 'g6'));
-        $this->_subject->applyMove(new Chess_Move('a7', 'a6'));
-        $this->_subject->applyMove(new Chess_Move('g6', 'g7'));
-        $this->_subject->applyMove(new Chess_Move('b7', 'b5'));
-        $this->_subject->applyMove(new Chess_Move('g7', 'h8', 'q'));
+        $this->_subject->applyMove(new Move('e2', 'e4'));
+        $this->_subject->applyMove(new Move('f7', 'f5'));
+        $this->_subject->applyMove(new Move('e4', 'f5'));
+        $this->_subject->applyMove(new Move('g7', 'g6'));
+        $this->_subject->applyMove(new Move('f5', 'g6'));
+        $this->_subject->applyMove(new Move('a7', 'a6'));
+        $this->_subject->applyMove(new Move('g6', 'g7'));
+        $this->_subject->applyMove(new Move('b7', 'b5'));
+        $this->_subject->applyMove(new Move('g7', 'h8', 'q'));
         $this->_assertPosition('rnbqkbnQ/2ppp2p/p7/1p6/8/8/PPPP1PPP/RNBQKBNR');
     }
 
@@ -191,7 +193,7 @@ class PositionTest extends TestCase
      */
     public function testIsAttacking($fen, $source, $destination)
     {
-        $subject = Chess_Position::makeFromFen($fen);
+        $subject = Position::makeFromFen($fen);
         $this->assertTrue($subject->isAttacking($source, $destination));
     }
 
@@ -226,7 +228,7 @@ class PositionTest extends TestCase
      */
     public function testIsNotAttacking($fen, $source, $destination)
     {
-        $subject = Chess_Position::makeFromFen($fen);
+        $subject = Position::makeFromFen($fen);
         $this->assertFalse($subject->isAttacking($source, $destination));
     }
 

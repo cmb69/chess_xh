@@ -14,6 +14,10 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
+use PgnParser;
+
 /**
  * The PGN importers.
  *
@@ -23,7 +27,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_PgnImporter
+class PgnImporter
 {
     /**
      * The path of the data folder.
@@ -88,7 +92,7 @@ class Chess_PgnImporter
         $parser = new PgnParser($this->_dataFolder . $name . '.pgn');
         $games = $parser->getGames();
         foreach ($games as $i => $pgnGame) {
-            $game = new Chess_Game();
+            $game = new Game();
             foreach ($pgnGame['moves'] as $move) {
                 if (preg_match('/=(.)$/', $move['m'], $matches)) {
                     $promotion = strtolower($matches[1]);

@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+use Chess\Controller;
+
 if (!defined('CMSIMPLE_XH_VERSION')) {
     http_response_code(403);
     exit;
@@ -85,7 +87,7 @@ function chess($basename)
 /**
  * The plugin controller.
  */
-$_Chess_controller = new Chess_Controller();
+$_Chess_controller = new Controller();
 $_Chess_controller->dispatch();
 
 ?>

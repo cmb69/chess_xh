@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the back end functionality of the controllers.
  *
@@ -28,7 +30,7 @@ class BackEndControllerTest extends TestCase
     /**
      * The subject under test.
      *
-     * @var Chess_Controller
+     * @var Controller
      */
     private $_subject;
 
@@ -46,7 +48,7 @@ class BackEndControllerTest extends TestCase
         $this->setConstant('XH_ADM', true);
         $chess = 'true';
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->_subject = new Chess_Controller();
+        $this->_subject = new Controller();
         $printPluginAdminMock = $this->createFunctionMock(
             'print_plugin_admin'
         );
@@ -68,9 +70,9 @@ class BackEndControllerTest extends TestCase
         $admin = '';
         $pth = ["folder" => ["plugins" => ""]];
         $infoViewFactory = $this->createFunctionMock(
-            'Chess_InfoView::make'
+            'Chess\InfoView::make'
         );
-        $infoViewMock = $this->createMock(Chess_InfoView::class);
+        $infoViewMock = $this->createMock(InfoView::class);
         $infoViewMock->expects($this->once())->method('render');
         $infoViewFactory->expects($this->once())
             ->will($this->returnValue($infoViewMock));
@@ -92,9 +94,9 @@ class BackEndControllerTest extends TestCase
         $admin = 'plugin_main';
         $pth = ["folder" => ["plugins" => ""]];
         $importCommandFactory = $this->createFunctionMock(
-            'Chess_ImportCommand::make'
+            'Chess\ImportCommand::make'
         );
-        $importCommand = $this->getMockBuilder(Chess_ImportCommand::class)
+        $importCommand = $this->getMockBuilder(ImportCommand::class)
             ->disableOriginalConstructor()->getMock();
         $importCommand->expects($this->once())->method('execute');
         $importCommandFactory->expects($this->once())->with($this->anything())

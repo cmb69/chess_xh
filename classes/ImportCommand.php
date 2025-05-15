@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The import commands.
  *
@@ -23,23 +25,23 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_ImportCommand extends Chess_Presenter
+class ImportCommand extends Presenter
 {
     /**
      * The PGN importer.
      *
-     * @var Chess_PgnImporter.
+     * @var PgnImporter.
      */
     private $_importer;
 
     /**
      * Returns a new self instance.
      *
-     * @param Chess_PgnImporter $importer A PGN importer.
+     * @param PgnImporter $importer A PGN importer.
      *
-     * @return Chess_ImportCommand
+     * @return ImportCommand
      */
-    public static function make(Chess_PgnImporter $importer)
+    public static function make(PgnImporter $importer)
     {
         return new self($importer);
     }
@@ -47,11 +49,11 @@ class Chess_ImportCommand extends Chess_Presenter
     /**
      * Initializes a new instance.
      *
-     * @param Chess_PgnImporter $importer A PGN importer.
+     * @param PgnImporter $importer A PGN importer.
      *
      * @return void
      */
-    public function __construct(Chess_PgnImporter $importer)
+    public function __construct(PgnImporter $importer)
     {
         parent::__construct();
         $this->_importer = $importer;
@@ -77,13 +79,13 @@ class Chess_ImportCommand extends Chess_Presenter
                 $_XH_csrfProtection->check();
             }
             $game = $_POST['chess_game'];
-            if (Chess_Game::isValidName($game)) {
+            if (Game::isValidName($game)) {
                 $this->_importer->import($game);
             } else {
                 $o .= $this->renderFailure('invalid_name', $game);
             }
         }
-        $view = Chess_ImportView::make($this->_importer);
+        $view = ImportView::make($this->_importer);
         $o .= $view->render();
     }
 }

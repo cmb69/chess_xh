@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The moves.
  *
@@ -23,7 +25,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_Move
+class Move
 {
     /**
      * The source square.
@@ -148,11 +150,11 @@ class Chess_Move
     /**
      * Returns the SAN of the move.
      *
-     * @param Chess_Position $position A position.
+     * @param Position $position A position.
      *
      * @return string
      */
-    public function getSan(Chess_Position $position)
+    public function getSan(Position $position)
     {
         if ($position->isCastling($this)) {
             if ($this->getDestinationFile() == 'g') {
@@ -202,11 +204,11 @@ class Chess_Move
     /**
      * Returns whether the move is capturing.
      *
-     * @param Chess_Position $position A position.
+     * @param Position $position A position.
      *
      * @return bool
      */
-    private function _isCapture(Chess_Position $position)
+    private function _isCapture(Position $position)
     {
         return $position->hasPieceOn($this->_destination)
             || $position->isEnPassant($this);

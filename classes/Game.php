@@ -14,6 +14,10 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
+use __PHP_Incomplete_Class;
+
 /**
  * The games.
  *
@@ -23,7 +27,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_Game
+class Game
 {
     /**
      * The name of the game (no pun intended ;).
@@ -57,7 +61,7 @@ class Chess_Game
      *
      * @param string $basename A basename of a data file.
      *
-     * @return ?Chess_Game
+     * @return ?Game
      */
     public static function load($basename)
     {
@@ -113,11 +117,11 @@ class Chess_Game
      *
      * @param int $ply A ply number.
      *
-     * @return Chess_Position
+     * @return Position
      */
     public function getPosition($ply)
     {
-        $position = new Chess_Position();
+        $position = new Position();
         $ply = min($ply, $this->getPlyCount());
         for ($i = 0; $i < $ply; ++$i) {
             $position->applyMove($this->_moves[$i]);
@@ -130,7 +134,7 @@ class Chess_Game
      *
      * @param int $ply A ply number.
      *
-     * @return ?Chess_Move
+     * @return ?Move
      */
     public function getMove($ply)
     {
@@ -154,7 +158,7 @@ class Chess_Game
      */
     public function move($from, $to, $promotion = null)
     {
-        $this->_moves[] = new Chess_Move($from, $to, $promotion);
+        $this->_moves[] = new Move($from, $to, $promotion);
     }
 
     /**

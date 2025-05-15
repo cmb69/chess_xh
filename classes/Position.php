@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The positions.
  *
@@ -23,7 +25,7 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_Position
+class Position
 {
     /**
      * The sparse map of squares to pieces.
@@ -37,7 +39,7 @@ class Chess_Position
      *
      * @param string $fen A FEN string.
      *
-     * @return Chess_Position
+     * @return Position
      */
     public static function makeFromFen($fen)
     {
@@ -109,7 +111,7 @@ class Chess_Position
     /**
      * Applies a move. Doesn't check for validity.
      *
-     * @param Chess_Move $move A move.
+     * @param Move $move A move.
      *
      * @return void
      */
@@ -143,7 +145,7 @@ class Chess_Position
         $destinations = $this->_getCapturingDestinations($kingSquare);
         foreach ($destinations as $destination) {
             $position = clone $this;
-            $position->applyMove(new Chess_Move($kingSquare, $destination));
+            $position->applyMove(new Move($kingSquare, $destination));
             if (!$position->isUnderAttack($destination)) {
                 return true;
             }
@@ -390,7 +392,7 @@ class Chess_Position
     /**
      * Returns whether a move is castling.
      *
-     * @param Chess_Move $move A move.
+     * @param Move $move A move.
      *
      * @return bool
      */
@@ -403,7 +405,7 @@ class Chess_Position
     /**
      * Moves the rook when castling.
      *
-     * @param Chess_Move $move A move.
+     * @param Move $move A move.
      *
      * @return void
      */
@@ -423,7 +425,7 @@ class Chess_Position
     /**
      * Returns whether a move is an en passant capture.
      *
-     * @param Chess_Move $move A move.
+     * @param Move $move A move.
      *
      * @return bool
      */
@@ -437,7 +439,7 @@ class Chess_Position
     /**
      * Removes an en passant captured pawn.
      *
-     * @param Chess_Move $move A move.
+     * @param Move $move A move.
      *
      * @return void
      */

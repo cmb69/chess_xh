@@ -14,6 +14,10 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
+use XH\CSRFProtection;
+
 /**
  * Testing the import views.
  *
@@ -28,14 +32,14 @@ class ImportViewTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_ImportView
+     * @var ImportView
      */
     protected $subject;
 
     /**
      * The PGN importer.
      *
-     * @var Chess_PgnImporter
+     * @var PgnImporter
      */
     private $_importer;
 
@@ -58,13 +62,13 @@ class ImportViewTest extends TestCase
                 'menu_main' => 'Import'
             )
         );
-        $_XH_csrfProtection = $this->getMockBuilder(XH\CSRFProtection::class)
+        $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_importer = $this->getMockBuilder('Chess_PgnImporter')
+        $this->_importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
         $this->_importer->expects($this->any())->method('findAll')
             ->will($this->returnValue(array('foo', 'bar', 'baz')));
-        $this->subject = new Chess_ImportView($this->_importer);
+        $this->subject = new ImportView($this->_importer);
     }
 
     /**
@@ -75,7 +79,7 @@ class ImportViewTest extends TestCase
     public function testFactory()
     {
         $this->assertInstanceOf(
-            'Chess_ImportView', Chess_ImportView::make($this->_importer)
+            ImportView::class, ImportView::make($this->_importer)
         );
     }
 

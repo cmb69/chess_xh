@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the moves.
  *
@@ -28,7 +30,7 @@ class MoveTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_Move
+     * @var Move
      */
     private $_subject;
 
@@ -39,7 +41,7 @@ class MoveTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->_subject = new Chess_Move('e7', 'd8', 'q');
+        $this->_subject = new Move('e7', 'd8', 'q');
     }
 
     /**
@@ -115,7 +117,7 @@ class MoveTest extends TestCase
     /**
      * Tests getSan().
      *
-     * @param Chess_Move $move     A move.
+     * @param Move $move     A move.
      * @param string     $fen      A FEN like piece placement string.
      * @param string     $expected A move in SAN format.
      *
@@ -126,7 +128,7 @@ class MoveTest extends TestCase
     public function testGetSan($move, $fen, $expected)
     {
         $this->assertEquals(
-            $expected, $move->getSan(Chess_Position::makeFromFen($fen))
+            $expected, $move->getSan(Position::makeFromFen($fen))
         );
     }
 
@@ -140,17 +142,17 @@ class MoveTest extends TestCase
     public function dataForGetSan()
     {
         return array(
-            array(new Chess_Move('e2', 'e4'), '8/8/8/8/8/8/4p3/8', 'e4'),
-            array(new Chess_Move('g1', 'f3'), '8/8/8/8/8/8/8/6N1', 'Nf3'),
-            array(new Chess_Move('d4', 'e5'), '8/8/8/4p3/3P4/8/8/8', 'dxe5'),
-            array(new Chess_Move('d4', 'e5'), '8/8/8/4b3/3B4/8/8/8', 'Bxe5'),
-            array(new Chess_Move('e1', 'g1'), '8/8/8/8/8/8/8/4K2R', 'O-O'),
-            array(new Chess_Move('e1', 'c1'), '8/8/8/8/8/8/8/R3K3', 'O-O-O'),
-            array(new Chess_Move('e5', 'f6'), '8/8/8/4Pp2/8/8/8/8', 'exf6'),
-            array(new Chess_Move('e7', 'e8', 'q'), '8/4P3/8/8/8/8/8/8', 'e8=Q'),
-            array(new Chess_Move('d1', 'e1'), '4k3/8/8/8/8/8/8/3Q4', 'Qe1+'),
-            array(new Chess_Move('e1', 'e7'), '4k3/4q3/8/8/8/8/8/4Q3', 'Qxe7+'),
-            array(new Chess_Move('e1', 'e7'), '4k3/4q3/8/6B1/8/8/8/4Q3', 'Qxe7#')
+            array(new Move('e2', 'e4'), '8/8/8/8/8/8/4p3/8', 'e4'),
+            array(new Move('g1', 'f3'), '8/8/8/8/8/8/8/6N1', 'Nf3'),
+            array(new Move('d4', 'e5'), '8/8/8/4p3/3P4/8/8/8', 'dxe5'),
+            array(new Move('d4', 'e5'), '8/8/8/4b3/3B4/8/8/8', 'Bxe5'),
+            array(new Move('e1', 'g1'), '8/8/8/8/8/8/8/4K2R', 'O-O'),
+            array(new Move('e1', 'c1'), '8/8/8/8/8/8/8/R3K3', 'O-O-O'),
+            array(new Move('e5', 'f6'), '8/8/8/4Pp2/8/8/8/8', 'exf6'),
+            array(new Move('e7', 'e8', 'q'), '8/4P3/8/8/8/8/8/8', 'e8=Q'),
+            array(new Move('d1', 'e1'), '4k3/8/8/8/8/8/8/3Q4', 'Qe1+'),
+            array(new Move('e1', 'e7'), '4k3/4q3/8/8/8/8/8/4Q3', 'Qxe7+'),
+            array(new Move('e1', 'e7'), '4k3/4q3/8/6B1/8/8/8/4Q3', 'Qxe7#')
         );
     }
 }

@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the game views.
  *
@@ -28,14 +30,14 @@ class GameViewTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_GameView
+     * @var GameView
      */
     protected $subject;
 
     /**
      * The game.
      *
-     * @var Chess_Game
+     * @var Game
      */
     private $_game;
 
@@ -69,8 +71,8 @@ class GameViewTest extends TestCase
                 'label_end' => 'End'
             )
         );
-        $this->_game = new Chess_Game();
-        $this->subject = new Chess_GameView($this->_game);
+        $this->_game = new Game();
+        $this->subject = new GameView($this->_game);
     }
 
     /**
@@ -81,7 +83,7 @@ class GameViewTest extends TestCase
     public function testFactory()
     {
         $this->assertInstanceOf(
-            'Chess_GameView', Chess_GameView::make(new Chess_Game())
+            GameView::class, GameView::make(new Game())
         );
     }
 
@@ -189,11 +191,11 @@ class GameViewTest extends TestCase
      */
     public function testRendersWhiteKingOnLightSquare()
     {
-        $game = new Chess_Game();
+        $game = new Game();
         $game->move('e2', 'e4');
         $game->move('e7', 'e5');
         $game->move('e1', 'e2');
-        $subject = new Chess_GameView($game, 2);
+        $subject = new GameView($game, 2);
         $matcher = array(
             'tag' => 'td',
             'attributes' => array('class' => 'chess_dark'),
@@ -230,7 +232,7 @@ class GameViewTest extends TestCase
      */
     public function testFlipped()
     {
-        $this->subject = new Chess_GameView(new Chess_Game(), null, true);
+        $this->subject = new GameView(new Game(), null, true);
         $this->assertRenders(
             array(
                 'tag' => 'table',

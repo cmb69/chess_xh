@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStream;
@@ -67,7 +69,7 @@ EOT;
     /**
      * The test subject.
      *
-     * @var Chess_PgnImporter
+     * @var PgnImporter
      */
     private $_subject;
 
@@ -95,7 +97,7 @@ EOT;
         $this->_dataFolder = vfsStream::url('test/chess/data/');
         mkdir($this->_dataFolder, 0777, true);
         file_put_contents($this->_dataFolder . 'test.pgn', self::PGN);
-        $this->_subject = new Chess_PgnImporter($this->_dataFolder);
+        $this->_subject = new PgnImporter($this->_dataFolder);
     }
 
     /**

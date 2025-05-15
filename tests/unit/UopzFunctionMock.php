@@ -1,5 +1,7 @@
 <?php
 
+namespace Chess;
+
 /**
  * Extension for PHPUnit that makes MockObject-style expectations possible for global functions (even PECL functions).
  *

@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The import views.
  *
@@ -23,23 +25,23 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_ImportView
+class ImportView
 {
     /**
      * The PGN importer.
      *
-     * @var Chess_PgnImporter
+     * @var PgnImporter
      */
     private $_importer;
 
     /**
      * Returns a new self instance.
      *
-     * @param Chess_PgnImporter $importer A PGN importer.
+     * @param PgnImporter $importer A PGN importer.
      *
-     * @return Chess_ImportView
+     * @return ImportView
      */
-    public static function make(Chess_PgnImporter $importer)
+    public static function make(PgnImporter $importer)
     {
         return new self($importer);
     }
@@ -47,11 +49,11 @@ class Chess_ImportView
     /**
      * Initializes a new instance.
      *
-     * @param Chess_PgnImporter $importer A PGN importer.
+     * @param PgnImporter $importer A PGN importer.
      *
      * @return void
      */
-    public function __construct(Chess_PgnImporter $importer)
+    public function __construct(PgnImporter $importer)
     {
         $this->_importer = $importer;
     }

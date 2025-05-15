@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the front end functionality of the controllers.
  *
@@ -28,14 +30,14 @@ class FrontEndControllerTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_Controller
+     * @var Controller
      */
     private $_subject;
 
     /**
      * The game view.
      *
-     * @var Chess_GameView
+     * @var GameView
      */
     private $_gameView;
 
@@ -69,11 +71,11 @@ class FrontEndControllerTest extends TestCase
         );
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->createFunctionMock('XH_exit');
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
     }
 
@@ -161,11 +163,11 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -186,11 +188,11 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -209,11 +211,11 @@ class FrontEndControllerTest extends TestCase
     public function testChessNextAction()
     {
         $_REQUEST['chess_action'] = 'next';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -233,11 +235,11 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'previous';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder(Chess_GameView::class)
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -257,11 +259,11 @@ class FrontEndControllerTest extends TestCase
     {
         $this->markTestSkipped();
         $_REQUEST['chess_action'] = 'end';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -313,11 +315,11 @@ class FrontEndControllerTest extends TestCase
         $this->markTestSkipped();
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'italian';
-        $this->_subject = new Chess_Controller();
-        $this->_gameView = $this->getMockBuilder('Chess_GameView')
+        $this->_subject = new Controller();
+        $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $header = $this->createFunctionMock('header');
         $header->expects($this->once())->with($this->stringContains('Content-Type'));
@@ -340,9 +342,9 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
-        $this->_subject = new Chess_Controller();
+        $this->_subject = new Controller();
         $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess_GameView::make'
+            'Chess\GameView::make'
         );
         $header = $this->createFunctionMock('header');
         $header->expects($this->never());

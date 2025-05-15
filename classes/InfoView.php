@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * The info views.
  *
@@ -23,16 +25,16 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Chess_XH
  */
-class Chess_InfoView
+class InfoView
 {
     /**
      * Returns a new self instance.
      *
-     * @return Chess_InfoView.
+     * @return InfoView.
      */
     public static function make()
     {
-        return new Chess_InfoView();
+        return new InfoView();
     }
 
     /**

@@ -14,6 +14,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
 
+namespace Chess;
+
 /**
  * Testing the import commands.
  *
@@ -28,14 +30,14 @@ class ImportCommandTest extends TestCase
     /**
      * The test subject.
      *
-     * @var Chess_ImportCommand
+     * @var ImportCommand
      */
     private $_subject;
 
     /**
      * The PGN importer.
      *
-     * @var Chess_PgnImporter
+     * @var PgnImporter
      */
     private $_importer;
 
@@ -49,7 +51,7 @@ class ImportCommandTest extends TestCase
     /**
      * The view.
      *
-     * @var Chess_ImportView
+     * @var ImportView
      */
     private $_importView;
 
@@ -70,14 +72,14 @@ class ImportCommandTest extends TestCase
         $_XH_csrfProtection = $this->getMockBuilder(XH\CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->_importer = $this->getMockBuilder(Chess_PgnImporter::class)
+        $this->_importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_subject = new Chess_ImportCommand($this->_importer);
+        $this->_subject = new ImportCommand($this->_importer);
         $this->_importViewFactory = $this->createFunctionMock(
-            'Chess_ImportView::make'
+            '\Chess\ImportView::make'
         );
-        $this->_importViewFactory = $this->createFunctionMock('Chess_ImportView::make');
-        $this->_importView = $this->getMockBuilder(Chess_ImportView::class)
+        $this->_importViewFactory = $this->createFunctionMock('Chess\ImportView::make');
+        $this->_importView = $this->getMockBuilder(ImportView::class)
             ->disableOriginalConstructor()->getMock();
     }
 
@@ -89,7 +91,7 @@ class ImportCommandTest extends TestCase
     public function testFactory()
     {
         $this->assertInstanceOf(
-            'Chess_ImportCommand', Chess_ImportCommand::make($this->_importer)
+            ImportCommand::class, ImportCommand::make($this->_importer)
         );
     }
 
