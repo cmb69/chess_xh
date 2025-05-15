@@ -21,28 +21,10 @@ class Controller extends Presenter
     /** @var Factory */
     private $factory;
 
-    /** @var string */
-    private $requestedGame;
-
-    /** @var int */
-    private $requestedPly;
-
-    /** @var bool */
-    private $isFlipped;
-
     public function __construct(Factory $factory)
     {
         parent::__construct();
         $this->factory = $factory;
-        $this->requestedGame = isset($_REQUEST['chess_game'])
-            ? $_REQUEST['chess_game'] : "";
-        if (!Game::isValidName($this->requestedGame)) {
-            $this->requestedGame = "";
-        }
-        $this->requestedPly = isset($_REQUEST['chess_ply'])
-            ? (int) $_REQUEST['chess_ply'] : 0;
-        $this->isFlipped = isset($_REQUEST['chess_flipped'])
-            ? (bool) $_REQUEST['chess_flipped'] : false;
     }
 
     public function dispatch(): void
@@ -95,7 +77,12 @@ class Controller extends Presenter
     /** @return string|void */
     public function chess(string $basename)
     {
-        if (isset($_REQUEST['chess_ajax']) && $this->requestedGame != $basename) {
+        $requestedGame = isset($_REQUEST['chess_game'])
+            ? $_REQUEST['chess_game'] : "";
+        if (!Game::isValidName($requestedGame)) {
+            $requestedGame = "";
+        }
+        if (isset($_REQUEST['chess_ajax']) && $requestedGame != $basename) {
             return;
         }
         if (!Game::isValidName($basename)) {
@@ -117,7 +104,8 @@ class Controller extends Presenter
 
     private function getPly(Game $game): int
     {
-        $result = $this->requestedPly;
+        $result = isset($_REQUEST['chess_ply'])
+            ? (int) $_REQUEST['chess_ply'] : 0;
         switch ($this->requestedAction()) {
             case 'start':
                 $result = 0;
@@ -136,7 +124,8 @@ class Controller extends Presenter
 
     private function isFlipped(): bool
     {
-        $result = $this->isFlipped;
+        $result = isset($_REQUEST['chess_flipped'])
+            ? (bool) $_REQUEST['chess_flipped'] : false;
         if ($this->requestedAction() == 'flip') {
             $result = !$result;
         }
