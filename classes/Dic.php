@@ -51,6 +51,6 @@ class Dic
     private static function view(): View
     {
         global $pth, $plugin_tx;
-        return new View($pth["folder"]["plugins"] . "chess/view/", $plugin_tx["chess"]);
+        return new View($pth["folder"]["plugins"] . "chess/views/", $plugin_tx["chess"]);
     }
 }
