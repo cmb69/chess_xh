@@ -23,6 +23,8 @@ class BackEndControllerTest extends TestCase
 
     private $factory;
 
+    private $printPluginAdminMock;
+
     public function setUp(): void
     {
         global $chess, $plugin_tx;
@@ -32,16 +34,16 @@ class BackEndControllerTest extends TestCase
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->factory = $this->createStub(Factory::class);
         $this->_subject = new Controller($this->factory);
-        $printPluginAdminMock = $this->createFunctionMock(
+        $this->printPluginAdminMock = $this->createFunctionMock(
             'print_plugin_admin'
         );
-        $printPluginAdminMock->expects($this->once());
     }
 
     public function testInfoView(): void
     {
         global $admin, $pth;
 
+        $this->printPluginAdminMock->expects($this->once());
         $fmock = $this->createFunctionMock("XH_wantsPluginAdministration");
         $fmock->expects($this->once())->willReturn(true);
         $admin = '';
@@ -57,6 +59,7 @@ class BackEndControllerTest extends TestCase
     {
         global $admin, $pth;
 
+        $this->printPluginAdminMock->expects($this->once());
         $fmock = $this->createFunctionMock("XH_wantsPluginAdministration");
         $fmock->expects($this->once())->willReturn(true);
         $admin = 'plugin_main';
@@ -73,6 +76,7 @@ class BackEndControllerTest extends TestCase
     {
         global $admin, $action, $pth;
 
+        $this->printPluginAdminMock->expects($this->once());
         $admin = 'plugin_config';
         $action = 'plugin_edit';
         $pth = ["folder" => ["plugins" => ""]];

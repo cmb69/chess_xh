@@ -1,0 +1,112 @@
+<?php
+
+/**
+ * Copyright (c) Christoph M. Becker
+ *
+ * This file is part of Logman_XH.
+ *
+ * Logman_XH is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Logman_XH is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Logman_XH.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+namespace Chess;
+
+class ChessController extends Presenter
+{
+    /** @var Factory */
+    private $factory;
+
+    public function __construct(Factory $factory)
+    {
+        parent::__construct();
+        $this->factory = $factory;
+    }
+
+    /** @return string|void */
+    public function chess(string $basename)
+    {
+        $requestedGame = isset($_REQUEST['chess_game'])
+            ? $_REQUEST['chess_game'] : "";
+        if (!Game::isValidName($requestedGame)) {
+            $requestedGame = "";
+        }
+        if (isset($_REQUEST['chess_ajax']) && $requestedGame != $basename) {
+            return;
+        }
+        if (!Game::isValidName($basename)) {
+            return $this->renderFailure('invalid_name', $basename);
+        }
+        $game = Game::load($basename);
+        if (!$game) {
+            return $this->renderFailure('load_error', $basename);
+        }
+        $this->emitScript();
+        $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
+        if (isset($_REQUEST['chess_ajax'])) {
+            header('Content-Type:text/html; charset=UTF-8');
+            echo $gameView->render();
+            XH_exit();
+        } else {
+            return $gameView->render();
+        }
+    }
+
+    private function getPly(Game $game): int
+    {
+        $result = isset($_REQUEST['chess_ply'])
+            ? (int) $_REQUEST['chess_ply'] : 0;
+        switch ($this->requestedAction()) {
+            case 'start':
+                $result = 0;
+                break;
+            case 'next':
+                $result = min($result + 1, $game->getPlyCount());
+                break;
+            case 'previous':
+                $result = max($result - 1, 0);
+                break;
+            case 'end':
+                $result = $game->getPlyCount();
+        }
+        return $result;
+    }
+
+    private function isFlipped(): bool
+    {
+        $result = isset($_REQUEST['chess_flipped'])
+            ? (bool) $_REQUEST['chess_flipped'] : false;
+        if ($this->requestedAction() == 'flip') {
+            $result = !$result;
+        }
+        return $result;
+    }
+
+    private function requestedAction(): string
+    {
+        $res = isset($_REQUEST['chess_action'])
+            ? $_REQUEST['chess_action'] : "";
+        $actions = array('start', 'previous', 'next', 'end', 'flip');
+        if (!in_array($res, $actions)) {
+            $res = "";
+        }
+        return $res;
+    }
+
+    private function emitScript(): void
+    {
+        global $pth, $bjs;
+
+        $bjs = '<script type="text/javascript" src="'
+            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
+    }
+}

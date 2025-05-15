@@ -29,20 +29,11 @@ class Controller extends Presenter
 
     public function dispatch(): void
     {
-        $this->emitScript();
         if (XH_ADM // @phpstan-ignore-line
             && XH_wantsPluginAdministration("chess")
         ) {
             $this->handleAdministration();
         }
-    }
-
-    private function emitScript(): void
-    {
-        global $pth, $bjs;
-
-        $bjs = '<script type="text/javascript" src="'
-            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
     }
 
     private function handleAdministration(): void
@@ -72,74 +63,5 @@ class Controller extends Presenter
         );
         $importCommand = $this->factory->makeImportCommand($importer, new ImportView($importer));
         $importCommand->execute();
-    }
-
-    /** @return string|void */
-    public function chess(string $basename)
-    {
-        $requestedGame = isset($_REQUEST['chess_game'])
-            ? $_REQUEST['chess_game'] : "";
-        if (!Game::isValidName($requestedGame)) {
-            $requestedGame = "";
-        }
-        if (isset($_REQUEST['chess_ajax']) && $requestedGame != $basename) {
-            return;
-        }
-        if (!Game::isValidName($basename)) {
-            return $this->renderFailure('invalid_name', $basename);
-        }
-        $game = Game::load($basename);
-        if (!$game) {
-            return $this->renderFailure('load_error', $basename);
-        }
-        $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
-        if (isset($_REQUEST['chess_ajax'])) {
-            header('Content-Type:text/html; charset=UTF-8');
-            echo $gameView->render();
-            XH_exit();
-        } else {
-            return $gameView->render();
-        }
-    }
-
-    private function getPly(Game $game): int
-    {
-        $result = isset($_REQUEST['chess_ply'])
-            ? (int) $_REQUEST['chess_ply'] : 0;
-        switch ($this->requestedAction()) {
-            case 'start':
-                $result = 0;
-                break;
-            case 'next':
-                $result = min($result + 1, $game->getPlyCount());
-                break;
-            case 'previous':
-                $result = max($result - 1, 0);
-                break;
-            case 'end':
-                $result = $game->getPlyCount();
-        }
-        return $result;
-    }
-
-    private function isFlipped(): bool
-    {
-        $result = isset($_REQUEST['chess_flipped'])
-            ? (bool) $_REQUEST['chess_flipped'] : false;
-        if ($this->requestedAction() == 'flip') {
-            $result = !$result;
-        }
-        return $result;
-    }
-
-    private function requestedAction(): string
-    {
-        $res = isset($_REQUEST['chess_action'])
-            ? $_REQUEST['chess_action'] : "";
-        $actions = array('start', 'previous', 'next', 'end', 'flip');
-        if (!in_array($res, $actions)) {
-            $res = "";
-        }
-        return $res;
     }
 }

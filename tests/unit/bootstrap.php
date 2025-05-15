@@ -14,6 +14,7 @@ require_once './classes/Move.php';
 require_once './classes/PgnImporter.php';
 require_once './classes/Presenter.php';
 require_once './classes/Controller.php';
+require_once './classes/ChessController.php';
 require_once './classes/GameView.php';
 require_once './classes/InfoView.php';
 require_once './classes/ImportCommand.php';

@@ -16,7 +16,7 @@
 
 namespace Chess;
 
-class FrontEndControllerTest extends TestCase
+class ChessControllerTest extends TestCase
 {
     /** @var Controller */
     private $_subject;
@@ -47,28 +47,7 @@ class FrontEndControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_gameViewFactory = $this->createStub(Factory::class);
         $this->_gameViewFactory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new Controller($this->_gameViewFactory);
-    }
-
-    public function testDispatchEmitsScript(): void
-    {
-        global $bjs;
-
-        $bjs = '';
-        $this->_subject->dispatch();
-        $this->assertSame('<script type="text/javascript" src="../chess/chess.js"></script>', $bjs);
-    }
-
-    public function testCantAccessBackEnd(): void
-    {
-        global $chess;
-
-        $chess = 'true';
-        $printPluginAdminMock = $this->createFunctionMock(
-            'print_plugin_admin'
-        );
-        $printPluginAdminMock->expects($this->never());
-        $this->_subject->dispatch();
+        $this->_subject = new ChessController($this->_gameViewFactory);
     }
 
     public function testChess(): void
@@ -90,7 +69,7 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
-        $this->_subject = new Controller($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -100,7 +79,7 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
-        $this->_subject = new Controller($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -109,7 +88,7 @@ class FrontEndControllerTest extends TestCase
     public function testChessNextAction(): void
     {
         $_REQUEST['chess_action'] = 'next';
-        $this->_subject = new Controller($this->_gameViewFactory);
+        $this->_subject = new ChessController($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -123,7 +102,7 @@ class FrontEndControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new Controller($factory);
+        $this->_subject = new ChessController($factory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -136,7 +115,7 @@ class FrontEndControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new Controller($factory);
+        $this->_subject = new ChessController($factory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
@@ -158,7 +137,7 @@ class FrontEndControllerTest extends TestCase
             ->disableOriginalConstructor()->getMock();
         $factory = $this->createStub(Factory::class);
         $factory->method("makeGameView")->willReturn($this->_gameView);
-        $this->_subject = new Controller($factory);
+        $this->_subject = new ChessController($factory);
         $header = $this->createFunctionMock('header');
         $header->expects($this->once())->with($this->stringContains('Content-Type'));
         $this->_gameView->expects($this->once())->method('render')
@@ -174,10 +153,20 @@ class FrontEndControllerTest extends TestCase
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
         $factory = $this->createStub(Factory::class);
-        $this->_subject = new Controller($factory);
+        $this->_subject = new ChessController($factory);
         $header = $this->createFunctionMock('header');
         $header->expects($this->never());
         $this->expectOutputString('');
         $this->_subject->chess('italian');
+    }
+
+    public function testEmitsScript(): void
+    {
+        global $bjs, $pth;
+
+        $pth = ["folder" => ["plugins" => "../"]];
+        $bjs = '';
+        $this->_subject->chess('italian');
+        $this->assertSame('<script type="text/javascript" src="../chess/chess.js"></script>', $bjs);
     }
 }

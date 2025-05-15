@@ -23,6 +23,11 @@ namespace Chess;
 
 class Dic
 {
+    public static function chessController(): ChessController
+    {
+        return new ChessController(new Factory());
+    }
+
     public static function infoView(): InfoView
     {
         return new InfoView();

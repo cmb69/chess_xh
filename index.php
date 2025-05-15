@@ -15,6 +15,7 @@
  */
 
 use Chess\Controller;
+use Chess\Dic;
 use Chess\Factory;
 
 if (!defined('CMSIMPLE_XH_VERSION')) {
@@ -44,9 +45,7 @@ define('CHESS_VERSION', '1.0beta2');
  */
 function chess($basename)
 {
-    global $_Chess_controller;
-
-    return $_Chess_controller->chess($basename);
+    return Dic::chessController()->chess($basename);
 }
 
 /**
