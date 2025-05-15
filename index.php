@@ -29,28 +29,6 @@ if (!defined('CMSIMPLE_XH_VERSION')) {
  */
 
 /**
- * The domain layer.
- */
-require_once $pth['folder']['plugin_classes'] . 'Game.php';
-require_once $pth['folder']['plugin_classes'] . 'Position.php';
-require_once $pth['folder']['plugin_classes'] . 'Move.php';
-
-/**
- * The service layer.
- */
-require_once $pth['folder']['plugin_classes'] . 'PgnImporter.php';
-
-/**
- * The presentation layer.
- */
-require_once $pth['folder']['plugin_classes'] . 'Presenter.php';
-require_once $pth['folder']['plugin_classes'] . 'ChessController.php';
-require_once $pth['folder']['plugin_classes'] . 'GameView.php';
-require_once $pth['folder']['plugin_classes'] . 'InfoView.php';
-require_once $pth['folder']['plugin_classes'] . 'ImportCommand.php';
-require_once $pth['folder']['plugin_classes'] . 'ImportView.php';
-
-/**
  * The plugin version.
  */
 define('CHESS_VERSION', '1.0beta2');
