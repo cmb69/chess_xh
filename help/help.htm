@@ -1,139 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8">
-<title>Chess_XH - Manual</title>
-<link rel="stylesheet" type="text/css" href="./stylesheet.css">
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Chess_XH – User Manual</title>
+  <style type="text/css">
+    body {
+        font-family: Georgia, serif;
+        line-height: 1.5;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        background: #ffffe1;
+        max-width: 32em;
+    }
+    p {
+        text-align: justify;
+    }
+    pre {
+        color: black;
+        background: #ffe;
+        overflow: auto;
+        padding: 0.2em 0.5em;
+        border: 1px solid silver;
+    }
+  </style>
 </head>
-
 <body>
-
-<h1>Chess_XH – a CMSimple_XH Plugin</h1>
-<img src="../chess.png" style="float:left; margin-right:1em" alt="Knight on
-chess board fragment">
-<p>Chess_XH facilitates to display simple chess game viewers on your website.
-Contrary to many other viewers it doesn't require JavaScript or Flash.</p>
-<p>The chess games can't be entered in CMSimple_XH's back-end; instead they have
-to be imported from <a
-href="http://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a> files.</p>
-
-<ul id="nav">
-<li><a href="#notice">Important Notice</a></li>
+<h1 id="chess_xh">Chess_XH</h1>
+<p>Chess_XH facilitates to display simple chess game viewers on your website. Contrary to many other viewers it doesn’t require JavaScript or Flash. The chess games can’t be entered in CMSimple_XH’s back-end; instead they have to be imported from <a href="https://en.wikipedia.org/wiki/Portable_Game_Notation">PGN</a> files.</p>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ul>
 <li><a href="#requirements">Requirements</a></li>
+<li><a href="#download">Download</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#settings">Settings</a></li>
 <li><a href="#usage">Usage</a></li>
 <li><a href="#limitations">Limitations</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
 <li><a href="#license">License</a></li>
 <li><a href="#credits">Credits</a></li>
 </ul>
-
-<div id="body">
-
-<p><strong>Please do read this documentation <em>before</em> you encounter any
-problems!</strong></p>
-
-<h2 id="notice">Important Notice</h2>
-<p><strong>Chess_XH couldn't be tested so far in various environments. It is a
-so called beta version. Use with caution!</strong></p>
-<div class="toplink"><a href="#">back to top</a></div>
-
 <h2 id="requirements">Requirements</h2>
-<p>Chess_XH is a plugin for CMSimple_XH. It requires CMSimple_XH &ge; 1.7.0 and
-PHP &ge; 7.1.0.</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<p>Chess_XH is a plugin for <a href="https://cmsimple-xh.org/">CMSimple_XH</a>. It requires CMSimple_XH ≥ 1.7.0 and PHP ≥ 7.1.0.</p>
+<h2 id="download">Download</h2>
+<p>The <a href="https://github.com/cmb69/chess_xh/releases/latest">lastest release</a> is available for download on Github.</p>
 <h2 id="installation">Installation</h2>
-<p>The installation is done as with many other CMSimple_XH plugins.
-See the <a href="http://www.cmsimple-xh.org/wiki/doku.php/installation">
-CMSimple_XH wiki</a> for further details.</p>
-<ol>
+<p>The installation is done as with many other CMSimple_XH plugins.</p>
+<ol type="1">
 <li>Backup the data on your server.</li>
 <li>Unzip the distribution on your computer.</li>
-<li>Upload the whole directory chess/ to your server into CMSimple_XH's plugins/
-directory.</li>
-<li>Set write permissions for the subdirectories css/<!--, config/-->, data/ and
-languages/.</li>
-<li>Protect Chess_XH's data/ folder against direct access by any means your
-webserver provides. .htaccess files for Apache servers are already placed
-there.</li>
-<!--<li>Browse to Chess' administration (Plugins &rarr; Chess), and check if all
-requirements are fulfilled.</li>
---></ol>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<li>Upload the whole folder <code>chess/</code> to your server into the <code>plugins/</code> folder of CMSimple_XH.</li>
+<li>Set write permissions for the subfolders <code>css/</code>, <code>data/</code> and <code>languages/</code>.</li>
+<li>Protect Chess_XH’s data/ folder against direct access by any means your webserver provides. .htaccess files for Apache servers are already placed there. <!--
+1. Browse to Chess' administration (Plugins &rarr; Chess), and check if all
+   requirements are fulfilled.
+--></li>
+</ol>
 <h2 id="settings">Settings</h2>
-<p>The plugin's configuration is done as with many other CMSimple_XH plugins in
-the website's back-end. Select "Chess" from "Plugins".</p>
-<!--<p>You can change the default settings of Pagemanager_XH in "Config". Hints for
-the options will be displayed when hovering over the help icon with your
-mouse.</p>
---><p>Localization is done in "Language". You can translate the character strings
-to your own language, or customize them according to your needs.</p>
-<p>The look of Chess_XH can be customized in "Stylesheet".</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<p>The configuration of the plugin is done as with many other CMSimple_XH plugins in the back-end of the website. Go to <code>Plugins</code> → <code>Chess</code>.</p>
+<p>Localization is done under <code>Language</code>. You can translate the character strings to your own language if there is no appropriate language file available, or customize them according to your needs.</p>
+<p>The look of Chess_XH can be customized under <code>Stylesheet</code>.</p>
 <h2 id="usage">Usage</h2>
-<p>At first you have to import some PGN files into a proprietary format for
-faster processing. This can be done in the website's back-end (Plugins &rarr;
-Chess &rarr; Import). PGN files containing multiple games will result in
-multiple .dat files with a single game each.</p>
-<p>It is recommended to keep the PGN files after the import, as you will likely
-need to import them again for future versions of the plugin.</p>
+<p>At first you have to import some PGN files into a proprietary format for faster processing. This can be done in the back-end of the website under <code>Plugins</code> → <code>Chess</code> → <code>Import</code>. PGN files containing multiple games will result in multiple <code>.dat</code> files with a single game each.</p>
+<p>It is recommended to keep the PGN files after the import, as you will likely need to import them again for future versions of the plugin.</p>
 <p>To display a chess game on a page, insert</p>
-<pre>{{{PLUGIN:chess('italian');}}}</pre>
-<p>where 'italian' is the name of a chess game in .dat format.</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<pre><code>{{{chess(&#39;italian&#39;)}}}</code></pre>
+<p>where <code>italian</code> is the name of a chess game in <code>.dat</code> format.</p>
 <h2 id="limitations">Limitations</h2>
-<p>Currently only a small subset of the information available in PGN is used
-by the plugin, namely the moves without comments or other anotations.</p>
-<p>The import of a PGN file is quite time consuming, so very large PGN files
-with many games might cause timeout issues (blank page). In this case you have
-to split the PGN file manually before importing it.</p>
-<p>The JavaScript support for improved viewing of the games requires a
-contemporary browser. Old browsers such as IE 8 will fall back to plain HTML
-forms.</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<p>Currently only a small subset of the information available in PGN is used by the plugin, namely the moves without comments or other anotations.</p>
+<p>The import of a PGN file is quite time consuming, so very large PGN files with many games might cause timeout issues (blank page). In this case you have to split the PGN file manually before importing it.</p>
+<p>The JavaScript support for improved viewing of the games requires a contemporary browser. Old browsers such as IE 8 will fall back to plain HTML forms.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<p>Report bugs and ask for support either on <a href="https://github.com/cmb69/chess_xh/issues">Github</a> or in the <a href="https://cmsimpleforum.com/">CMSimple_XH Forum</a>.</p>
 <h2 id="license">License</h2>
-<p>Chess_XH is licensed under
-<a href="http://www.gnu.org/licenses/gpl.html">GPLv3</a>.</p>
-<p>&copy; 2014 Christoph M. Becker</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
+<p>Chess_XH is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p>Chess_XH is distributed in the hope that it will be useful, but <em>without any warranty</em>; without even the implied warranty of <em>merchantibility</em> or <em>fitness for a particular purpose</em>. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with Chess_XH. If not, see <a href="https://www.gnu.org/licenses/" class="uri">https://www.gnu.org/licenses/</a>.</p>
+<p>Copyright © Christoph M. Becker</p>
 <h2 id="credits">Credits</h2>
-<p>This plugin has been inspired by <a
-href="http://www.scroterturm.de/">Bulkington</a>.</p>
-<p>The plugin uses <a
-href="https://github.com/DHTMLGoodies/chessParser">chessParser</a> for the PGN
-import. Many thanks to <a href="http://dhtml-chess.com/">Alf Magne Kalleland</a>
-for publishing this library under LGPL.</p>
-<p>The plugin icon is designed by <a href="http://www.mentalrey.it/">Alessandro
-Rei</a>. Many thanks for publishing this icon under GPL.</p>
-<p>The images of the chess pieces are designed by <a
-href="http://en.wikipedia.org/wiki/User:Cburnett">Colin M.L. Burnett</a>. Many
-thanks for publishing them on <a
-href="http://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard_transparent">Wikimedia</a>
-under GPL.</p>
-<p>The animated loading image is taken from <a
-href="http://preloaders.net/">preloaders.net</a>. Many thanks for making this
-service available.</p>
-<!--<p>This plugin uses free applications icons from <a
-href="http://www.aha-soft.com/">Aha-Soft</a>. Many thanks to making these icons
-freely available.</p>
---><!--<p>Many thanks to the community at the <a
-href="http://www.cmsimpleforum.com/">CMSimple_XH forum</a> for tips, suggestions and
-testing</p>-->
-<p>And last but not least many thanks to <a href="http://harteg.dk/">Peter
-Harteg</a>, the "father" of CMSimple, and all developers of <a
-href="http://www.cmsimple-xh.org/"> CMSimple_XH</a> without whom this amazing
-CMS wouldn't exist.</p>
-<div class="toplink"><a href="#">back to top</a></div>
-
-</div>
-
+<p>This plugin has been inspired by <a href="https://www.scroterturm.de/"><em>Bulkington</em></a>.</p>
+<p>The plugin uses <a href="https://github.com/DHTMLGoodies/chessParser">chessParser</a> for the PGN import. Many thanks to <a href="http://dhtml-chess.com/">Alf Magne Kalleland</a> for publishing this library under LGPL.</p>
+<p>The plugin icon is designed by <a href="http://www.mentalrey.it/">Alessandro Rei</a>. Many thanks for publishing this icon under GPL.</p>
+<p>The images of the chess pieces are designed by <a href="https://en.wikipedia.org/wiki/User:Cburnett">Colin M.L. Burnett</a>. Many thanks for publishing them on <a href="https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard_transparent">Wikimedia</a> under GPL.</p>
+<p>The animated loading image is taken from <a href="https://preloaders.net/">preloaders.net</a>. Many thanks for making this service available.</p>
+<p>Many thanks to the community at the <a href="https://www.cmsimpleforum.com/">CMSimple_XH Forum</a> for tips, suggestions and testing.</p>
+<p>
+And last but not least many thanks to <a href="https://harteg.dk/">Peter Harteg</a>, the “father” of CMSimple, and all developers of <a
+href="https://www.cmsimple-xh.org/"> CMSimple_XH</a> without whom this amazing CMS would not exist.
+</p>
 </body>
-
 </html>
