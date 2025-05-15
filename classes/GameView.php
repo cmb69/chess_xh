@@ -48,18 +48,18 @@ class GameView
     public function render(): string
     {
         return '<div id="chess_view_' . $this->game->getName()
-            . '" class="chess_view">'
+            . '" class="chess_view">' . "\n"
             . $this->renderBoard() . $this->renderControlPanel()
-            . '</div>';
+            . '</div>' . "\n";
     }
 
     private function renderBoard(): string
     {
-        $result = '<table class="chess_board">';
+        $result = '<table class="chess_board">' . "\n";
         foreach ($this->getRanks() as $rank) {
             $result .= $this->renderRank($rank);
         }
-        $result .= '</table>';
+        $result .= '</table>' . "\n";
         return $result;
     }
 
@@ -74,11 +74,11 @@ class GameView
 
     private function renderRank(int $rank): string
     {
-        $result = '<tr>';
+        $result = '<tr>' . "\n";
         foreach ($this->getFiles() as $file) {
             $result .= $this->renderSquare($file, $rank);
         }
-        $result .= '</tr>';
+        $result .= '</tr>' . "\n";
         return $result;
     }
 
@@ -95,7 +95,7 @@ class GameView
     {
         $square = "$file$rank";
         $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
-        $result = '<td class="' . $class . '">';
+        $result = '<td class="' . $class . '">' . "\n";
         $move = $this->game->getMove($this->ply - 1);
         $moved = $move !== null && $move->isSourceOrDestination($square);
         if ($this->position->hasPieceOn($square)) {
@@ -107,7 +107,7 @@ class GameView
                 $result .= '&nbsp;';
             }
         }
-        $result .= '</td>';
+        $result .= '</td>' . "\n";
         return $result;
     }
 

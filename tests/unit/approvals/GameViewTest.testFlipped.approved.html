@@ -1,1 +1,148 @@
-<div id="chess_view_" class="chess_view"><table class="chess_board"><tr><td class="chess_light"><img  src="./chess/images/wr.png" alt="wr"></td><td class="chess_dark"><img  src="./chess/images/wn.png" alt="wn"></td><td class="chess_light"><img  src="./chess/images/wb.png" alt="wb"></td><td class="chess_dark"><img  src="./chess/images/wk.png" alt="wk"></td><td class="chess_light"><img  src="./chess/images/wq.png" alt="wq"></td><td class="chess_dark"><img  src="./chess/images/wb.png" alt="wb"></td><td class="chess_light"><img  src="./chess/images/wn.png" alt="wn"></td><td class="chess_dark"><img  src="./chess/images/wr.png" alt="wr"></td></tr><tr><td class="chess_dark"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_light"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_dark"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_light"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_dark"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_light"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_dark"><img  src="./chess/images/wp.png" alt="wp"></td><td class="chess_light"><img  src="./chess/images/wp.png" alt="wp"></td></tr><tr><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td></tr><tr><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td></tr><tr><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td></tr><tr><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td><td class="chess_dark">&nbsp;</td><td class="chess_light">&nbsp;</td></tr><tr><td class="chess_light"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_dark"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_light"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_dark"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_light"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_dark"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_light"><img  src="./chess/images/bp.png" alt="bp"></td><td class="chess_dark"><img  src="./chess/images/bp.png" alt="bp"></td></tr><tr><td class="chess_dark"><img  src="./chess/images/br.png" alt="br"></td><td class="chess_light"><img  src="./chess/images/bn.png" alt="bn"></td><td class="chess_dark"><img  src="./chess/images/bb.png" alt="bb"></td><td class="chess_light"><img  src="./chess/images/bk.png" alt="bk"></td><td class="chess_dark"><img  src="./chess/images/bq.png" alt="bq"></td><td class="chess_light"><img  src="./chess/images/bb.png" alt="bb"></td><td class="chess_dark"><img  src="./chess/images/bn.png" alt="bn"></td><td class="chess_light"><img  src="./chess/images/br.png" alt="br"></td></tr></table><form class="chess_control_panel" action="/xh/#chess_view_" method="get"><input type="hidden" name="selected" value="Chess"><input type="hidden" name="chess_game" value=""><input type="hidden" name="chess_flipped" value="1"><button type="submit" name="chess_action" value="goto">Go to</button><button type="submit" name="chess_action" value="start" disabled="disabled">Start</button><button type="submit" name="chess_action" value="previous" disabled="disabled">Previous</button><input type="text" name="chess_ply" value="0"><button type="submit" name="chess_action" value="next" disabled="disabled">Next</button><button type="submit" name="chess_action" value="end" disabled="disabled">End</button><button type="submit" name="chess_action" value="flip">Flip</button></form></div>
+<div id="chess_view_" class="chess_view">
+<table class="chess_board">
+<tr>
+<td class="chess_light">
+<img  src="./chess/images/wr.png" alt="wr"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wn.png" alt="wn"></td>
+<td class="chess_light">
+<img  src="./chess/images/wb.png" alt="wb"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wk.png" alt="wk"></td>
+<td class="chess_light">
+<img  src="./chess/images/wq.png" alt="wq"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wb.png" alt="wb"></td>
+<td class="chess_light">
+<img  src="./chess/images/wn.png" alt="wn"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wr.png" alt="wr"></td>
+</tr>
+<tr>
+<td class="chess_dark">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_light">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_light">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_light">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+<td class="chess_light">
+<img  src="./chess/images/wp.png" alt="wp"></td>
+</tr>
+<tr>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+</tr>
+<tr>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+</tr>
+<tr>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+</tr>
+<tr>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+<td class="chess_dark">
+&nbsp;</td>
+<td class="chess_light">
+&nbsp;</td>
+</tr>
+<tr>
+<td class="chess_light">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_light">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_light">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_light">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bp.png" alt="bp"></td>
+</tr>
+<tr>
+<td class="chess_dark">
+<img  src="./chess/images/br.png" alt="br"></td>
+<td class="chess_light">
+<img  src="./chess/images/bn.png" alt="bn"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bb.png" alt="bb"></td>
+<td class="chess_light">
+<img  src="./chess/images/bk.png" alt="bk"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bq.png" alt="bq"></td>
+<td class="chess_light">
+<img  src="./chess/images/bb.png" alt="bb"></td>
+<td class="chess_dark">
+<img  src="./chess/images/bn.png" alt="bn"></td>
+<td class="chess_light">
+<img  src="./chess/images/br.png" alt="br"></td>
+</tr>
+</table>
+<form class="chess_control_panel" action="/xh/#chess_view_" method="get"><input type="hidden" name="selected" value="Chess"><input type="hidden" name="chess_game" value=""><input type="hidden" name="chess_flipped" value="1"><button type="submit" name="chess_action" value="goto">Go to</button><button type="submit" name="chess_action" value="start" disabled="disabled">Start</button><button type="submit" name="chess_action" value="previous" disabled="disabled">Previous</button><input type="text" name="chess_ply" value="0"><button type="submit" name="chess_action" value="next" disabled="disabled">Next</button><button type="submit" name="chess_action" value="end" disabled="disabled">End</button><button type="submit" name="chess_action" value="flip">Flip</button></form></div>
