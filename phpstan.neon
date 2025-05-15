@@ -11,3 +11,5 @@ parameters:
     - ../../cmsimple/functions.php
   scanDirectories:
     - ./parser
+    - ../plib/classes
+  

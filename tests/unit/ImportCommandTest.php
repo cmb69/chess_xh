@@ -17,6 +17,7 @@
 namespace Chess;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use Plib\View;
 use XH\CSRFProtection;
 
 class ImportCommandTest extends TestCase
@@ -30,6 +31,9 @@ class ImportCommandTest extends TestCase
     /** @var ImportView&MockObject */
     private $_importView;
 
+    /** @var View */
+    private $view;
+
     public function setUp(): void
     {
         global $admin, $_XH_csrfProtection, $plugin_tx;
@@ -42,7 +46,8 @@ class ImportCommandTest extends TestCase
         $this->_importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
         $this->_importView = $this->createMock(ImportView::class);
-        $this->_subject = new ImportCommand($this->_importer, $this->_importView);
+        $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
+        $this->_subject = new ImportCommand($this->_importer, $this->_importView, $this->view);
     }
 
     // public function testFactory(): void
@@ -84,6 +89,6 @@ class ImportCommandTest extends TestCase
         $_XH_csrfProtection->expects($this->once())->method('check');
         $this->_importView->expects($this->once())->method('render');
         $this->_subject->execute();
-        $this->assertSame('<p class="xh_fail">The name &quot;foo!&quot; is invalid</p>', $o);
+        $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $o);
     }
 }

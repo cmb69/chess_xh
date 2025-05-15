@@ -21,6 +21,8 @@
 
 namespace Chess;
 
+use Plib\View;
+
 class Dic
 {
     public static function chessController(): ChessController
@@ -32,11 +34,17 @@ class Dic
     {
         global $pth;
         $importer = new PgnImporter($pth["folder"]["plugins"] . "chess/data/");
-        return new ImportCommand($importer, new ImportView($importer));
+        return new ImportCommand($importer, new ImportView($importer), self::view());
     }
 
     public static function infoView(): InfoView
     {
         return new InfoView();
+    }
+
+    private static function view(): View
+    {
+        global $pth, $plugin_tx;
+        return new View($pth["folder"]["plugins"] . "chess/view/", $plugin_tx["chess"]);
     }
 }
