@@ -25,6 +25,8 @@ use Plib\View;
 
 class Dic
 {
+    public const VERSION = "1.0beta2";
+
     public static function chessController(): ChessController
     {
         return new ChessController(new Factory(), self::view());

@@ -22,4 +22,3 @@ require_once './classes/ImportCommand.php';
 require_once './classes/ImportView.php';
 
 const CMSIMPLE_XH_VERSION = "CMSimple_XH 1.7.4";
-const CHESS_VERSION = "1.0beta2";

@@ -19,17 +19,6 @@ use Chess\Dic;
 use Chess\Factory;
 
 /**
- * The paths.
- *
- * @var array{folder:array<string,string>,file:array<string,string>} $pth
- */
-
-/**
- * The plugin version.
- */
-define('CHESS_VERSION', '1.0beta2');
-
-/**
  * Renders a game view.
  *
  * @param string $basename A basename of a data file.

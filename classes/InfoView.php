@@ -22,7 +22,7 @@ class InfoView
     {
         return '<h1>Chess</h1>'
             . $this->renderIcon()
-            . '<p>Version: ' . CHESS_VERSION . '</p>'
+            . '<p>Version: ' . Dic::VERSION . '</p>'
             . $this->renderCopyright() . $this->renderLicense();
     }
 
