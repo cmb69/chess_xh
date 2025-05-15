@@ -50,10 +50,8 @@ class ImportCommand
     /** @todo Add success message */
     public function execute(Request $request): Response
     {
-        global $action;
-
         $o = "";
-        if ($action == 'import') {
+        if ($request->get("action") === "import") {
             if (!$this->csrfProtector->check($request->post("chess_token"))) {
                 return Response::create("not authorized");
             }

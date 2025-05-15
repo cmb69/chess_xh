@@ -25,9 +25,6 @@ class ImportCommandTest extends TestCase
 
     public function setUp(): void
     {
-        global $admin;
-
-        $admin = 'plugin_main';
         $this->importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
         $this->importer->expects($this->any())->method('findAll')
@@ -39,23 +36,18 @@ class ImportCommandTest extends TestCase
 
     public function testViewOnly(): void
     {
-        global $action;
-
-        $action = 'plugin_text';
         $this->importer->expects($this->never())->method('import');
-        $request = new FakeRequest();
+        $request = new FakeRequest(["url" => "http://example.com/?&action=plugin_text"]);
         $response = $this->subject->execute($request);
         Approvals::verifyHtml($response->output());
     }
 
     public function testImport(): void
     {
-        global $action;
-
-        $action = 'import';
         $this->csrfProtector->method("check")->willReturn(true);
         $this->importer->expects($this->once())->method('import')->with('foo');
         $request = new FakeRequest([
+            "url" => "http://example.com/?&action=import",
             "post" => ["chess_game" => "foo"],
         ]);
         $this->subject->execute($request);
@@ -63,11 +55,9 @@ class ImportCommandTest extends TestCase
 
     public function testImportFailsForInvalidName(): void
     {
-        global $action;
-
-        $action = 'import';
         $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
+            "url" => "http://example.com/?&action=import",
             "post" => ["chess_game" => "foo!"],
         ]);
         $response = $this->subject->execute($request);
