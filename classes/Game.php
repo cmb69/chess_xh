@@ -198,14 +198,14 @@ class Game
     private function _exportTagPair($name)
     {
         switch ($name) {
-        case 'date':
-            $value = '??.??.??';
-            break;
-        case 'result':
-            $value = '*';
-            break;
-        default:
-            $value = '?';
+            case 'date':
+                $value = '??.??.??';
+                break;
+            case 'result':
+                $value = '*';
+                break;
+            default:
+                $value = '?';
         }
         return sprintf('[%s "%s"]' . "\n", ucfirst($name), $value);
     }
@@ -228,6 +228,3 @@ class Game
         return $result;
     }
 }
-
-
-?>

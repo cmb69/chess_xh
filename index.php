@@ -89,5 +89,3 @@ function chess($basename)
  */
 $_Chess_controller = new Controller();
 $_Chess_controller->dispatch();
-
-?>

@@ -177,9 +177,7 @@ class GameView
         $move = $this->_game->getMove($this->_ply - 1);
         $moved = $move !== null && $move->isSourceOrDestination($square);
         if ($this->_position->hasPieceOn($square)) {
-            $result .= $this->_renderPiece(
-                $this->_position->getPieceOn($square), $moved
-            );
+            $result .= $this->_renderPiece($this->_position->getPieceOn($square), $moved);
         } else {
             if ($moved) {
                 $result .= '<span class="chess_move">&nbsp;</span>';
@@ -275,37 +273,36 @@ class GameView
         global $plugin_tx;
 
         switch ($which) {
-        case 'start':
-            $value = 'start';
-            $disabled = ($this->_ply == 0);
-            break;
-        case 'previous':
-            $value = 'previous';
-            $disabled = ($this->_ply == 0);
-            break;
-        case 'goto':
-            $value = 'goto';
-            $disabled = false;
-            break;
-        case 'next':
-            $value = 'next';
-            $disabled = ($this->_ply == $this->_game->getPlyCount());
-            break;
-        case 'end';
-            $value = 'end';
-            $disabled = ($this->_ply == $this->_game->getPlyCount());
-            break;
-        case 'flip':
-            $value = 'flip';
-            $disabled = false;
-            break;
-        default:
-            $value = "";
-            $disabled = true;
+            case 'start':
+                $value = 'start';
+                $disabled = ($this->_ply == 0);
+                break;
+            case 'previous':
+                $value = 'previous';
+                $disabled = ($this->_ply == 0);
+                break;
+            case 'goto':
+                $value = 'goto';
+                $disabled = false;
+                break;
+            case 'next':
+                $value = 'next';
+                $disabled = ($this->_ply == $this->_game->getPlyCount());
+                break;
+            case 'end':
+                $value = 'end';
+                $disabled = ($this->_ply == $this->_game->getPlyCount());
+                break;
+            case 'flip':
+                $value = 'flip';
+                $disabled = false;
+                break;
+            default:
+                $value = "";
+                $disabled = true;
         }
         return '<button type="submit" name="chess_action" value="' . $value . '"'
             . ($disabled ? ' disabled="disabled"' : '') . '>'
             . $plugin_tx['chess']["label_$which"] . '</button>';
     }
 }
-

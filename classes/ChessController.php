@@ -144,15 +144,15 @@ class Controller extends Presenter
 
         $o .= print_plugin_admin('on');
         switch ($admin) {
-        case '':
-            $infoView = InfoView::make();
-            $o .= $infoView->render();
-            break;
-        case 'plugin_main':
-            $this->_handleImport();
-            break;
-        default:
-            $o .= plugin_admin_common();
+            case '':
+                $infoView = InfoView::make();
+                $o .= $infoView->render();
+                break;
+            case 'plugin_main':
+                $this->_handleImport();
+                break;
+            default:
+                $o .= plugin_admin_common();
         }
     }
 
@@ -193,9 +193,7 @@ class Controller extends Presenter
         if (!$game) {
             return $this->renderFailure('load_error', $basename);
         }
-        $gameView = GameView::make(
-            $game, $this->_getPly($game), $this->_isFlipped()
-        );
+        $gameView = GameView::make($game, $this->_getPly($game), $this->_isFlipped());
         if ($this->_isAjaxRequest) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
@@ -216,17 +214,17 @@ class Controller extends Presenter
     {
         $result = $this->_requestedPly;
         switch ($this->_requestedAction) {
-        case 'start':
-            $result = 0;
-            break;
-        case 'next':
-            $result = min($result + 1, $game->getPlyCount());
-            break;
-        case 'previous':
-            $result = max($result - 1, 0);
-            break;
-        case 'end':
-            $result = $game->getPlyCount();
+            case 'start':
+                $result = 0;
+                break;
+            case 'next':
+                $result = min($result + 1, $game->getPlyCount());
+                break;
+            case 'previous':
+                $result = max($result - 1, 0);
+                break;
+            case 'end':
+                $result = $game->getPlyCount();
         }
         return $result;
     }
@@ -245,4 +243,3 @@ class Controller extends Presenter
         return $result;
     }
 }
-

@@ -214,4 +214,3 @@ class Move
             || $position->isEnPassant($this);
     }
 }
-

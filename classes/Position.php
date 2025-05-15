@@ -197,40 +197,38 @@ class Position
     {
         $result = array();
         switch ($this->_pieces[$square][1]) {
-        case 'p':
-            if ($this->_pieces[$square][0] == 'w') {
-                $directions = array('nw', 'ne');
-            } else {
-                $directions = array('sw', 'se');
-            }
-            $result = $this->_getNeighborSquares($square, $directions);
-            break;
-        case 'n':
-            $result = $this->_getKnightsSquares($square);
-            break;
-        case 'b':
-            $directions = array('ne', 'se', 'sw', 'nw');
-            // fall through
-        case 'r':
-            $directions = array('n', 'e', 's', 'w');
-            // fall through
-        case 'q':
-            $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
-            foreach ($directions as $direction) {
-                $result = array_merge(
-                    $result, $this->_getSquaresTo($direction, $square)
-                );
-            }
-            break;
-        case 'k':
-            $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
-            foreach ($directions as $direction) {
-                $neighbor = $this->_getNeighborSquare($square, $direction);
-                if ($neighbor) {
-                    $result []= $neighbor;
+            case 'p':
+                if ($this->_pieces[$square][0] == 'w') {
+                    $directions = array('nw', 'ne');
+                } else {
+                    $directions = array('sw', 'se');
                 }
-            }
-            break;
+                $result = $this->_getNeighborSquares($square, $directions);
+                break;
+            case 'n':
+                $result = $this->_getKnightsSquares($square);
+                break;
+            case 'b':
+                $directions = array('ne', 'se', 'sw', 'nw');
+                // fall through
+            case 'r':
+                $directions = array('n', 'e', 's', 'w');
+                // fall through
+            case 'q':
+                $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
+                foreach ($directions as $direction) {
+                    $result = array_merge($result, $this->_getSquaresTo($direction, $square));
+                }
+                break;
+            case 'k':
+                $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
+                foreach ($directions as $direction) {
+                    $neighbor = $this->_getNeighborSquare($square, $direction);
+                    if ($neighbor) {
+                        $result []= $neighbor;
+                    }
+                }
+                break;
         }
         return $result;
     }
@@ -249,30 +247,30 @@ class Position
             $square1 = $this->_getNeighborSquare($square, $direction);
             if ($square1) {
                 switch ($direction) {
-                case 'n';
-                    $result = array_merge(
-                        $result,
-                        $this->_getNeighborSquares($square1, array('nw', 'ne'))
-                    );
-                    break;
-                case 'e':
-                    $result = array_merge(
-                        $result,
-                        $this->_getNeighborSquares($square1, array('ne', 'se'))
-                    );
-                    break;
-                case 's':
-                    $result = array_merge(
-                        $result,
-                        $this->_getNeighborSquares($square1, array('se', 'sw'))
-                    );
-                    break;
-                case 'w':
-                    $result = array_merge(
-                        $result,
-                        $this->_getNeighborSquares($square1, array('sw', 'nw'))
-                    );
-                    break;
+                    case 'n':
+                        $result = array_merge(
+                            $result,
+                            $this->_getNeighborSquares($square1, array('nw', 'ne'))
+                        );
+                        break;
+                    case 'e':
+                        $result = array_merge(
+                            $result,
+                            $this->_getNeighborSquares($square1, array('ne', 'se'))
+                        );
+                        break;
+                    case 's':
+                        $result = array_merge(
+                            $result,
+                            $this->_getNeighborSquares($square1, array('se', 'sw'))
+                        );
+                        break;
+                    case 'w':
+                        $result = array_merge(
+                            $result,
+                            $this->_getNeighborSquares($square1, array('sw', 'nw'))
+                        );
+                        break;
                 }
             }
         }
@@ -331,32 +329,37 @@ class Position
      */
     private function _getNeighborSquare($square, $direction)
     {
-        $file = $square[0]; $rank = $square[1];
+        $file = $square[0];
+        $rank = $square[1];
         switch ($direction) {
-        case 'n':
-            ++$rank;
-            break;
-        case 'ne':
-            ++$rank; ++$file;
-            break;
-        case 'e':
-            ++$file;
-            break;
-        case 'se':
-            --$rank; ++$file;
-            break;
-        case 's':
-            --$rank;
-            break;
-        case 'sw':
-            --$rank; $file = chr(ord($file) - 1);
-            break;
-        case 'w':
-            $file = chr(ord($file) - 1);
-            break;
-        case 'nw':
-            ++$rank; $file = chr(ord($file) - 1);
-            break;
+            case 'n':
+                ++$rank;
+                break;
+            case 'ne':
+                ++$rank;
+                ++$file;
+                break;
+            case 'e':
+                ++$file;
+                break;
+            case 'se':
+                --$rank;
+                ++$file;
+                break;
+            case 's':
+                --$rank;
+                break;
+            case 'sw':
+                --$rank;
+                $file = chr(ord($file) - 1);
+                break;
+            case 'w':
+                $file = chr(ord($file) - 1);
+                break;
+            case 'nw':
+                ++$rank;
+                $file = chr(ord($file) - 1);
+                break;
         }
         $square = $file . $rank;
         return $this->_isValidSquare($square) ? $square : false;
