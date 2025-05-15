@@ -149,7 +149,7 @@ class Position
                 foreach ($directions as $direction) {
                     $neighbor = $this->getNeighborSquare($square, $direction);
                     if ($neighbor) {
-                        $result []= $neighbor;
+                        $result[] = $neighbor;
                     }
                 }
                 break;
@@ -198,7 +198,7 @@ class Position
     {
         $result = array();
         while ($square = $this->getNeighborSquare($square, $direction)) {
-            $result []= $square;
+            $result[] = $square;
             if ($this->hasPieceOn($square)) {
                 break;
             }
@@ -212,7 +212,7 @@ class Position
         foreach ($directions as $direction) {
             $neighbor = $this->getNeighborSquare($square, $direction);
             if ($neighbor) {
-                $result []= $neighbor;
+                $result[] = $neighbor;
             }
         }
         return $result;
@@ -311,7 +311,7 @@ class Position
     {
         $ranks = array();
         for ($rank = 8; $rank >= 1; --$rank) {
-            $ranks []= $this->rankToString($rank);
+            $ranks[] = $this->rankToString($rank);
         }
         return implode('/', $ranks);
     }

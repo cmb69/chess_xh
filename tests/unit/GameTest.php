@@ -1,7 +1,5 @@
 <?php
 
-namespace Chess;
-
 /**
  * Testing the games.
  *
@@ -15,6 +13,8 @@ namespace Chess;
  * @version   SVN: $Id$
  * @link      http://3-magi.net/?CMSimple_XH/Chess_XH
  */
+
+namespace Chess;
 
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;

@@ -34,7 +34,7 @@ class PgnImporter
         if ($dir = opendir($this->dataFolder)) {
             while ($entry = readdir($dir)) {
                 if (pathinfo($entry, PATHINFO_EXTENSION) == 'pgn') {
-                    $result []= basename($entry, '.pgn');
+                    $result[] = basename($entry, '.pgn');
                 }
             }
         }

@@ -80,10 +80,9 @@ class Move
 
     public function isSourceOrDestination(string $square): bool
     {
-        return $square == $this->getSource()
-            || $square == $this->getDestination();
+        return $square == $this->getSource() || $square == $this->getDestination();
     }
-    
+
     public function getSan(Position $position): string
     {
         if ($position->isCastling($this)) {

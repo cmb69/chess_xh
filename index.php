@@ -18,11 +18,6 @@ use Chess\Controller;
 use Chess\Dic;
 use Chess\Factory;
 
-if (!defined('CMSIMPLE_XH_VERSION')) {
-    http_response_code(403);
-    exit;
-}
-
 /**
  * The paths.
  *

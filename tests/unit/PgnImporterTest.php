@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
 
 class PgnImporterTest extends TestCase
 {
-    const PGN = <<<'EOT'
+    private const PGN = <<<'EOT'
 [Event "Ch World (match)"]
 [Site "Chennai (India)"]
 [Date "2013.11.09"]
