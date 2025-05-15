@@ -37,8 +37,8 @@ if (window.addEventListener) {
 
             function isSuccess() {
                 return request.status === 200 &&
-                        /^<div id="chess_view_/.test(request.responseText) &&
-                        /<\/div>$/.test(request.responseText);
+                        /^\s*<div id="chess_view_/.test(request.responseText) &&
+                        /<\/div>\s*$/.test(request.responseText);
             }
 
             function onSuccess(form, html) {
