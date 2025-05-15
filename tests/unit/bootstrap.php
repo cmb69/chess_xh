@@ -23,6 +23,5 @@ require_once './classes/ChessController.php';
 require_once './classes/GameView.php';
 require_once './classes/InfoView.php';
 require_once './classes/ImportCommand.php';
-require_once './classes/ImportView.php';
 
 const CMSIMPLE_XH_VERSION = "CMSimple_XH 1.7.4";

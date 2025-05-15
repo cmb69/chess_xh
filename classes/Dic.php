@@ -36,10 +36,8 @@ class Dic
     public static function importCommand(): ImportCommand
     {
         global $pth;
-        $importer = new PgnImporter($pth["folder"]["plugins"] . "chess/data/");
         return new ImportCommand(
-            $importer,
-            new ImportView($importer, new CsrfProtector()),
+            new PgnImporter($pth["folder"]["plugins"] . "chess/data/"),
             new CsrfProtector(),
             self::view()
         );
