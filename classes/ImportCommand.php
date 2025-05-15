@@ -24,11 +24,6 @@ class ImportCommand extends Presenter
     /** @var ImportView */
     private $importView;
 
-    public static function make(PgnImporter $importer, ImportView $importView): ImportCommand
-    {
-        return new self($importer, $importView);
-    }
-
     public function __construct(PgnImporter $importer, ImportView $importView)
     {
         parent::__construct();
