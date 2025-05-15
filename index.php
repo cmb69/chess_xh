@@ -47,9 +47,3 @@ function chess($basename)
 {
     return Dic::chessController()->chess($basename);
 }
-
-/**
- * The plugin controller.
- */
-$_Chess_controller = new Controller(new Factory());
-$_Chess_controller->dispatch();

@@ -28,6 +28,13 @@ class Dic
         return new ChessController(new Factory());
     }
 
+    public static function importCommand(): ImportCommand
+    {
+        global $pth;
+        $importer = new PgnImporter($pth["folder"]["plugins"] . "chess/data/");
+        return new ImportCommand($importer, new ImportView($importer));
+    }
+
     public static function infoView(): InfoView
     {
         return new InfoView();
