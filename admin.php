@@ -20,6 +20,7 @@
  */
 
 use Chess\Dic;
+use Plib\Request;
 
 if (!defined("CMSIMPLE_XH_VERSION")) {
     http_response_code(403);
@@ -38,7 +39,7 @@ if (XH_wantsPluginAdministration("chess")) {
             $o .= Dic::infoView()->render();
             break;
         case "plugin_main":
-            Dic::importCommand()->execute();
+            Dic::importCommand()->execute(Request::current());
             break;
         default:
             $o .= plugin_admin_common();

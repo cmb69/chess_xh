@@ -4,6 +4,7 @@ namespace Chess;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 use Plib\View;
 use XH\CSRFProtection;
 
@@ -50,7 +51,8 @@ class ImportCommandTest extends TestCase
         $action = 'plugin_text';
         $this->importer->expects($this->never())->method('import');
         $this->importView->expects($this->once())->method('render');
-        $this->subject->execute();
+        $request = new FakeRequest();
+        $this->subject->execute($request);
     }
 
     public function testImport(): void
@@ -58,11 +60,13 @@ class ImportCommandTest extends TestCase
         global $action, $_XH_csrfProtection;
 
         $action = 'import';
-        $_POST['chess_game'] = 'foo';
         $_XH_csrfProtection->expects($this->once())->method('check');
         $this->importer->expects($this->once())->method('import')->with('foo');
         $this->importView->expects($this->once())->method('render');
-        $this->subject->execute();
+        $request = new FakeRequest([
+            "post" => ["chess_game" => "foo"],
+        ]);
+        $this->subject->execute($request);
     }
 
     public function testImportFailsForInvalidName(): void
@@ -71,10 +75,12 @@ class ImportCommandTest extends TestCase
 
         $o = '';
         $action = 'import';
-        $_POST['chess_game'] = 'foo!';
         $_XH_csrfProtection->expects($this->once())->method('check');
         $this->importView->expects($this->once())->method('render');
-        $this->subject->execute();
+        $request = new FakeRequest([
+            "post" => ["chess_game" => "foo!"],
+        ]);
+        $this->subject->execute($request);
         $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $o);
     }
 }

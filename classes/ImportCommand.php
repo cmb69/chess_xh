@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\Request;
 use Plib\View;
 
 class ImportCommand
@@ -45,7 +46,7 @@ class ImportCommand
     }
 
     /** @todo Add success message */
-    public function execute(): void
+    public function execute(Request $request): void
     {
         global $action, $o, $_XH_csrfProtection;
 
@@ -53,7 +54,7 @@ class ImportCommand
             if (isset($_XH_csrfProtection)) {
                 $_XH_csrfProtection->check();
             }
-            $game = $_POST['chess_game'];
+            $game = $request->post("chess_game");
             if (Game::isValidName($game)) {
                 $this->importer->import($game);
             } else {
