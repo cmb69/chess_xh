@@ -3,7 +3,9 @@
 namespace Chess;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Plib\CsrfProtector;
 use XH\CSRFProtection;
 
 class ImportViewTest extends TestCase
@@ -14,9 +16,12 @@ class ImportViewTest extends TestCase
     /** @var PgnImporter */
     private $importer;
 
+    /** @var CsrfProtector&Stub */
+    private $csrfProtector;
+
     public function setUp(): void
     {
-        global $sn, $plugin_tx, $_XH_csrfProtection;
+        global $sn, $plugin_tx;
 
         $sn = '/xh/';
         $plugin_tx = array(
@@ -25,19 +30,16 @@ class ImportViewTest extends TestCase
                 'menu_main' => 'Import'
             )
         );
-        $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->csrfProtector = $this->createStub(CsrfProtector::class);
         $this->importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
         $this->importer->expects($this->any())->method('findAll')
             ->will($this->returnValue(array('foo', 'bar', 'baz')));
-        $this->subject = new ImportView($this->importer);
+        $this->subject = new ImportView($this->importer, $this->csrfProtector);
     }
 
     public function testRendersHtml(): void
     {
-        global $_XH_csrfProtection;
-        $_XH_csrfProtection->expects($this->once())->method('tokenInput');
         Approvals::verifyHtml($this->subject->render());
     }
 }

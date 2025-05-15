@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\CsrfProtector;
 use Plib\Request;
 use Plib\View;
 
@@ -32,27 +33,33 @@ class ImportCommand
     /** @var ImportView */
     private $importView;
 
+    /** @var CsrfProtector */
+    private $csrfProtector;
+
     /** @var View */
     private $view;
 
     public function __construct(
         PgnImporter $importer,
         ImportView $importView,
+        CsrfProtector $csrfProtector,
         View $view
     ) {
         $this->importer = $importer;
         $this->importView = $importView;
+        $this->csrfProtector = $csrfProtector;
         $this->view = $view;
     }
 
     /** @todo Add success message */
     public function execute(Request $request): void
     {
-        global $action, $o, $_XH_csrfProtection;
+        global $action, $o;
 
         if ($action == 'import') {
-            if (isset($_XH_csrfProtection)) {
-                $_XH_csrfProtection->check();
+            if (!$this->csrfProtector->check($request->post("chess_token"))) {
+                $o .= "not authorized";
+                return;
             }
             $game = $request->post("chess_game");
             if (Game::isValidName($game)) {

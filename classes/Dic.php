@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\CsrfProtector;
 use Plib\View;
 
 class Dic
@@ -36,7 +37,12 @@ class Dic
     {
         global $pth;
         $importer = new PgnImporter($pth["folder"]["plugins"] . "chess/data/");
-        return new ImportCommand($importer, new ImportView($importer), self::view());
+        return new ImportCommand(
+            $importer,
+            new ImportView($importer, new CsrfProtector()),
+            new CsrfProtector(),
+            self::view()
+        );
     }
 
     public static function infoView(): InfoView

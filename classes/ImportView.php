@@ -21,14 +21,20 @@
 
 namespace Chess;
 
+use Plib\CsrfProtector;
+
 class ImportView
 {
     /** @var PgnImporter */
     private $importer;
 
-    public function __construct(PgnImporter $importer)
+    /** @var CsrfProtector */
+    private $csrfProtector;
+
+    public function __construct(PgnImporter $importer, CsrfProtector $csrfProtector)
     {
         $this->importer = $importer;
+        $this->csrfProtector = $csrfProtector;
     }
 
     public function render(): string
@@ -41,13 +47,12 @@ class ImportView
 
     private function renderForm(): string
     {
-        global $sn, $_XH_csrfProtection;
+        global $sn;
 
+        $token = $this->csrfProtector->token();
         $result = '<form class="chess_import_form" action="' . $sn
-            . '?chess" method="post">';
-        if (isset($_XH_csrfProtection)) {
-            $result .= $_XH_csrfProtection->tokenInput();
-        }
+            . '?chess" method="post">'
+            . '<input type="hidden" name="chess_token" value="' . $token . '">';
         $result .= '<input type="hidden" name="admin" value="plugin_main">'
             . '<input type="hidden" name="action" value="import">'
             . $this->renderList()
