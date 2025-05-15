@@ -15,6 +15,7 @@
  */
 
 use Chess\Controller;
+use Chess\Factory;
 
 if (!defined('CMSIMPLE_XH_VERSION')) {
     http_response_code(403);
@@ -87,5 +88,5 @@ function chess($basename)
 /**
  * The plugin controller.
  */
-$_Chess_controller = new Controller();
+$_Chess_controller = new Controller(new Factory());
 $_Chess_controller->dispatch();

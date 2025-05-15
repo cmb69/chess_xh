@@ -18,6 +18,9 @@ namespace Chess;
 
 class Controller extends Presenter
 {
+    /** @var Factory */
+    private $factory;
+
     /** @var string */
     private $requestedGame;
 
@@ -33,9 +36,10 @@ class Controller extends Presenter
     /** @var bool */
     private $isAjaxRequest;
 
-    public function __construct()
+    public function __construct(Factory $factory)
     {
         parent::__construct();
+        $this->factory = $factory;
         $this->requestedGame = isset($_REQUEST['chess_game'])
             ? $_REQUEST['chess_game'] : "";
         if (!Game::isValidName($this->requestedGame)) {
@@ -84,7 +88,7 @@ class Controller extends Presenter
         $o .= print_plugin_admin('on');
         switch ($admin) {
             case '':
-                $infoView = Dic::infoView();
+                $infoView = $this->factory->makeInfoView();
                 $o .= $infoView->render();
                 break;
             case 'plugin_main':
@@ -102,7 +106,7 @@ class Controller extends Presenter
         $importer = new PgnImporter(
             $pth['folder']['plugins'] . 'chess/data/'
         );
-        $importCommand = ImportCommand::make($importer);
+        $importCommand = $this->factory->makeImportCommand($importer, new ImportView($importer));
         $importCommand->execute();
     }
 
@@ -119,7 +123,7 @@ class Controller extends Presenter
         if (!$game) {
             return $this->renderFailure('load_error', $basename);
         }
-        $gameView = GameView::make($game, $this->getPly($game), $this->isFlipped());
+        $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
         if ($this->isAjaxRequest) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();

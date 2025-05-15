@@ -21,6 +21,8 @@ class BackEndControllerTest extends TestCase
     /** @var Controller */
     private $_subject;
 
+    private $factory;
+
     public function setUp(): void
     {
         global $chess, $plugin_tx;
@@ -28,7 +30,8 @@ class BackEndControllerTest extends TestCase
         $this->setConstant('XH_ADM', true);
         $chess = 'true';
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->_subject = new Controller();
+        $this->factory = $this->createStub(Factory::class);
+        $this->_subject = new Controller($this->factory);
         $printPluginAdminMock = $this->createFunctionMock(
             'print_plugin_admin'
         );
@@ -39,35 +42,31 @@ class BackEndControllerTest extends TestCase
     {
         global $admin, $pth;
 
-        $this->markTestSkipped();
+        $fmock = $this->createFunctionMock("XH_wantsPluginAdministration");
+        $fmock->expects($this->once())->willReturn(true);
         $admin = '';
         $pth = ["folder" => ["plugins" => ""]];
-        $infoViewFactory = $this->createFunctionMock(
-            'Chess\InfoView::make'
-        );
         $infoViewMock = $this->createMock(InfoView::class);
         $infoViewMock->expects($this->once())->method('render');
-        $infoViewFactory->expects($this->once())
-            ->will($this->returnValue($infoViewMock));
+        $this->factory->method("makeInfoView")->willReturn($infoViewMock);
         $this->_subject->dispatch();
+        $fmock->restore();
     }
 
     public function testImportCommand(): void
     {
         global $admin, $pth;
 
-        $this->markTestSkipped();
+        $fmock = $this->createFunctionMock("XH_wantsPluginAdministration");
+        $fmock->expects($this->once())->willReturn(true);
         $admin = 'plugin_main';
         $pth = ["folder" => ["plugins" => ""]];
-        $importCommandFactory = $this->createFunctionMock(
-            'Chess\ImportCommand::make'
-        );
         $importCommand = $this->getMockBuilder(ImportCommand::class)
             ->disableOriginalConstructor()->getMock();
+        $this->factory->method("makeImportCommand")->willReturn($importCommand);
         $importCommand->expects($this->once())->method('execute');
-        $importCommandFactory->expects($this->once())->with($this->anything())
-            ->will($this->returnValue($importCommand));
         $this->_subject->dispatch();
+        $fmock->restore();
     }
 
     public function testDefaultAdministration(): void

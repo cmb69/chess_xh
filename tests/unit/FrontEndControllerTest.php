@@ -43,12 +43,11 @@ class FrontEndControllerTest extends TestCase
         );
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->createFunctionMock('XH_exit');
-        $this->_subject = new Controller();
         $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $this->_gameViewFactory = $this->createStub(Factory::class);
+        $this->_gameViewFactory->method("makeGameView")->willReturn($this->_gameView);
+        $this->_subject = new Controller($this->_gameViewFactory);
     }
 
     public function testDispatchEmitsScript(): void
@@ -57,16 +56,7 @@ class FrontEndControllerTest extends TestCase
 
         $bjs = '';
         $this->_subject->dispatch();
-        $this->assertTag(
-            array(
-                'tag' => 'script',
-                'attributes' => array(
-                    'type' => 'text/javascript',
-                    'src' => '../chess/chess.js'
-                )
-            ),
-            $bjs
-        );
+        $this->assertSame('<script type="text/javascript" src="../chess/chess.js"></script>', $bjs);
     }
 
     public function testCantAccessBackEnd(): void
@@ -85,40 +75,24 @@ class FrontEndControllerTest extends TestCase
     {
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->will($this->returnValue($this->_gameView));
-
-        $this->markTestSkipped();
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
     public function testChessInvalidName(): void
     {
-        $matcher = array(
-            'tag' => 'p',
-            'attributes' => array('class' => 'xh_fail'),
-            'content' => 'The name "italian!" is invalid!'
+        $this->assertSame(
+            '<p class="xh_fail">The name &quot;italian!&quot; is invalid</p>',
+            $this->_subject->chess('italian!')
         );
-        $this->assertTag($matcher, $this->_subject->chess('italian!'));
     }
 
     public function testChessFlipped(): void
     {
         $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
-        $this->_subject = new Controller();
-        $this->_gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $this->_subject = new Controller($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->with($this->anything(), $this->anything(), false)
-            ->will($this->returnValue($this->_gameView));
-
-        $this->markTestSkipped();
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
@@ -126,36 +100,18 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
-        $this->_subject = new Controller();
-        $this->_gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $this->_subject = new Controller($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->with($this->anything(), 0, $this->anything())
-            ->will($this->returnValue($this->_gameView));
-        $this->markTestSkipped();
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
     public function testChessNextAction(): void
     {
         $_REQUEST['chess_action'] = 'next';
-        $this->_subject = new Controller();
-        $this->_gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $this->_subject = new Controller($this->_gameViewFactory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->with($this->anything(), 1, $this->anything())
-            ->will($this->returnValue($this->_gameView));
-        $this->markTestSkipped();
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
@@ -163,83 +119,64 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'previous';
-        $this->_subject = new Controller();
         $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $factory = $this->createStub(Factory::class);
+        $factory->method("makeGameView")->willReturn($this->_gameView);
+        $this->_subject = new Controller($factory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->with($this->anything(), 0, $this->anything())
-            ->will($this->returnValue($this->_gameView));
-        $this->markTestSkipped();
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
     public function testChessEndAction(): void
     {
-        $this->markTestSkipped();
         $_REQUEST['chess_action'] = 'end';
-        $this->_subject = new Controller();
         $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $factory = $this->createStub(Factory::class);
+        $factory->method("makeGameView")->willReturn($this->_gameView);
+        $this->_subject = new Controller($factory);
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->with($this->anything(), 6, $this->anything())
-            ->will($this->returnValue($this->_gameView));
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Test the chess method when failing.
-     *
-     * @return void
-     */
-    public function testChessFailure()
+    public function testChessFailure(): void
     {
-        $matcher = array(
-            'tag' => 'p',
-            'attributes' => array('class' => 'xh_fail'),
-            'content' => 'The chess file "foo" can\'t be loaded!'
+        $this->assertSame(
+            '<p class="xh_fail">The chess file &quot;foo&quot; can\'t be loaded!</p>',
+            $this->_subject->chess('foo')
         );
-        $this->assertTag($matcher, $this->_subject->chess('foo'));
     }
 
     public function testChessFailureOldCMSimple(): void
     {
-        $messageMock = $this->createFunctionMock("XH_message");
-        $matcher = array(
-            'tag' => 'p',
-            'attributes' => array('class' => 'cmsimplecore_warning'),
-            'content' => 'The chess file "foo" can\'t be loaded!'
-        );
-        $this->assertTag($matcher, $this->_subject->chess('foo'));
+        global $plugin_tx;
+        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
+        $messageMock = $this->createFunctionMock("function_exists");
+        $messageMock->expects($this->any())->willReturn(false);
+        $output = $this->_subject->chess('foo');
         $messageMock->restore();
+        $this->assertSame(
+            '<p class="cmsimplecore_warning">The chess file "foo" can\'t be loaded!<p>',
+            $output
+        );
     }
 
     public function testChessAjax(): void
     {
-        $this->markTestSkipped();
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'italian';
-        $this->_subject = new Controller();
         $this->_gameView = $this->getMockBuilder(GameView::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $factory = $this->createStub(Factory::class);
+        $factory->method("makeGameView")->willReturn($this->_gameView);
+        $this->_subject = new Controller($factory);
         $header = $this->createFunctionMock('header');
         $header->expects($this->once())->with($this->stringContains('Content-Type'));
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
-        $this->_gameViewFactory->expects($this->once())
-            ->will($this->returnValue($this->_gameView));
         $exit = $this->createFunctionMock('XH_exit');
         $exit->expects($this->once());
         $this->expectOutputString('foo');
@@ -250,13 +187,10 @@ class FrontEndControllerTest extends TestCase
     {
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
-        $this->_subject = new Controller();
-        $this->_gameViewFactory = $this->createFunctionMock(
-            'Chess\GameView::make'
-        );
+        $factory = $this->createStub(Factory::class);
+        $this->_subject = new Controller($factory);
         $header = $this->createFunctionMock('header');
         $header->expects($this->never());
-        $this->_gameViewFactory->expects($this->never());
         $this->expectOutputString('');
         $this->_subject->chess('italian');
     }

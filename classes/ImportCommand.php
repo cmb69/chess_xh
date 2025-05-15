@@ -21,15 +21,19 @@ class ImportCommand extends Presenter
     /** @var PgnImporter */
     private $importer;
 
-    public static function make(PgnImporter $importer): ImportCommand
+    /** @var ImportView */
+    private $importView;
+
+    public static function make(PgnImporter $importer, ImportView $importView): ImportCommand
     {
-        return new self($importer);
+        return new self($importer, $importView);
     }
 
-    public function __construct(PgnImporter $importer)
+    public function __construct(PgnImporter $importer, ImportView $importView)
     {
         parent::__construct();
         $this->importer = $importer;
+        $this->importView = $importView;
     }
 
     /** @todo Add success message */
@@ -48,7 +52,6 @@ class ImportCommand extends Presenter
                 $o .= $this->renderFailure('invalid_name', $game);
             }
         }
-        $view = ImportView::make($this->importer);
-        $o .= $view->render();
+        $o .= $this->importView->render();
     }
 }

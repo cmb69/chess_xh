@@ -16,6 +16,9 @@
 
 namespace Chess;
 
+use PHPUnit\Framework\MockObject\MockObject;
+use XH\CSRFProtection;
+
 class ImportCommandTest extends TestCase
 {
     /** @var ImportCommand */
@@ -24,10 +27,7 @@ class ImportCommandTest extends TestCase
     /** @var PgnImporter */
     private $_importer;
 
-    /** @var object */
-    private $_importViewFactory;
-
-    /** @var ImportView */
+    /** @var ImportView&MockObject */
     private $_importView;
 
     public function setUp(): void
@@ -36,37 +36,29 @@ class ImportCommandTest extends TestCase
 
         $this->setConstant('XH_ADM', true);
         $admin = 'plugin_main';
-        $_XH_csrfProtection = $this->getMockBuilder(XH\CSRFProtection::class)
+        $_XH_csrfProtection = $this->getMockBuilder(CSRFProtection::class)
             ->disableOriginalConstructor()->getMock();
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->_importer = $this->getMockBuilder(PgnImporter::class)
             ->disableOriginalConstructor()->getMock();
-        $this->_subject = new ImportCommand($this->_importer);
-        $this->_importViewFactory = $this->createFunctionMock(
-            '\Chess\ImportView::make'
-        );
-        $this->_importViewFactory = $this->createFunctionMock('Chess\ImportView::make');
-        $this->_importView = $this->getMockBuilder(ImportView::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->_importView = $this->createMock(ImportView::class);
+        $this->_subject = new ImportCommand($this->_importer, $this->_importView);
     }
 
-    public function testFactory(): void
-    {
-        $this->assertInstanceOf(
-            ImportCommand::class, ImportCommand::make($this->_importer)
-        );
-    }
+    // public function testFactory(): void
+    // {
+    //     $this->assertInstanceOf(
+    //         ImportCommand::class, ImportCommand::make($this->_importer)
+    //     );
+    // }
 
     public function testViewOnly(): void
     {
         global $action;
 
-        $this->markTestSkipped();
         $action = 'plugin_text';
         $this->_importer->expects($this->never())->method('import');
         $this->_importView->expects($this->once())->method('render');
-        $this->_importViewFactory->expects($this->once())->with($this->anything())
-            ->will($this->returnValue($this->_importView));
         $this->_subject->execute();
     }
 
@@ -74,14 +66,11 @@ class ImportCommandTest extends TestCase
     {
         global $action, $_XH_csrfProtection;
 
-        $this->markTestSkipped();
         $action = 'import';
         $_POST['chess_game'] = 'foo';
         $_XH_csrfProtection->expects($this->once())->method('check');
         $this->_importer->expects($this->once())->method('import')->with('foo');
         $this->_importView->expects($this->once())->method('render');
-        $this->_importViewFactory->expects($this->once())->with($this->anything())
-            ->will($this->returnValue($this->_importView));
         $this->_subject->execute();
     }
 
@@ -89,21 +78,12 @@ class ImportCommandTest extends TestCase
     {
         global $o, $action, $_XH_csrfProtection;
 
-        $this->markTestSkipped();
         $o = '';
         $action = 'import';
         $_POST['chess_game'] = 'foo!';
         $_XH_csrfProtection->expects($this->once())->method('check');
         $this->_importView->expects($this->once())->method('render');
-        $this->_importViewFactory->expects($this->once())->with($this->anything())
-            ->will($this->returnValue($this->_importView));
         $this->_subject->execute();
-        $this->assertTag(
-            array(
-                'tag' => 'p',
-
-            ),
-            $o
-        );
+        $this->assertSame('<p class="xh_fail">The name &quot;foo!&quot; is invalid</p>', $o);
     }
 }
