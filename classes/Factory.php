@@ -8,14 +8,4 @@ class Factory
     {
         return new GameView($game, $ply, $flipped);
     }
-
-    public function makeImportCommand(PgnImporter $importer, ImportView $importView): ImportCommand
-    {
-        return new ImportCommand($importer, $importView);
-    }
-
-    public function makeInfoView(): InfoView
-    {
-        return new InfoView();
-    }
 }

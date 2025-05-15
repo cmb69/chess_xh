@@ -16,6 +16,8 @@
 
 namespace Chess;
 
+use Plib\View;
+
 class ImportCommand extends Presenter
 {
     /** @var PgnImporter */
@@ -24,11 +26,18 @@ class ImportCommand extends Presenter
     /** @var ImportView */
     private $importView;
 
-    public function __construct(PgnImporter $importer, ImportView $importView)
-    {
+    /** @var View */
+    private $view;
+
+    public function __construct(
+        PgnImporter $importer,
+        ImportView $importView,
+        View $view
+    ) {
         parent::__construct();
         $this->importer = $importer;
         $this->importView = $importView;
+        $this->view = $view;
     }
 
     /** @todo Add success message */
@@ -44,7 +53,7 @@ class ImportCommand extends Presenter
             if (Game::isValidName($game)) {
                 $this->importer->import($game);
             } else {
-                $o .= $this->renderFailure('invalid_name', $game);
+                $o .= $this->view->message("fail", "message_invalid_name", $game);
             }
         }
         $o .= $this->importView->render();
