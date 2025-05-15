@@ -17,6 +17,7 @@
 namespace Chess;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\TestCase;
 
 class GameViewTest extends TestCase
 {
@@ -30,7 +31,6 @@ class GameViewTest extends TestCase
     {
         global $pth, $sn, $su, $plugin_tx;
 
-        $this->setConstant('CMSIMPLE_XH_VERSION', 'CMSimple_XH 1.6.2');
         $pth = array(
             'folder' => array('plugins' => './')
         );
