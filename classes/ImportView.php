@@ -26,11 +26,6 @@ class ImportView
     /** @var PgnImporter */
     private $importer;
 
-    public static function make(PgnImporter $importer): self
-    {
-        return new self($importer);
-    }
-
     public function __construct(PgnImporter $importer)
     {
         $this->importer = $importer;

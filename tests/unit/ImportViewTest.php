@@ -34,11 +34,6 @@ class ImportViewTest extends TestCase
         $this->subject = new ImportView($this->importer);
     }
 
-    public function testFactory(): void
-    {
-        $this->assertInstanceOf(ImportView::class, ImportView::make($this->importer));
-    }
-
     public function testRendersHtml(): void
     {
         global $_XH_csrfProtection;
