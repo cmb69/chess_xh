@@ -18,34 +18,15 @@ namespace Chess;
 
 class FrontEndControllerTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var Controller
-     */
+    /** @var Controller */
     private $_subject;
 
-    /**
-     * The game view.
-     *
-     * @var GameView
-     */
+    /** @var GameView */
     private $_gameView;
 
-    /**
-     * The game view factory mock.
-     *
-     * @var object
-     */
+    /** @var object */
     private $_gameViewFactory;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array The paths of system files and folders.
-     */
     public function setUp(): void
     {
         global $pth, $plugin_tx;
@@ -70,14 +51,7 @@ class FrontEndControllerTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the script element is emitted.
-     *
-     * @return void
-     *
-     * @global string The (X)HTML to insert at the bottom of the body.
-     */
-    public function testDispatchEmitsScript()
+    public function testDispatchEmitsScript(): void
     {
         global $bjs;
 
@@ -95,14 +69,7 @@ class FrontEndControllerTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the back end can't be accessed.
-     *
-     * @return void
-     *
-     * @global string Whether the plugin administration is requested.
-     */
-    public function testCantAccessBackEnd()
+    public function testCantAccessBackEnd(): void
     {
         global $chess;
 
@@ -114,12 +81,7 @@ class FrontEndControllerTest extends TestCase
         $this->_subject->dispatch();
     }
 
-    /**
-     * Tests the chess method.
-     *
-     * @return void
-     */
-    public function testChess()
+    public function testChess(): void
     {
         $this->_gameView->expects($this->once())->method('render')
             ->will($this->returnValue('foo'));
@@ -130,12 +92,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Tests chess() with an invalid name.
-     *
-     * @return void
-     */
-    public function testChessInvalidName()
+    public function testChessInvalidName(): void
     {
         $matcher = array(
             'tag' => 'p',
@@ -145,12 +102,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertTag($matcher, $this->_subject->chess('italian!'));
     }
 
-    /**
-     * Tests the chess method for a board flipped twice.
-     *
-     * @return void
-     */
-    public function testChessFlipped()
+    public function testChessFlipped(): void
     {
         $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
@@ -170,12 +122,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Tests the chess method for the "start" action.
-     *
-     * @return void
-     */
-    public function testChessStartAction()
+    public function testChessStartAction(): void
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
@@ -194,12 +141,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Tests the chess method for the "next" action.
-     *
-     * @return void
-     */
-    public function testChessNextAction()
+    public function testChessNextAction(): void
     {
         $_REQUEST['chess_action'] = 'next';
         $this->_subject = new Controller();
@@ -217,12 +159,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Tests the chess method for the "previous" action.
-     *
-     * @return void
-     */
-    public function testChessPreviousAction()
+    public function testChessPreviousAction(): void
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'previous';
@@ -241,12 +178,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertEquals('foo', $this->_subject->chess('italian'));
     }
 
-    /**
-     * Tests the chess method for the "end" action.
-     *
-     * @return void
-     */
-    public function testChessEndAction()
+    public function testChessEndAction(): void
     {
         $this->markTestSkipped();
         $_REQUEST['chess_action'] = 'end';
@@ -279,12 +211,7 @@ class FrontEndControllerTest extends TestCase
         $this->assertTag($matcher, $this->_subject->chess('foo'));
     }
 
-    /**
-     * Test the chess method when failing under CMSimple_XH < 1.6.
-     *
-     * @return void
-     */
-    public function testChessFailureOldCMSimple()
+    public function testChessFailureOldCMSimple(): void
     {
         $messageMock = $this->createFunctionMock("XH_message");
         $matcher = array(
@@ -296,12 +223,7 @@ class FrontEndControllerTest extends TestCase
         $messageMock->restore();
     }
 
-    /**
-     * Tests the chess() for Ajax.
-     *
-     * @return void
-     */
-    public function testChessAjax()
+    public function testChessAjax(): void
     {
         $this->markTestSkipped();
         $_REQUEST['chess_ajax'] = '1';
@@ -324,12 +246,7 @@ class FrontEndControllerTest extends TestCase
         $this->_subject->chess('italian');
     }
 
-    /**
-     * Tests calling chess() with Ajax on irrelevant game.
-     *
-     * @return void
-     */
-    public function testIrrelevantAjax()
+    public function testIrrelevantAjax(): void
     {
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
@@ -344,5 +261,3 @@ class FrontEndControllerTest extends TestCase
         $this->_subject->chess('italian');
     }
 }
-
-?>

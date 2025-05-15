@@ -18,20 +18,9 @@ namespace Chess;
 
 class BackEndControllerTest extends TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var Controller
-     */
+    /** @var Controller */
     private $_subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global string Whether the plugin administration is requested.
-     */
     public function setUp(): void
     {
         global $chess, $plugin_tx;
@@ -46,14 +35,7 @@ class BackEndControllerTest extends TestCase
         $printPluginAdminMock->expects($this->once());
     }
 
-    /**
-     * Tests the info view.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>admin</var> GP parameter.
-     */
-    public function testInfoView()
+    public function testInfoView(): void
     {
         global $admin, $pth;
 
@@ -70,14 +52,7 @@ class BackEndControllerTest extends TestCase
         $this->_subject->dispatch();
     }
 
-    /**
-     * Tests the import command.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>admin</var> GP parameter.
-     */
-    public function testImportCommand()
+    public function testImportCommand(): void
     {
         global $admin, $pth;
 
@@ -95,15 +70,7 @@ class BackEndControllerTest extends TestCase
         $this->_subject->dispatch();
     }
 
-    /**
-     * Tests the default administration functionality.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>admin</var> GP parameter.
-     * @global string The value of the <var>action</var> GP parameter.
-     */
-    public function testDefaultAdministration()
+    public function testDefaultAdministration(): void
     {
         global $admin, $action, $pth;
 
@@ -118,5 +85,3 @@ class BackEndControllerTest extends TestCase
         $this->_subject->dispatch();
     }
 }
-
-?>

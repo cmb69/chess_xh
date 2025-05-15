@@ -18,30 +18,12 @@ namespace Chess;
 
 class GameViewTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var GameView
-     */
+    /** @var GameView */
     protected $subject;
 
-    /**
-     * The game.
-     *
-     * @var Game
-     */
+    /** @var Game */
     private $_game;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array  The paths of system files and folders.
-     * @global string The site name.
-     * @global string The selected URL.
-     * @global array  The localization of the plugins.
-     */
     public function setUp(): void
     {
         global $pth, $sn, $su, $plugin_tx;
@@ -66,24 +48,14 @@ class GameViewTest extends TestCase
         $this->subject = new GameView($this->_game);
     }
 
-    /**
-     * Tests the factory.
-     *
-     * @return void
-     */
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->assertInstanceOf(
             GameView::class, GameView::make(new Game())
         );
     }
 
-    /**
-     * Tests that the view is rendered.
-     *
-     * @return void
-     */
-    public function testRendersView()
+    public function testRendersView(): void
     {
         $this->assertRenders(
             array(
@@ -94,12 +66,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a table with 8 rows is rendered.
-     *
-     * @return void
-     */
-    public function testRendersTableWith8Rows()
+    public function testRendersTableWith8Rows(): void
     {
         $this->assertRenders(
             array(
@@ -113,12 +80,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a row with 8 cells is rendered.
-     *
-     * @return void
-     */
-    public function testRendersRowWith8Cells()
+    public function testRendersRowWith8Cells(): void
     {
         $this->assertRenders(
             array(
@@ -131,12 +93,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a white queen is rendered.
-     *
-     * @return void
-     */
-    public function testRendersWhiteQueen()
+    public function testRendersWhiteQueen(): void
     {
         $this->assertRenders(
             array(
@@ -153,12 +110,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a black queen is rendered.
-     *
-     * @return void
-     */
-    public function testRendersBlackQueen()
+    public function testRendersBlackQueen(): void
     {
         $this->assertRenders(
             array(
@@ -175,12 +127,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a white king is rendered on a light square.
-     *
-     * @return void
-     */
-    public function testRendersWhiteKingOnLightSquare()
+    public function testRendersWhiteKingOnLightSquare(): void
     {
         $game = new Game();
         $game->move('e2', 'e4');
@@ -201,12 +148,7 @@ class GameViewTest extends TestCase
         $this->assertTag($matcher, $subject->render());
     }
 
-    /**
-     * Tests that an empty square is renderd.
-     *
-     * @return void
-     */
-    public function testRendersEmptySquare()
+    public function testRendersEmptySquare(): void
     {
         $this->assertRenders(
             array(
@@ -216,14 +158,9 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests the flipped chess board.
-     *
-     * @return void
-     */
-    public function testFlipped()
+    public function testFlipped(): void
     {
-        $this->subject = new GameView(new Game(), null, true);
+        $this->subject = new GameView(new Game(), 0, true);
         $this->assertRenders(
             array(
                 'tag' => 'table',
@@ -236,12 +173,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a control panel is rendered.
-     *
-     * @return void
-     */
-    public function testRendersControlPanel()
+    public function testRendersControlPanel(): void
     {
         $this->assertRenders(
             array(
@@ -255,12 +187,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the control panel is rendered in old CMSimples.
-     *
-     * @return void
-     */
-    public function testRendersControlPanelOldCMSimple()
+    public function testRendersControlPanelOldCMSimple(): void
     {
         $this->setConstant('CMSIMPLE_XH_VERSION', 'CMSimple 4.4.3');
         $this->assertRenders(
@@ -275,12 +202,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the "selected" input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersSelectedInput()
+    public function testRendersSelectedInput(): void
     {
         $this->assertRenders(
             array(
@@ -294,12 +216,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the game input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersGameInput()
+    public function testRendersGameInput(): void
     {
         $this->assertRenders(
             array(
@@ -313,12 +230,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the flip input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersFlippedInput()
+    public function testRendersFlippedInput(): void
     {
         $this->assertRenders(
             array(
@@ -333,12 +245,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the ply input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersPlyInput()
+    public function testRendersPlyInput(): void
     {
         $this->assertRenders(
             array(
@@ -353,12 +260,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the ply input field doesn't top the maximum.
-     *
-     * @return void
-     */
-    public function testRendersPlyInputDoesntTopMax()
+    public function testRendersPlyInputDoesntTopMax(): void
     {
         $_REQUEST['chess_action'] = 'goto';
         $_REQUEST['chess_ply'] = '23';
@@ -375,12 +277,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the flip button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersFlipButton()
+    public function testRendersFlipButton(): void
     {
         $this->assertRenders(
             array(
@@ -395,12 +292,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the start button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersStartButton()
+    public function testRendersStartButton(): void
     {
         $this->assertRenders(
             array(
@@ -416,12 +308,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the previous button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersPreviousButton()
+    public function testRendersPreviousButton(): void
     {
         $this->assertRenders(
             array(
@@ -437,12 +324,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the "go to" button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersGotoButton()
+    public function testRendersGotoButton(): void
     {
         $this->_game->move('e2', 'e4');
         $this->assertRenders(
@@ -458,12 +340,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the next button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersNextButton()
+    public function testRendersNextButton(): void
     {
         $this->_game->move('e2', 'e4');
         $this->assertRenders(
@@ -479,12 +356,7 @@ class GameViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the end button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersEndButton()
+    public function testRendersEndButton(): void
     {
         $this->_game->move('e2', 'e4');
         $this->_game->move('e7', 'e5');
@@ -501,5 +373,3 @@ class GameViewTest extends TestCase
         );
     }
 }
-
-?>

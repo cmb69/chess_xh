@@ -18,45 +18,20 @@ namespace Chess;
 
 class ImportView
 {
-    /**
-     * The PGN importer.
-     *
-     * @var PgnImporter
-     */
+    /** @var PgnImporter */
     private $importer;
 
-    /**
-     * Returns a new self instance.
-     *
-     * @param PgnImporter $importer A PGN importer.
-     *
-     * @return ImportView
-     */
-    public static function make(PgnImporter $importer)
+    public static function make(PgnImporter $importer): self
     {
         return new self($importer);
     }
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param PgnImporter $importer A PGN importer.
-     *
-     * @return void
-     */
     public function __construct(PgnImporter $importer)
     {
         $this->importer = $importer;
     }
 
-    /**
-     * Renders the view.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The localization of the plugins.
-     */
-    public function render()
+    public function render(): string
     {
         global $plugin_tx;
 
@@ -64,15 +39,7 @@ class ImportView
             . $this->renderForm();
     }
 
-    /**
-     * Renders the form.
-     *
-     * @return string (X)HTML.
-     *
-     * @global string            The script name.
-     * @global XH_CSRFProtection The CSRF protector.
-     */
-    private function renderForm()
+    private function renderForm(): string
     {
         global $sn, $_XH_csrfProtection;
 
@@ -88,12 +55,7 @@ class ImportView
         return $result;
     }
 
-    /**
-     * Renders the list.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderList()
+    private function renderList(): string
     {
         $result = '<ul>';
         foreach ($this->importer->findAll() as $name) {
@@ -103,16 +65,7 @@ class ImportView
         return $result;
     }
 
-    /**
-     * Renders a list item.
-     *
-     * @param string $name A basename.
-     *
-     * @return string (X)HTML
-     *
-     * @global array The localization of the plugins.
-     */
-    private function renderListItem($name)
+    private function renderListItem(string $name): string
     {
         global $plugin_tx;
 

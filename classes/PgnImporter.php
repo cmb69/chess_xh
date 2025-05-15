@@ -20,31 +20,15 @@ use PgnParser;
 
 class PgnImporter
 {
-    /**
-     * The path of the data folder.
-     *
-     * @var string
-     */
+    /** @var string */
     private $dataFolder;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param string $dataFolder A data folder path.
-     *
-     * @return void
-     */
-    public function __construct($dataFolder)
+    public function __construct(string $dataFolder)
     {
         $this->dataFolder = (string) $dataFolder;
     }
 
-    /**
-     * Returns a list of all PGN files.
-     *
-     * @return array
-     */
-    public function findAll()
+    public function findAll(): array
     {
         $result = array();
         if ($dir = opendir($this->dataFolder)) {
@@ -58,16 +42,7 @@ class PgnImporter
         return $result;
     }
 
-    /**
-     * Imports a PGN file.
-     *
-     * @param string $name A basename of a file.
-     *
-     * @return void
-     *
-     * @global array The paths of system files and folders.
-     */
-    public function import($name)
+    public function import(string $name): void
     {
         global $pth;
 

@@ -18,21 +18,9 @@ namespace Chess;
 
 class InfoViewTest extends TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var InfoView
-     */
+    /** @var InfoView */
     protected $subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array The paths of system files and folders.
-     * @global array The localization of the plugins.
-     */
     public function setUp(): void
     {
         global $pth, $plugin_tx;
@@ -47,24 +35,14 @@ class InfoViewTest extends TestCase
         $this->subject = new InfoView();
     }
 
-    /**
-     * Tests the factory.
-     *
-     * @return void
-     */
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->assertInstanceOf(
             InfoView::class, InfoView::make()
         );
     }
 
-    /**
-     * Tests that the heading is rendered.
-     *
-     * @return void
-     */
-    public function testRendersHeading()
+    public function testRendersHeading(): void
     {
         $this->assertRenders(
             array(
@@ -74,12 +52,7 @@ class InfoViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the plugin icon is rendered.
-     *
-     * @return void
-     */
-    public function testRendersIcon()
+    public function testRendersIcon(): void
     {
         $this->assertRenders(
             array(
@@ -93,12 +66,7 @@ class InfoViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the version info is rendered.
-     *
-     * @return void
-     */
-    public function testRendersVersion()
+    public function testRendersVersion(): void
     {
         $this->assertRenders(
             array(
@@ -108,12 +76,7 @@ class InfoViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the copyright info is rendered.
-     *
-     * @return void
-     */
-    public function testRendersCopyright()
+    public function testRendersCopyright(): void
     {
         $this->assertRenders(
             array(
@@ -131,12 +94,7 @@ class InfoViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the license info is rendered.
-     *
-     * @return void
-     */
-    public function testRendersLicense()
+    public function testRendersLicense(): void
     {
         $this->assertRenders(
             array(
@@ -147,5 +105,3 @@ class InfoViewTest extends TestCase
         );
     }
 }
-
-?>

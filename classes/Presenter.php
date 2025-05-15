@@ -18,20 +18,9 @@ namespace Chess;
 
 abstract class Presenter
 {
-    /**
-     * The localization.
-     *
-     * @var array
-     */
+    /** @var array */
     protected $lang;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @return void
-     *
-     * @global array The localization of the plugins.
-     */
     public function __construct()
     {
         global $plugin_tx;
@@ -39,14 +28,7 @@ abstract class Presenter
         $this->lang = $plugin_tx['chess'];
     }
 
-    /**
-     * Returns a failure message.
-     *
-     * @param string $key A message key.
-     *
-     * @return string (X)HTML.
-     */
-    protected function renderFailure($key)
+    protected function renderFailure(string $key): string
     {
         $args = func_get_args();
         array_shift($args);

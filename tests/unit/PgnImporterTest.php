@@ -22,9 +22,6 @@ use org\bovigo\vfs\vfsStream;
 
 class PgnImporterTest extends TestCase
 {
-    /**
-     * Test PGN.
-     */
     const PGN = <<<'EOT'
 [Event "Ch World (match)"]
 [Site "Chennai (India)"]
@@ -57,27 +54,12 @@ Na5 14.Qa3 Nc4 15.Qb3 Na5 16.Qa3 Nc4 1/2-1/2
 1.e4 d5 2.exd5 e5 3.d6 Qf6 4.d7 Ke7 5.d8=Q *
 EOT;
 
-    /**
-     * The test subject.
-     *
-     * @var PgnImporter
-     */
+    /** @var PgnImporter */
     private $_subject;
 
-    /**
-     * The path of the data folder.
-     *
-     * @var string
-     */
+    /** @var string */
     private $_dataFolder;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array The paths of system files and folders.
-     */
     public function setUp(): void
     {
         global $pth;
@@ -91,27 +73,15 @@ EOT;
         $this->_subject = new PgnImporter($this->_dataFolder);
     }
 
-    /**
-     * Tests findAll().
-     *
-     * @return void
-     */
-    public function testFindAll()
+    public function testFindAll(): void
     {
         $this->assertEquals(array('test'), $this->_subject->findAll());
     }
 
-    /**
-     * Tests import().
-     *
-     * @return void
-     */
-    public function testImport()
+    public function testImport(): void
     {
         $this->_subject->import('test');
         $this->assertFileExists($this->_dataFolder . 'test.dat');
         $this->assertFileExists($this->_dataFolder . 'test_1.dat');
     }
 }
-
-?>

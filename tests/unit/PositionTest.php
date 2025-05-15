@@ -18,55 +18,30 @@ namespace Chess;
 
 class PositionTest extends TestCase
 {
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         $this->_subject = new Position();
     }
 
-    /**
-     * Tests makeFromFen.
-     *
-     * @return void
-     */
-    public function testMakeFromFen()
+    public function testMakeFromFen(): void
     {
         $fen = 'r1bq1rk1/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1';
         $position = Position::makeFromFen($fen);
         $this->assertEquals($fen, (string) $position);
     }
 
-    /**
-     * Tests the start position.
-     *
-     * @return void
-     */
-    public function testStartPosition()
+    public function testStartPosition(): void
     {
         $this->_assertPosition('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
     }
 
-    /**
-     * Tests the position after a move.
-     *
-     * @return void
-     */
-    public function testPositionAfterMove()
+    public function testPositionAfterMove(): void
     {
         $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_assertPosition('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR');
     }
 
-    /**
-     * Tests the position after a capture.
-     *
-     * @return void
-     */
-    public function testPositionAfterCapture()
+    public function testPositionAfterCapture(): void
     {
         $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_subject->applyMove(new Move('d7', 'd5'));
@@ -74,12 +49,7 @@ class PositionTest extends TestCase
         $this->_assertPosition('rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR');
     }
 
-    /**
-     * Tests the position after a king's side castling.
-     *
-     * @return void
-     */
-    public function testPositionAfterKingSideCastling()
+    public function testPositionAfterKingSideCastling(): void
     {
         $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_subject->applyMove(new Move('e7', 'e5'));
@@ -94,12 +64,7 @@ class PositionTest extends TestCase
         );
     }
 
-    /**
-     * Tests the position after a queen's side castling.
-     *
-     * @return void
-     */
-    public function testPositionAfterQueenSideCastling()
+    public function testPositionAfterQueenSideCastling(): void
     {
         $this->_subject->applyMove(new Move('d2', 'd4'));
         $this->_subject->applyMove(new Move('d7', 'd5'));
@@ -116,12 +81,7 @@ class PositionTest extends TestCase
         );
     }
 
-    /**
-     * Tests the position after an en passant.
-     *
-     * @return void
-     */
-    public function testPositionAfterEnPassant()
+    public function testPositionAfterEnPassant(): void
     {
         $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_subject->applyMove(new Move('a7', 'a5'));
@@ -131,12 +91,7 @@ class PositionTest extends TestCase
         $this->_assertPosition('rnbqkbnr/1pppp1pp/5P2/p7/8/8/PPPP1PPP/RNBQKBNR');
     }
 
-    /**
-     * Tests the position after a promotion.
-     *
-     * @return void
-     */
-    public function testPositionAfterPromotion()
+    public function testPositionAfterPromotion(): void
     {
         $this->_subject->applyMove(new Move('e2', 'e4'));
         $this->_subject->applyMove(new Move('f7', 'f5'));
@@ -150,50 +105,25 @@ class PositionTest extends TestCase
         $this->_assertPosition('rnbqkbnQ/2ppp2p/p7/1p6/8/8/PPPP1PPP/RNBQKBNR');
     }
 
-    /**
-     * Tests hasPieceOn().
-     *
-     * @return void
-     */
-    public function testHasPieceOn()
+    public function testHasPieceOn(): void
     {
         $this->assertTrue($this->_subject->hasPieceOn('e1'));
         $this->assertFalse($this->_subject->hasPieceOn('e4'));
     }
 
-    /**
-     * Tests getPieceOn().
-     *
-     * @return void
-     */
-    public function testGetPieceOn()
+    public function testGetPieceOn(): void
     {
         $this->assertEquals('wk', $this->_subject->getPieceOn('e1'));
     }
 
-    /**
-     * Test isAttacking().
-     *
-     * @param string $fen         A FEN like piece placement string.
-     * @param string $source      A square in AN.
-     * @param string $destination A square in AN.
-     *
-     * @return void
-     *
-     * @dataProvider isAttackingData
-     */
-    public function testIsAttacking($fen, $source, $destination)
+    /** @dataProvider isAttackingData */
+    public function testIsAttacking(string $fen, string $source, string $destination): void
     {
         $subject = Position::makeFromFen($fen);
         $this->assertTrue($subject->isAttacking($source, $destination));
     }
 
-    /**
-     * Returns test data for testIsAttacking().
-     *
-     * @return array
-     */
-    public function isAttackingData()
+    public function isAttackingData(): array
     {
         return array(
             array('8/8/8/3p4/4P3/8/8/8', 'e4', 'd5'),
@@ -206,29 +136,14 @@ class PositionTest extends TestCase
         );
     }
 
-    /**
-     * Tests isAttacking().
-     *
-     * @param string $fen         A FEN like piece placement string.
-     * @param string $source      A square in AN.
-     * @param string $destination A square in AN.
-     *
-     * @return void
-     *
-     * @dataProvider isNotAttackingData
-     */
-    public function testIsNotAttacking($fen, $source, $destination)
+    /** @dataProvider isNotAttackingData */
+    public function testIsNotAttacking(string $fen, string $source, string $destination): void
     {
         $subject = Position::makeFromFen($fen);
         $this->assertFalse($subject->isAttacking($source, $destination));
     }
 
-    /**
-     * Returns test data for testIsNotAttacking().
-     *
-     * @return array
-     */
-    public function isNotAttackingData()
+    public function isNotAttackingData(): array
     {
         return array(
             array('8/8/8/3P4/4P3/8/8/8', 'e4', 'd5'),
@@ -240,17 +155,8 @@ class PositionTest extends TestCase
         );
     }
 
-    /**
-     * Asserts a certain position.
-     *
-     * @param string $expected FEN piece placement.
-     *
-     * @return void
-     */
-    private function _assertPosition($expected)
+    private function _assertPosition(string $expected): void
     {
         $this->assertEquals($expected, (string) $this->_subject);
     }
 }
-
-?>

@@ -20,28 +20,12 @@ use XH\CSRFProtection;
 
 class ImportViewTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var ImportView
-     */
+    /** @var ImportView */
     protected $subject;
 
-    /**
-     * The PGN importer.
-     *
-     * @var PgnImporter
-     */
+    /** @var PgnImporter */
     private $_importer;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global string The script name.
-     * @global array  The localization of the plugins.
-     */
     public function setUp(): void
     {
         global $sn, $plugin_tx, $_XH_csrfProtection;
@@ -62,24 +46,14 @@ class ImportViewTest extends TestCase
         $this->subject = new ImportView($this->_importer);
     }
 
-    /**
-     * Tests the factory.
-     *
-     * @return void
-     */
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->assertInstanceOf(
             ImportView::class, ImportView::make($this->_importer)
         );
     }
 
-    /**
-     * Tests that the heading is rendered.
-     *
-     * @return void
-     */
-    public function testRendersHeading()
+    public function testRendersHeading(): void
     {
         $this->assertRenders(
             array(
@@ -89,12 +63,7 @@ class ImportViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the form is rendered.
-     *
-     * @return void
-     */
-    public function testRendersForm()
+    public function testRendersForm(): void
     {
         $this->assertRenders(
             array(
@@ -108,35 +77,17 @@ class ImportViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the admin input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersAdminInput()
+    public function testRendersAdminInput(): void
     {
         $this->_testRendersInput('admin', 'plugin_main');
     }
 
-    /**
-     * Tests that the action input field is rendered.
-     *
-     * @return void
-     */
-    public function testRendersActionInput()
+    public function testRendersActionInput(): void
     {
         $this->_testRendersInput('action', 'import');
     }
 
-    /**
-     * Tests that a hidden input field is rendered.
-     *
-     * @param string $name  A name attribute value.
-     * @param string $value A value attribute value.
-     *
-     * @return void
-     */
-    private function _testRendersInput($name, $value)
+    private function _testRendersInput(string $name, string $value): void
     {
         $this->assertRenders(
             array(
@@ -151,12 +102,7 @@ class ImportViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the list is rendered.
-     *
-     * @return void
-     */
-    public function testRendersList()
+    public function testRendersList(): void
     {
         $this->assertRenders(
             array(
@@ -170,12 +116,7 @@ class ImportViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that list items with buttons are rendered.
-     *
-     * @return void
-     */
-    public function testRendersListItemWithButton()
+    public function testRendersListItemWithButton(): void
     {
         $this->assertRenders(
             array(
@@ -190,14 +131,7 @@ class ImportViewTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the CSRF token input is rendered.
-     *
-     * @return void
-     *
-     * @global XH_CSRFProtection The CSRF protection.
-     */
-    public function testRendersCSRFTokenInput()
+    public function testRendersCSRFTokenInput(): void
     {
         global $_XH_csrfProtection;
 
@@ -205,5 +139,3 @@ class ImportViewTest extends TestCase
         $this->subject->render();
     }
 }
-
-?>

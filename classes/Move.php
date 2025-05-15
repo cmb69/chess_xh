@@ -18,78 +18,41 @@ namespace Chess;
 
 class Move
 {
-    /**
-     * The source square.
-     *
-     * @var string
-     */
+    /** @var string */
     private $source;
 
-    /**
-     * The destination square.
-     *
-     * @var string
-     */
+    /** @var string */
     private $destination;
 
-    /**
-     * The piece to promote to.
-     *
-     * @var ?string
-     */
+    /** @var ?string */
     private $promotion;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param string $source      The source square.
-     * @param string $destination The destination square.
-     * @param string $promotion   The piece to promote to.
-     *
-     * @return void
-     */
-    public function __construct($source, $destination, $promotion = null)
+    public function __construct(string $source, string $destination, ?string $promotion = null)
     {
         $this->source = (string) $source;
         $this->destination = (string) $destination;
         $this->promotion = $promotion;
     }
 
-    /**
-     * Returns the source square.
-     *
-     * @return string
-     */
+    /** @return string */
     public function getSource()
     {
         return $this->source;
     }
 
-    /**
-     * Returns the source file.
-     *
-     * @return string
-     */
+    /** @return string */
     public function getSourceFile()
     {
         return $this->source[0];
     }
 
-    /**
-     * Returns the source rank.
-     *
-     * @return string
-     */
+    /** @return string */
     public function getSourceRank()
     {
         return $this->source[1];
     }
 
-    /**
-     * Returns the destination square.
-     *
-     * @return string
-     */
+    /** @return string */
     public function getDestination()
     {
         return $this->destination;
@@ -100,52 +63,28 @@ class Move
      *
      * @return string
      */
-    public function getDestinationFile()
+    public function getDestinationFile(): string
     {
         return $this->destination[0];
     }
 
-    /**
-     * Returns the file distance.
-     *
-     * @return int
-     */
-    public function getFileDistance()
+    public function getFileDistance(): int
     {
         return abs(ord($this->source[0]) - ord($this->destination[0]));
     }
 
-    /**
-     * Returns the piece to promote to.
-     *
-     * @return string
-     */
-    public function getPromotion()
+    public function getPromotion(): ?string
     {
         return $this->promotion;
     }
 
-    /**
-     * Returns whether a square is the source or destination of this move.
-     *
-     * @param string $square A square in AN.
-     *
-     * @return bool
-     */
-    public function isSourceOrDestination($square)
+    public function isSourceOrDestination(string $square): bool
     {
         return $square == $this->getSource()
             || $square == $this->getDestination();
     }
-
-    /**
-     * Returns the SAN of the move.
-     *
-     * @param Position $position A position.
-     *
-     * @return string
-     */
-    public function getSan(Position $position)
+    
+    public function getSan(Position $position): string
     {
         if ($position->isCastling($this)) {
             if ($this->getDestinationFile() == 'g') {
@@ -192,14 +131,7 @@ class Move
         return $result;
     }
 
-    /**
-     * Returns whether the move is capturing.
-     *
-     * @param Position $position A position.
-     *
-     * @return bool
-     */
-    private function isCapture(Position $position)
+    private function isCapture(Position $position): bool
     {
         return $position->hasPieceOn($this->destination)
             || $position->isEnPassant($this);

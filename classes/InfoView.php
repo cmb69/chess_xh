@@ -18,22 +18,12 @@ namespace Chess;
 
 class InfoView
 {
-    /**
-     * Returns a new self instance.
-     *
-     * @return InfoView.
-     */
-    public static function make()
+    public static function make(): self
     {
         return new InfoView();
     }
 
-    /**
-     * Renders the view.
-     *
-     * @return string (X)HTML.
-     */
-    public function render()
+    public function render(): string
     {
         return '<h1>Chess</h1>'
             . $this->renderIcon()
@@ -41,15 +31,7 @@ class InfoView
             . $this->renderCopyright() . $this->renderLicense();
     }
 
-    /**
-     * Renders the plugin icon.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The paths of system files and folders.
-     * @global array The localization of the plugins.
-     */
-    private function renderIcon()
+    private function renderIcon(): string
     {
         global $pth, $plugin_tx;
 
@@ -58,12 +40,7 @@ class InfoView
             . '">';
     }
 
-    /**
-     * Renders the copyright info.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderCopyright()
+    private function renderCopyright(): string
     {
         return <<<EOT
 <p>Copyright &copy; 2014
@@ -72,12 +49,7 @@ class InfoView
 EOT;
     }
 
-    /**
-     * Renders the license info.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderLicense()
+    private function renderLicense(): string
     {
         return <<<EOT
 <p class="chess_license">This program is free software: you can

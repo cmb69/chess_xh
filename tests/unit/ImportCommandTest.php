@@ -18,42 +18,18 @@ namespace Chess;
 
 class ImportCommandTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var ImportCommand
-     */
+    /** @var ImportCommand */
     private $_subject;
 
-    /**
-     * The PGN importer.
-     *
-     * @var PgnImporter
-     */
+    /** @var PgnImporter */
     private $_importer;
 
-    /**
-     * The view factory.
-     *
-     * @var object
-     */
+    /** @var object */
     private $_importViewFactory;
 
-    /**
-     * The view.
-     *
-     * @var ImportView
-     */
+    /** @var ImportView */
     private $_importView;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global string            The value of the <var>admin</var> GP parameter.
-     * @global XH_CSRFProtection The CSRF protector.
-     */
     public function setUp(): void
     {
         global $admin, $_XH_csrfProtection, $plugin_tx;
@@ -74,26 +50,14 @@ class ImportCommandTest extends TestCase
             ->disableOriginalConstructor()->getMock();
     }
 
-    /**
-     * Tests the factory method.
-     *
-     * @return void
-     */
-    public function testFactory()
+    public function testFactory(): void
     {
         $this->assertInstanceOf(
             ImportCommand::class, ImportCommand::make($this->_importer)
         );
     }
 
-    /**
-     * Tests displaying the view only.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>action</var> GP parameter.
-     */
-    public function testViewOnly()
+    public function testViewOnly(): void
     {
         global $action;
 
@@ -106,15 +70,7 @@ class ImportCommandTest extends TestCase
         $this->_subject->execute();
     }
 
-    /**
-     * Tests the import.
-     *
-     * @return void
-     *
-     * @global string            The value of the <var>action</var> GP parameter.
-     * @global XH_CSRFProtection The CSRF protector.
-     */
-    public function testImport()
+    public function testImport(): void
     {
         global $action, $_XH_csrfProtection;
 
@@ -129,15 +85,7 @@ class ImportCommandTest extends TestCase
         $this->_subject->execute();
     }
 
-    /**
-     * Tests the import.
-     *
-     * @return void
-     *
-     * @global string            The value of the <var>action</var> GP parameter.
-     * @global XH_CSRFProtection The CSRF protector.
-     */
-    public function testImportFailsForInvalidName()
+    public function testImportFailsForInvalidName(): void
     {
         global $o, $action, $_XH_csrfProtection;
 
@@ -159,5 +107,3 @@ class ImportCommandTest extends TestCase
         );
     }
 }
-
-?>

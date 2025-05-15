@@ -18,21 +18,10 @@ namespace Chess;
 
 class Position
 {
-    /**
-     * The sparse map of squares to pieces.
-     *
-     * @var array
-     */
+    /** @var array */
     private $pieces;
 
-    /**
-     * Creates a new position from a FEN string.
-     *
-     * @param string $fen A FEN string.
-     *
-     * @return Position
-     */
-    public static function makeFromFen($fen)
+    public static function makeFromFen(string $fen): self
     {
         $result = new self();
         $result->pieces = array();
@@ -54,11 +43,6 @@ class Position
         return $result;
     }
 
-    /**
-     * Initializes a new instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->pieces = array(
@@ -73,40 +57,18 @@ class Position
         );
     }
 
-    /**
-     * Returns whether there is a piece on a certain square.
-     *
-     * @param string $square A square.
-     *
-     * @return bool
-     *
-     * @todo Rename to isOccupied?
-     */
-    public function hasPieceOn($square)
+    /** @todo Rename to isOccupied? */
+    public function hasPieceOn(string $square): bool
     {
         return isset($this->pieces[$square]);
     }
 
-    /**
-     * Returns the piece on a certain square.
-     *
-     * @param string $square A square.
-     *
-     * @return string
-     */
-    public function getPieceOn($square)
+    public function getPieceOn(string $square): string
     {
         return $this->pieces[$square];
     }
 
-    /**
-     * Applies a move. Doesn't check for validity.
-     *
-     * @param Move $move A move.
-     *
-     * @return void
-     */
-    public function applyMove($move)
+    public function applyMove(Move $move): void
     {
         if ($this->isCastling($move)) {
             $this->moveRookForCastling($move);
@@ -122,14 +84,7 @@ class Position
         $this->removePiece($move->getSource());
     }
 
-    /**
-     * Returns whether a king can be moved.
-     *
-     * @param bool $isWhite Whether to check the white or black king.
-     *
-     * @return bool
-     */
-    public function canMoveKing($isWhite)
+    public function canMoveKing(bool $isWhite): bool
     {
         $piece = $isWhite ? 'wk' : 'bk';
         $kingSquare = array_search($piece, $this->pieces);
@@ -144,14 +99,7 @@ class Position
         return false;
     }
 
-    /**
-     * Returns whether a square is under attack.
-     *
-     * @param string $square A square in AN.
-     *
-     * @return bool
-     */
-    public function isUnderAttack($square)
+    public function isUnderAttack(string $square): bool
     {
         foreach (array_keys($this->pieces) as $attacker) {
             if ($this->isAttacking($attacker, $square)) {
@@ -161,15 +109,7 @@ class Position
         return false;
     }
 
-    /**
-     * Returns whether a piece is attacking a square.
-     *
-     * @param string $source      A square in AN.
-     * @param string $destination A square in AN.
-     *
-     * @return bool
-     */
-    public function isAttacking($source, $destination)
+    public function isAttacking(string $source, string $destination): bool
     {
         if ($this->pieces[$source][0] == $this->pieces[$destination][0]) {
             return false;
@@ -177,14 +117,7 @@ class Position
         return in_array($destination, $this->getCapturingDestinations($source));
     }
 
-    /**
-     * Returns the allowed capturing destinations of a piece.
-     *
-     * @param string $square A square in AN.
-     *
-     * @return array
-     */
-    private function getCapturingDestinations($square)
+    private function getCapturingDestinations(string $square): array
     {
         $result = array();
         switch ($this->pieces[$square][1]) {
@@ -224,14 +157,7 @@ class Position
         return $result;
     }
 
-    /**
-     * Returns an array of allowed knight's squares.
-     *
-     * @param string $square A square in AN.
-     *
-     * @return array
-     */
-    private function getKnightsSquares($square)
+    private function getKnightsSquares(string $square): array
     {
         $result = array();
         foreach (array('n', 'e', 's', 'w') as $direction) {
@@ -268,17 +194,7 @@ class Position
         return $result;
     }
 
-    /**
-     * Returns the squares in a certain direction.
-     *
-     * Use only for queen, rook and bishop.
-     *
-     * @param string $direction A direction, e.g. 'n' or 'se'.
-     * @param string $square    A square in AN.
-     *
-     * @return array
-     */
-    private function getSquaresTo($direction, $square)
+    private function getSquaresTo(string $direction, string $square): array
     {
         $result = array();
         while ($square = $this->getNeighborSquare($square, $direction)) {
@@ -290,15 +206,7 @@ class Position
         return $result;
     }
 
-    /**
-     * Returns the neighboring squares.
-     *
-     * @param string $square     A square in AN.
-     * @param array  $directions An array of directions.
-     *
-     * @return array
-     */
-    private function getNeighborSquares($square, $directions)
+    private function getNeighborSquares(string $square, array $directions): array
     {
         $result = array();
         foreach ($directions as $direction) {
@@ -310,15 +218,7 @@ class Position
         return $result;
     }
 
-    /**
-     * Returns a neighboring square.
-     *
-     * @param string $square    A square in AN.
-     * @param string $direction A direction.
-     *
-     * @return string
-     */
-    private function getNeighborSquare($square, $direction)
+    private function getNeighborSquare(string $square, string $direction): string
     {
         $file = $square[0];
         $rank = $square[1];
@@ -356,54 +256,26 @@ class Position
         return $this->isValidSquare($square) ? $square : false;
     }
 
-    /**
-     * Returns whether a square is valid (i.e. exists on the board).
-     *
-     * @param string $square A square in AN.
-     *
-     * @return bool
-     */
-    private function isValidSquare($square)
+    private function isValidSquare(string $square): bool
     {
         return $square[0] >= 'a' && $square[0] <= 'h'
             && $square[1] >= '1' && $square[1] <= '8';
     }
 
-    /**
-     * Returns whether a king is checked.
-     *
-     * @param bool $isWhite Whether the white (vs. black) king is relevant.
-     *
-     * @return bool
-     */
-    public function isChecked($isWhite)
+    public function isChecked(bool $isWhite): bool
     {
         $king = $isWhite ? 'wk' : 'bk';
         return ($kingSquare = array_search($king, $this->pieces))
             && $this->isUnderAttack($kingSquare);
     }
 
-    /**
-     * Returns whether a move is castling.
-     *
-     * @param Move $move A move.
-     *
-     * @return bool
-     */
-    public function isCastling($move)
+    public function isCastling(Move $move): bool
     {
         return $this->pieces[$move->getSource()][1] == 'k'
             && $move->getFileDistance() == 2;
     }
 
-    /**
-     * Moves the rook when castling.
-     *
-     * @param Move $move A move.
-     *
-     * @return void
-     */
-    private function moveRookForCastling($move)
+    private function moveRookForCastling(Move $move): void
     {
         if ($move->getDestinationFile() == 'g') { // king's side
             $rookFrom = 'h' . $move->getSourceRank();
@@ -416,52 +288,26 @@ class Position
         $this->removePiece($rookFrom);
     }
 
-    /**
-     * Returns whether a move is an en passant capture.
-     *
-     * @param Move $move A move.
-     *
-     * @return bool
-     */
-    public function isEnPassant($move)
+    public function isEnPassant(Move $move): bool
     {
         return $this->pieces[$move->getSource()][1] == 'p'
             && $move->getDestinationFile() != $move->getSourceFile()
             && !$this->hasPieceOn($move->getDestination());
     }
 
-    /**
-     * Removes an en passant captured pawn.
-     *
-     * @param Move $move A move.
-     *
-     * @return void
-     */
-    private function removeEnPassantCapturedPawn($move)
+    private function removeEnPassantCapturedPawn(Move $move): void
     {
         $this->removePiece(
             $move->getDestinationFile() . $move->getSourceRank()
         );
     }
 
-    /**
-     * Removes a piece from the position.
-     *
-     * @param string $square A square.
-     *
-     * @return void
-     */
-    private function removePiece($square)
+    private function removePiece(string $square): void
     {
         unset($this->pieces[$square]);
     }
 
-    /**
-     * Returns a string representation of the object (piece placement of FEN).
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         $ranks = array();
         for ($rank = 8; $rank >= 1; --$rank) {
@@ -470,14 +316,7 @@ class Position
         return implode('/', $ranks);
     }
 
-    /**
-     * Returns the FEN piece placement of a certain rank.
-     *
-     * @param int $rank A rank.
-     *
-     * @return string
-     */
-    private function rankToString($rank)
+    private function rankToString(int $rank): string
     {
         $result = '';
         $emptySquares = 0;

@@ -18,50 +18,22 @@ namespace Chess;
 
 class ImportCommand extends Presenter
 {
-    /**
-     * The PGN importer.
-     *
-     * @var PgnImporter.
-     */
+    /** @var PgnImporter */
     private $importer;
 
-    /**
-     * Returns a new self instance.
-     *
-     * @param PgnImporter $importer A PGN importer.
-     *
-     * @return ImportCommand
-     */
-    public static function make(PgnImporter $importer)
+    public static function make(PgnImporter $importer): ImportCommand
     {
         return new self($importer);
     }
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param PgnImporter $importer A PGN importer.
-     *
-     * @return void
-     */
     public function __construct(PgnImporter $importer)
     {
         parent::__construct();
         $this->importer = $importer;
     }
 
-    /**
-     * Executes the command.
-     *
-     * @return void
-     *
-     * @global string            The value of the <var>action</var> GP parameter.
-     * @global string            The HTML of the contents area.
-     * @global XH_CSRFProtection The CSRF protector.
-     *
-     * @todo Add success message.
-     */
-    public function execute()
+    /** @todo Add success message */
+    public function execute(): void
     {
         global $action, $o, $_XH_csrfProtection;
 

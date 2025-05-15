@@ -18,46 +18,21 @@ namespace Chess;
 
 class Controller extends Presenter
 {
-    /**
-     * The name of the requested game.
-     *
-     * @var string
-     */
+    /** @var string */
     private $requestedGame;
 
-    /**
-     * The requested ply.
-     *
-     * @var int
-     */
+    /** @var int */
     private $requestedPly;
 
-    /**
-     * Whether the board is flipped.
-     *
-     * @var bool
-     */
+    /** @var bool */
     private $isFlipped;
 
-    /**
-     * The requested action.
-     *
-     * @var string
-     */
+    /** @var string */
     private $requestedAction;
 
-    /**
-     * Whether we're responding to an Ajax request.
-     *
-     * @var bool
-     */
+    /** @var bool */
     private $isAjaxRequest;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
@@ -79,14 +54,7 @@ class Controller extends Presenter
         $this->isAjaxRequest = isset($_REQUEST['chess_ajax']);
     }
 
-    /**
-     * Dispatch according to the request.
-     *
-     * @return void
-     *
-     * @global string Whether the wrapper administration is requested.
-     */
-    public function dispatch()
+    public function dispatch(): void
     {
         $this->emitScript();
         if (XH_ADM // @phpstan-ignore-line
@@ -96,16 +64,7 @@ class Controller extends Presenter
         }
     }
 
-    /**
-     * Emits the script element.
-     *
-     * @return void
-     *
-     * @global array  The paths of system files and folders.
-     * @global string The (X)HTML to insert at the bottom of the body.
-     * @global string The (X)HTML to insert in the head.
-     */
-    private function emitScript()
+    private function emitScript(): void
     {
         global $pth, $bjs, $hjs;
 
@@ -118,16 +77,7 @@ class Controller extends Presenter
         }
     }
 
-    /**
-     * Handles the administration.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>admin</var> GP parameter.
-     * @global string The value of the <var>action</var> GP parameter.
-     * @global string The HTML of the contents area.
-     */
-    private function handleAdministration()
+    private function handleAdministration(): void
     {
         global $admin, $o;
 
@@ -145,14 +95,7 @@ class Controller extends Presenter
         }
     }
 
-    /**
-     * Creates and executes an import command.
-     *
-     * @return void
-     *
-     * @global array  The paths of system files and folders.
-     */
-    private function handleImport()
+    private function handleImport(): void
     {
         global $pth;
 
@@ -163,14 +106,8 @@ class Controller extends Presenter
         $importCommand->execute();
     }
 
-    /**
-     * Returns the game view.
-     *
-     * @param string $basename A basename of a data file.
-     *
-     * @return string|void
-     */
-    public function chess($basename)
+    /** @return string|void */
+    public function chess(string $basename)
     {
         if ($this->isAjaxRequest && $this->requestedGame != $basename) {
             return;
@@ -192,14 +129,7 @@ class Controller extends Presenter
         }
     }
 
-    /**
-     * Returns the requested ply.
-     *
-     * @param Game $game A game.
-     *
-     * @return int
-     */
-    private function getPly(Game $game)
+    private function getPly(Game $game): int
     {
         $result = $this->requestedPly;
         switch ($this->requestedAction) {
@@ -218,12 +148,7 @@ class Controller extends Presenter
         return $result;
     }
 
-    /**
-     * Returns whether the board shall be flipped.
-     *
-     * @return bool
-     */
-    private function isFlipped()
+    private function isFlipped(): bool
     {
         $result = $this->isFlipped;
         if ($this->requestedAction == 'flip') {

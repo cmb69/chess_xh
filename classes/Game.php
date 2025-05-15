@@ -18,41 +18,18 @@ namespace Chess;
 
 class Game
 {
-    /**
-     * The name of the game (no pun intended ;).
-     *
-     * @var string.
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * The moves.
-     *
-     * @var array A list of records.
-     */
+    /** @var array  */
     private $moves;
 
-    /**
-     * Returns whether a name is a valid game name.
-     *
-     * @param string $basename A basename.
-     *
-     * @return bool
-     */
-    public static function isValidName($basename)
+    public static function isValidName(string $basename): bool
     {
         return (bool) preg_match('/^[a-z0-9_-]+$/ui', $basename);
     }
 
-    /**
-     * Returns a game loaded from a file; <var>null</var> if the game can't be
-     * loaded.
-     *
-     * @param string $basename A basename of a data file.
-     *
-     * @return ?Game
-     */
-    public static function load($basename)
+    public static function load(string $basename): ?Game
     {
         global $pth;
 
@@ -70,45 +47,23 @@ class Game
         }
     }
 
-    /**
-     * Initializes a new instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->name = '';
         $this->moves = array();
     }
 
-    /**
-     * Returns the name of the game.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Returns the number of plies.
-     *
-     * @return int
-     */
-    public function getPlyCount()
+    public function getPlyCount(): int
     {
         return count($this->moves);
     }
 
-    /**
-     * Returns the position after a certain ply.
-     *
-     * @param int $ply A ply number.
-     *
-     * @return Position
-     */
-    public function getPosition($ply)
+    public function getPosition(int $ply): Position
     {
         $position = new Position();
         $ply = min($ply, $this->getPlyCount());
@@ -118,14 +73,7 @@ class Game
         return $position;
     }
 
-    /**
-     * Returns a certain move.
-     *
-     * @param int $ply A ply number.
-     *
-     * @return ?Move
-     */
-    public function getMove($ply)
+    public function getMove(int $ply): ?Move
     {
         if ($ply >= 0 && $ply < $this->getPlyCount()) {
             return $this->moves[$ply];
@@ -134,38 +82,18 @@ class Game
         }
     }
 
-    /**
-     * Registers a move.
-     *
-     * We're assuming valid moves only for now.
-     *
-     * @param string $from      A square.
-     * @param string $to        A square.
-     * @param string $promotion A piece.
-     *
-     * @return void
-     */
-    public function move($from, $to, $promotion = null)
+    /** We're assuming valid moves only for now */
+    public function move(string $from, string $to, ?string $promotion = null): void
     {
         $this->moves[] = new Move($from, $to, $promotion);
     }
 
-    /**
-     * Returns the game in PGN.
-     *
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->exportTagPairs() . "\n" . $this->exportMoveText();
     }
 
-    /**
-     * Returns the PGN tag pairs.
-     *
-     * @return string
-     */
-    private function exportTagPairs()
+    private function exportTagPairs(): string
     {
         $result = '';
         $tagNames = array(
@@ -177,14 +105,7 @@ class Game
         return $result;
     }
 
-    /**
-     * Returns a PGN tag pair.
-     *
-     * @param string $name A tag name.
-     *
-     * @return string
-     */
-    private function exportTagPair($name)
+    private function exportTagPair(string $name): string
     {
         switch ($name) {
             case 'date':
@@ -199,12 +120,7 @@ class Game
         return sprintf('[%s "%s"]' . "\n", ucfirst($name), $value);
     }
 
-    /**
-     * Returns the PGN movetext.
-     *
-     * @return string
-     */
-    private function exportMoveText()
+    private function exportMoveText(): string
     {
         $result = '';
         for ($i = 0; $i < $this->getPlyCount(); ++$i) {

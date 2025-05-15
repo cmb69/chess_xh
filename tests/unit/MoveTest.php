@@ -18,119 +18,59 @@ namespace Chess;
 
 class MoveTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var Move
-     */
+    /** @var Move */
     private $_subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         $this->_subject = new Move('e7', 'd8', 'q');
     }
 
-    /**
-     * Tests getSource().
-     *
-     * @return void
-     */
-    public function testGetSource()
+    public function testGetSource(): void
     {
         $this->assertEquals('e7', $this->_subject->getSource());
     }
 
-    /**
-     * Tests getSourceFile().
-     *
-     * @return void.
-     */
-    public function testGetSourceFile()
+    public function testGetSourceFile(): void
     {
         $this->assertEquals('e', $this->_subject->getSourceFile());
     }
 
-    /**
-     * Tests getSourceRank().
-     *
-     * @return void
-     */
-    public function testGetSourceRank()
+    public function testGetSourceRank(): void
     {
         $this->assertEquals('7', $this->_subject->getSourceRank());
     }
 
-    /**
-     * Tests getDestination().
-     *
-     * @return void
-     */
-    public function testGetDestination()
+    public function testGetDestination(): void
     {
         $this->assertEquals('d8', $this->_subject->getDestination());
     }
 
-    /**
-     * Tests getDestinationFile().
-     *
-     * @return void
-     */
-    public function testGetDestinationFile()
+    public function testGetDestinationFile(): void
     {
         $this->assertEquals('d', $this->_subject->getDestinationFile());
     }
 
-    /**
-     * Tests getFileDistance().
-     *
-     * @return void
-     */
-    public function testGetFileDistance()
+    public function testGetFileDistance(): void
     {
         $this->assertEquals(1, $this->_subject->getFileDistance());
     }
 
-    /**
-     * Tests getPromotion().
-     *
-     * @return void
-     */
-    public function testGetPromotion()
+    public function testGetPromotion(): void
     {
         $this->assertEquals('q', $this->_subject->getPromotion());
     }
 
-    /**
-     * Tests getSan().
-     *
-     * @param Move $move     A move.
-     * @param string     $fen      A FEN like piece placement string.
-     * @param string     $expected A move in SAN format.
-     *
-     * @return void
-     *
-     * @dataProvider dataForGetSan
-     */
-    public function testGetSan($move, $fen, $expected)
+    /** @dataProvider dataForGetSan */
+    public function testGetSan(Move $move, string $fen, string $expected): void
     {
         $this->assertEquals(
             $expected, $move->getSan(Position::makeFromFen($fen))
         );
     }
 
-    /**
-     * Returns data for testGetSan().
-     *
-     * @return void
-     *
-     * @todo Test for ambiguous moves.
-     */
-    public function dataForGetSan()
+    /** @todo Test for ambiguous moves */
+    public function dataForGetSan(): array
     {
         return array(
             array(new Move('e2', 'e4'), '8/8/8/8/8/8/4p3/8', 'e4'),
@@ -147,5 +87,3 @@ class MoveTest extends TestCase
         );
     }
 }
-
-?>

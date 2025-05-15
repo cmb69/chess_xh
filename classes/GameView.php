@@ -18,58 +18,24 @@ namespace Chess;
 
 class GameView
 {
-    /**
-     * The game.
-     *
-     * @var Game
-     */
+    /** @var Game */
     private $game;
 
-    /**
-     * The current ply number.
-     *
-     * @var int
-     */
+    /** @var int */
     private $ply;
 
-    /**
-     * The current position.
-     *
-     * @var Position
-     */
+    /** @var Position */
     private $position;
 
-    /**
-     * Whether the board is flipped (i.e. the white side is at the top).
-     *
-     * @var bool
-     */
+    /** @var bool */
     private $flipped;
 
-    /**
-     * Makes a new game view.
-     *
-     * @param Game $game    A game.
-     * @param int  $ply     A ply number.
-     * @param bool $flipped Whether the board is flipped.
-     *
-     * @return GameView
-     */
-    public static function make(Game $game, $ply = 0, $flipped = false)
+    public static function make(Game $game, int $ply = 0, bool $flipped = false): GameView
     {
         return new self($game, $ply, $flipped);
     }
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param Game $game    A game.
-     * @param int  $ply     A ply number.
-     * @param bool $flipped Whether the board is flipped.
-     *
-     * @return void
-     */
-    public function __construct(Game $game, $ply = 0, $flipped = false)
+    public function __construct(Game $game, int $ply = 0, bool $flipped = false)
     {
         $this->game = $game;
         $this->ply = (int) $ply;
@@ -79,12 +45,7 @@ class GameView
         $this->flipped = (bool) $flipped;
     }
 
-    /**
-     * Renders the game view.
-     *
-     * @return string (X)HTML.
-     */
-    public function render()
+    public function render(): string
     {
         return '<div id="chess_view_' . $this->game->getName()
             . '" class="chess_view">'
@@ -92,12 +53,7 @@ class GameView
             . '</div>';
     }
 
-    /**
-     * Renders the board.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderBoard()
+    private function renderBoard(): string
     {
         $result = '<table class="chess_board">';
         foreach ($this->getRanks() as $rank) {
@@ -107,12 +63,7 @@ class GameView
         return $result;
     }
 
-    /**
-     * Returns an array of ranks.
-     *
-     * @return array
-     */
-    private function getRanks()
+    private function getRanks(): array
     {
         $ranks = range(8, 1, -1);
         if ($this->flipped) {
@@ -121,14 +72,7 @@ class GameView
         return $ranks;
     }
 
-    /**
-     * Renders a certain rank as table row.
-     *
-     * @param int $rank A rank.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderRank($rank)
+    private function renderRank(int $rank): string
     {
         $result = '<tr>';
         foreach ($this->getFiles() as $file) {
@@ -138,12 +82,7 @@ class GameView
         return $result;
     }
 
-    /**
-     * Returns an array of files.
-     *
-     * @return array
-     */
-    private function getFiles()
+    private function getFiles(): array
     {
         $files = array_map('chr', range(97, 104));
         if ($this->flipped) {
@@ -152,15 +91,7 @@ class GameView
         return $files;
     }
 
-    /**
-     * Renders a certain square.
-     *
-     * @param string $file A file.
-     * @param int    $rank A rank.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderSquare($file, $rank)
+    private function renderSquare(string $file, int $rank): string
     {
         $square = "$file$rank";
         $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
@@ -180,17 +111,7 @@ class GameView
         return $result;
     }
 
-    /**
-     * Renders a piece.
-     *
-     * @param string $piece A piece.
-     * @param bool   $moved Whether the piece is moved.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The paths of system files and folders.
-     */
-    private function renderPiece($piece, $moved)
+    private function renderPiece(string $piece, bool $moved): string
     {
         global $pth;
 
@@ -199,15 +120,7 @@ class GameView
         return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
     }
 
-    /**
-     * Renders the control panel.
-     *
-     * @return string (X)HTML.
-     *
-     * @global string The script name.
-     * @global string The selected URL.
-     */
-    private function renderControlPanel()
+    private function renderControlPanel(): string
     {
         global $sn, $su;
 
@@ -225,41 +138,17 @@ class GameView
             . '</form>';
     }
 
-    /**
-     * Renders the ply input field.
-     *
-     * @param int $value A ply.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderPlyInput($value)
+    private function renderPlyInput(int $value): string
     {
         return '<input type="text" name="chess_ply" value="' . $value . '">';
     }
 
-    /**
-     * Renders a hidden input field.
-     *
-     * @param string $name  A name attribute value.
-     * @param string $value A value attribute value.
-     *
-     * @return string (X)HTML.
-     */
-    private function renderHiddenInput($name, $value)
+    private function renderHiddenInput(string $name, string $value): string
     {
         return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
     }
 
-    /**
-     * Renders a button.
-     *
-     * @param string $which Which button to render.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The localization of the plugins.
-     */
-    private function renderButton($which)
+    private function renderButton(string $which): string
     {
         global $plugin_tx;
 

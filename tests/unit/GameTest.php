@@ -22,20 +22,9 @@ use org\bovigo\vfs\vfsStream;
 
 class GameTest extends TestCase
 {
-    /**
-     * The test subject.
-     *
-     * @var Game
-     */
+    /** @var Game */
     private $subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array The paths of system files and folders.
-     */
     public function setUp(): void
     {
         global $pth;
@@ -46,12 +35,7 @@ class GameTest extends TestCase
         $this->subject = new Game();
     }
 
-    /**
-     * Tests loading of a stored game.
-     *
-     * @return void
-     */
-    public function testLoad()
+    public function testLoad(): void
     {
         $this->subject = Game::load('italian');
         $this->assertEquals('italian', $this->subject->getName());
@@ -61,22 +45,12 @@ class GameTest extends TestCase
         );
     }
 
-    /**
-     * Tests that loading of a non existing game returns null.
-     *
-     * @return void
-     */
-    public function testLoadNotExistingReturnsNull()
+    public function testLoadNotExistingReturnsNull(): void
     {
         $this->assertNull(Game::load('doesntexist'));
     }
 
-    /**
-     * Tests that loading of an empty file returns null.
-     *
-     * @return void
-     */
-    public function testLoadEmptyFileReturnsNull()
+    public function testLoadEmptyFileReturnsNull(): void
     {
         global $pth;
 
@@ -89,22 +63,12 @@ class GameTest extends TestCase
         $this->assertNull(Game::load('foo'));
     }
 
-    /**
-     * Tests that getPosition() returns a Chess_Position.
-     *
-     * @return void
-     */
-    public function testgetPositionReturnsChessPosition()
+    public function testgetPositionReturnsChessPosition(): void
     {
         $this->assertInstanceOf(Position::class, $this->subject->getPosition(0));
     }
 
-    /**
-     * Tests the start position.
-     *
-     * @return void
-     */
-    public function testStartPosition()
+    public function testStartPosition(): void
     {
         $this->assertEquals(
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
@@ -112,53 +76,28 @@ class GameTest extends TestCase
         );
     }
 
-    /**
-     * Tests getName().
-     *
-     * @return void
-     */
-    public function testGetName()
+    public function testGetName(): void
     {
         $this->assertEmpty($this->subject->getName());
     }
 
-    /**
-     * Tests the ply count.
-     *
-     * @return void
-     */
-    public function testPlyCount()
+    public function testPlyCount(): void
     {
         $this->assertEquals(0, $this->subject->getPlyCount());
     }
 
-    /**
-     * Tests getMove().
-     *
-     * @return void
-     */
-    public function testGetMove()
+    public function testGetMove(): void
     {
         $this->subject->move('e2', 'e4');
         $this->assertEquals(new Move('e2', 'e4'), $this->subject->getMove(0));
     }
 
-    /**
-     * Tests getting an invalid move.
-     *
-     * @return void
-     */
-    public function testGetInvalidMove()
+    public function testGetInvalidMove(): void
     {
         $this->assertNull($this->subject->getMove(42));
     }
 
-    /**
-     * Tests that a move changes the position.
-     *
-     * @return void
-     */
-    public function testMoveChangesPosition()
+    public function testMoveChangesPosition(): void
     {
         $this->subject->move('e2', 'e4');
         $this->assertEquals(
@@ -167,12 +106,7 @@ class GameTest extends TestCase
         );
     }
 
-    /**
-     * Tests a historic position.
-     *
-     * @return void
-     */
-    public function testHistoricPosition()
+    public function testHistoricPosition(): void
     {
         $this->subject->move('e2', 'e4');
         $this->subject->move('e7', 'e5');
@@ -182,12 +116,7 @@ class GameTest extends TestCase
         );
     }
 
-    /**
-     * Tests that __toString() returns PGN.
-     *
-     * @return void
-     */
-    public function testToStringReturnsPGN()
+    public function testToStringReturnsPGN(): void
     {
         $expected = <<<EOT
 [Event "?"]
@@ -203,5 +132,3 @@ EOT;
         $this->assertEquals($expected, (string) Game::load('italian'));
     }
 }
-
-?>
