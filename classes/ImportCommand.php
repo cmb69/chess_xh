@@ -23,6 +23,7 @@ namespace Chess;
 
 use Plib\CsrfProtector;
 use Plib\Request;
+use Plib\Response;
 use Plib\View;
 
 class ImportCommand
@@ -47,14 +48,14 @@ class ImportCommand
     }
 
     /** @todo Add success message */
-    public function execute(Request $request): void
+    public function execute(Request $request): Response
     {
-        global $action, $o;
+        global $action;
 
+        $o = "";
         if ($action == 'import') {
             if (!$this->csrfProtector->check($request->post("chess_token"))) {
-                $o .= "not authorized";
-                return;
+                return Response::create("not authorized");
             }
             $game = $request->post("chess_game");
             if (Game::isValidName($game)) {
@@ -64,6 +65,7 @@ class ImportCommand
             }
         }
         $o .= $this->render($request);
+        return Response::create($o);
     }
 
     public function render(Request $request): string

@@ -39,14 +39,13 @@ class ImportCommandTest extends TestCase
 
     public function testViewOnly(): void
     {
-        global $action, $o;
+        global $action;
 
         $action = 'plugin_text';
-        $o = "";
         $this->importer->expects($this->never())->method('import');
         $request = new FakeRequest();
-        $this->subject->execute($request);
-        Approvals::verifyHtml($o);
+        $response = $this->subject->execute($request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testImport(): void
@@ -64,15 +63,14 @@ class ImportCommandTest extends TestCase
 
     public function testImportFailsForInvalidName(): void
     {
-        global $o, $action;
+        global $action;
 
-        $o = '';
         $action = 'import';
         $this->csrfProtector->method("check")->willReturn(true);
         $request = new FakeRequest([
             "post" => ["chess_game" => "foo!"],
         ]);
-        $this->subject->execute($request);
-        $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $o);
+        $response = $this->subject->execute($request);
+        $this->assertStringContainsString("The name &quot;foo!&quot; is invalid", $response->output());
     }
 }

@@ -39,7 +39,7 @@ if (XH_wantsPluginAdministration("chess")) {
             $o .= Dic::infoView()->render();
             break;
         case "plugin_main":
-            Dic::importCommand()->execute(Request::current());
+            $o .= Dic::importCommand()->execute(Request::current())();
             break;
         default:
             $o .= plugin_admin_common();
