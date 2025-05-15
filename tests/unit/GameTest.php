@@ -36,7 +36,7 @@ class GameTest extends TestCase
      *
      * @var Game
      */
-    private $_subject;
+    private $subject;
 
     /**
      * Sets up the test fixture.
@@ -52,7 +52,7 @@ class GameTest extends TestCase
         $pth = array(
             'folder' => array('plugins' => '../')
         );
-        $this->_subject = new Game();
+        $this->subject = new Game();
     }
 
     /**
@@ -62,11 +62,11 @@ class GameTest extends TestCase
      */
     public function testLoad()
     {
-        $this->_subject = Game::load('italian');
-        $this->assertEquals('italian', $this->_subject->getName());
+        $this->subject = Game::load('italian');
+        $this->assertEquals('italian', $this->subject->getName());
         $this->assertEquals(
             'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
-            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
+            (string) $this->subject->getPosition($this->subject->getPlyCount())
         );
     }
 
@@ -105,7 +105,7 @@ class GameTest extends TestCase
      */
     public function testgetPositionReturnsChessPosition()
     {
-        $this->assertInstanceOf(Position::class, $this->_subject->getPosition(0));
+        $this->assertInstanceOf(Position::class, $this->subject->getPosition(0));
     }
 
     /**
@@ -117,7 +117,7 @@ class GameTest extends TestCase
     {
         $this->assertEquals(
             'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
-            $this->_subject->getPosition(0)
+            $this->subject->getPosition(0)
         );
     }
 
@@ -128,7 +128,7 @@ class GameTest extends TestCase
      */
     public function testGetName()
     {
-        $this->assertEmpty($this->_subject->getName());
+        $this->assertEmpty($this->subject->getName());
     }
 
     /**
@@ -138,7 +138,7 @@ class GameTest extends TestCase
      */
     public function testPlyCount()
     {
-        $this->assertEquals(0, $this->_subject->getPlyCount());
+        $this->assertEquals(0, $this->subject->getPlyCount());
     }
 
     /**
@@ -148,8 +148,8 @@ class GameTest extends TestCase
      */
     public function testGetMove()
     {
-        $this->_subject->move('e2', 'e4');
-        $this->assertEquals(new Move('e2', 'e4'), $this->_subject->getMove(0));
+        $this->subject->move('e2', 'e4');
+        $this->assertEquals(new Move('e2', 'e4'), $this->subject->getMove(0));
     }
 
     /**
@@ -159,7 +159,7 @@ class GameTest extends TestCase
      */
     public function testGetInvalidMove()
     {
-        $this->assertNull($this->_subject->getMove(42));
+        $this->assertNull($this->subject->getMove(42));
     }
 
     /**
@@ -169,10 +169,10 @@ class GameTest extends TestCase
      */
     public function testMoveChangesPosition()
     {
-        $this->_subject->move('e2', 'e4');
+        $this->subject->move('e2', 'e4');
         $this->assertEquals(
             'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
-            (string) $this->_subject->getPosition($this->_subject->getPlyCount())
+            (string) $this->subject->getPosition($this->subject->getPlyCount())
         );
     }
 
@@ -183,11 +183,11 @@ class GameTest extends TestCase
      */
     public function testHistoricPosition()
     {
-        $this->_subject->move('e2', 'e4');
-        $this->_subject->move('e7', 'e5');
+        $this->subject->move('e2', 'e4');
+        $this->subject->move('e7', 'e5');
         $this->assertEquals(
             'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR',
-            (string) $this->_subject->getPosition(1)
+            (string) $this->subject->getPosition(1)
         );
     }
 

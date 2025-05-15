@@ -45,9 +45,9 @@ class InfoView
     public function render()
     {
         return '<h1>Chess</h1>'
-            . $this->_renderIcon()
+            . $this->renderIcon()
             . '<p>Version: ' . CHESS_VERSION . '</p>'
-            . $this->_renderCopyright() . $this->_renderLicense();
+            . $this->renderCopyright() . $this->renderLicense();
     }
 
     /**
@@ -58,7 +58,7 @@ class InfoView
      * @global array The paths of system files and folders.
      * @global array The localization of the plugins.
      */
-    private function _renderIcon()
+    private function renderIcon()
     {
         global $pth, $plugin_tx;
 
@@ -72,7 +72,7 @@ class InfoView
      *
      * @return string (X)HTML.
      */
-    private function _renderCopyright()
+    private function renderCopyright()
     {
         return <<<EOT
 <p>Copyright &copy; 2014
@@ -86,7 +86,7 @@ EOT;
      *
      * @return string (X)HTML.
      */
-    private function _renderLicense()
+    private function renderLicense()
     {
         return <<<EOT
 <p class="chess_license">This program is free software: you can

@@ -32,7 +32,7 @@ class ImportCommand extends Presenter
      *
      * @var PgnImporter.
      */
-    private $_importer;
+    private $importer;
 
     /**
      * Returns a new self instance.
@@ -56,7 +56,7 @@ class ImportCommand extends Presenter
     public function __construct(PgnImporter $importer)
     {
         parent::__construct();
-        $this->_importer = $importer;
+        $this->importer = $importer;
     }
 
     /**
@@ -80,12 +80,12 @@ class ImportCommand extends Presenter
             }
             $game = $_POST['chess_game'];
             if (Game::isValidName($game)) {
-                $this->_importer->import($game);
+                $this->importer->import($game);
             } else {
                 $o .= $this->renderFailure('invalid_name', $game);
             }
         }
-        $view = ImportView::make($this->_importer);
+        $view = ImportView::make($this->importer);
         $o .= $view->render();
     }
 }

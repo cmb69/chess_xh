@@ -32,21 +32,21 @@ class Move
      *
      * @var string
      */
-    private $_source;
+    private $source;
 
     /**
      * The destination square.
      *
      * @var string
      */
-    private $_destination;
+    private $destination;
 
     /**
      * The piece to promote to.
      *
      * @var ?string
      */
-    private $_promotion;
+    private $promotion;
 
     /**
      * Initializes a new instance.
@@ -59,9 +59,9 @@ class Move
      */
     public function __construct($source, $destination, $promotion = null)
     {
-        $this->_source = (string) $source;
-        $this->_destination = (string) $destination;
-        $this->_promotion = $promotion;
+        $this->source = (string) $source;
+        $this->destination = (string) $destination;
+        $this->promotion = $promotion;
     }
 
     /**
@@ -71,7 +71,7 @@ class Move
      */
     public function getSource()
     {
-        return $this->_source;
+        return $this->source;
     }
 
     /**
@@ -81,7 +81,7 @@ class Move
      */
     public function getSourceFile()
     {
-        return $this->_source[0];
+        return $this->source[0];
     }
 
     /**
@@ -91,7 +91,7 @@ class Move
      */
     public function getSourceRank()
     {
-        return $this->_source[1];
+        return $this->source[1];
     }
 
     /**
@@ -101,7 +101,7 @@ class Move
      */
     public function getDestination()
     {
-        return $this->_destination;
+        return $this->destination;
     }
 
     /**
@@ -111,7 +111,7 @@ class Move
      */
     public function getDestinationFile()
     {
-        return $this->_destination[0];
+        return $this->destination[0];
     }
 
     /**
@@ -121,7 +121,7 @@ class Move
      */
     public function getFileDistance()
     {
-        return abs(ord($this->_source[0]) - ord($this->_destination[0]));
+        return abs(ord($this->source[0]) - ord($this->destination[0]));
     }
 
     /**
@@ -131,7 +131,7 @@ class Move
      */
     public function getPromotion()
     {
-        return $this->_promotion;
+        return $this->promotion;
     }
 
     /**
@@ -166,27 +166,27 @@ class Move
 
         $result = '';
 
-        $piece = $position->getPieceOn($this->_source);
+        $piece = $position->getPieceOn($this->source);
         $piece = strtoupper($piece[1]);
         if ($piece == 'P') {
             $piece = '';
         }
         $result .= $piece;
 
-        if ($this->_isCapture($position)) {
+        if ($this->isCapture($position)) {
             if ($piece == '') {
                 $result = $this->getSourceFile();
             }
             $result .= 'x';
         }
 
-        $result .= $this->_destination;
+        $result .= $this->destination;
 
-        if (isset($this->_promotion)) {
-            $result .= '=' . strtoupper($this->_promotion);
+        if (isset($this->promotion)) {
+            $result .= '=' . strtoupper($this->promotion);
         }
 
-        $piece = $position->getPieceOn($this->_source);
+        $piece = $position->getPieceOn($this->source);
         $isWhite = $piece[0] != 'w';
         $position1 = clone $position;
         $position1->applyMove($this);
@@ -208,9 +208,9 @@ class Move
      *
      * @return bool
      */
-    private function _isCapture(Position $position)
+    private function isCapture(Position $position)
     {
-        return $position->hasPieceOn($this->_destination)
+        return $position->hasPieceOn($this->destination)
             || $position->isEnPassant($this);
     }
 }

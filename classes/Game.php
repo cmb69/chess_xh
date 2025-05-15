@@ -34,14 +34,14 @@ class Game
      *
      * @var string.
      */
-    private $_name;
+    private $name;
 
     /**
      * The moves.
      *
      * @var array A list of records.
      */
-    private $_moves;
+    private $moves;
 
     /**
      * Returns whether a name is a valid game name.
@@ -74,7 +74,7 @@ class Game
         }
         $result = unserialize(file_get_contents($filename));
         if ($result) {
-            $result->_name = $basename;
+            $result->name = $basename;
             return $result;
         } else {
             return null;
@@ -88,8 +88,8 @@ class Game
      */
     public function __construct()
     {
-        $this->_name = '';
-        $this->_moves = array();
+        $this->name = '';
+        $this->moves = array();
     }
 
     /**
@@ -99,7 +99,7 @@ class Game
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
@@ -109,7 +109,7 @@ class Game
      */
     public function getPlyCount()
     {
-        return count($this->_moves);
+        return count($this->moves);
     }
 
     /**
@@ -124,7 +124,7 @@ class Game
         $position = new Position();
         $ply = min($ply, $this->getPlyCount());
         for ($i = 0; $i < $ply; ++$i) {
-            $position->applyMove($this->_moves[$i]);
+            $position->applyMove($this->moves[$i]);
         }
         return $position;
     }
@@ -139,7 +139,7 @@ class Game
     public function getMove($ply)
     {
         if ($ply >= 0 && $ply < $this->getPlyCount()) {
-            return $this->_moves[$ply];
+            return $this->moves[$ply];
         } else {
             return null;
         }
@@ -158,7 +158,7 @@ class Game
      */
     public function move($from, $to, $promotion = null)
     {
-        $this->_moves[] = new Move($from, $to, $promotion);
+        $this->moves[] = new Move($from, $to, $promotion);
     }
 
     /**
@@ -168,7 +168,7 @@ class Game
      */
     public function __toString()
     {
-        return $this->_exportTagPairs() . "\n" . $this->_exportMoveText();
+        return $this->exportTagPairs() . "\n" . $this->exportMoveText();
     }
 
     /**
@@ -176,14 +176,14 @@ class Game
      *
      * @return string
      */
-    private function _exportTagPairs()
+    private function exportTagPairs()
     {
         $result = '';
         $tagNames = array(
             'event', 'site', 'date', 'round', 'white', 'black', 'result'
         );
         foreach ($tagNames as $tagName) {
-            $result .= $this->_exportTagPair($tagName);
+            $result .= $this->exportTagPair($tagName);
         }
         return $result;
     }
@@ -195,7 +195,7 @@ class Game
      *
      * @return string
      */
-    private function _exportTagPair($name)
+    private function exportTagPair($name)
     {
         switch ($name) {
             case 'date':
@@ -215,14 +215,14 @@ class Game
      *
      * @return string
      */
-    private function _exportMoveText()
+    private function exportMoveText()
     {
         $result = '';
         for ($i = 0; $i < $this->getPlyCount(); ++$i) {
             if ($i % 2 == 0) {
                 $result .= (int) ($i / 2) + 1 . '. ';
             }
-            $result .= $this->_moves[$i]->getSan($this->getPosition($i)) . ' ';
+            $result .= $this->moves[$i]->getSan($this->getPosition($i)) . ' ';
         }
         $result .= '*';
         return $result;

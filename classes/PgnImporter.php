@@ -34,7 +34,7 @@ class PgnImporter
      *
      * @var string
      */
-    private $_dataFolder;
+    private $dataFolder;
 
     /**
      * Initializes a new instance.
@@ -45,7 +45,7 @@ class PgnImporter
      */
     public function __construct($dataFolder)
     {
-        $this->_dataFolder = (string) $dataFolder;
+        $this->dataFolder = (string) $dataFolder;
     }
 
     /**
@@ -56,7 +56,7 @@ class PgnImporter
     public function findAll()
     {
         $result = array();
-        if ($dir = opendir($this->_dataFolder)) {
+        if ($dir = opendir($this->dataFolder)) {
             while ($entry = readdir($dir)) {
                 if (pathinfo($entry, PATHINFO_EXTENSION) == 'pgn') {
                     $result []= basename($entry, '.pgn');
@@ -89,7 +89,7 @@ class PgnImporter
         include_once $folder . 'PgnGameParser.php';
         include_once $folder . 'PgnParser.php';
 
-        $parser = new PgnParser($this->_dataFolder . $name . '.pgn');
+        $parser = new PgnParser($this->dataFolder . $name . '.pgn');
         $games = $parser->getGames();
         foreach ($games as $i => $pgnGame) {
             $game = new Game();
@@ -102,7 +102,7 @@ class PgnImporter
                 $game->move($move['from'], $move['to'], $promotion);
             }
             $suffix = ($i > 0) ? '_' . $i : '';
-            file_put_contents($this->_dataFolder . $name . $suffix . '.dat', serialize($game));
+            file_put_contents($this->dataFolder . $name . $suffix . '.dat', serialize($game));
         }
     }
 }

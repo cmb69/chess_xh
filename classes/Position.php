@@ -32,7 +32,7 @@ class Position
      *
      * @var array
      */
-    private $_pieces;
+    private $pieces;
 
     /**
      * Creates a new position from a FEN string.
@@ -44,7 +44,7 @@ class Position
     public static function makeFromFen($fen)
     {
         $result = new self();
-        $result->_pieces = array();
+        $result->pieces = array();
         $rank = 8;
         $file = 'a';
         for ($i = 0; $i < strlen($fen); ++$i) {
@@ -56,7 +56,7 @@ class Position
                 $file = chr(ord($file) + (int) $char);
             } else {
                 $color = ($char >= 'A' && $char <= 'Z') ? 'w' : 'b';
-                $result->_pieces[$file . $rank] = $color . strtolower($char);
+                $result->pieces[$file . $rank] = $color . strtolower($char);
                 ++$file;
             }
         }
@@ -70,7 +70,7 @@ class Position
      */
     public function __construct()
     {
-        $this->_pieces = array(
+        $this->pieces = array(
             'a1' => 'wr', 'b1' => 'wn', 'c1' => 'wb', 'd1' => 'wq',
             'e1' => 'wk', 'f1' => 'wb', 'g1' => 'wn', 'h1' => 'wr',
             'a2' => 'wp', 'b2' => 'wp', 'c2' => 'wp', 'd2' => 'wp',
@@ -93,7 +93,7 @@ class Position
      */
     public function hasPieceOn($square)
     {
-        return isset($this->_pieces[$square]);
+        return isset($this->pieces[$square]);
     }
 
     /**
@@ -105,7 +105,7 @@ class Position
      */
     public function getPieceOn($square)
     {
-        return $this->_pieces[$square];
+        return $this->pieces[$square];
     }
 
     /**
@@ -118,17 +118,17 @@ class Position
     public function applyMove($move)
     {
         if ($this->isCastling($move)) {
-            $this->_moveRookForCastling($move);
+            $this->moveRookForCastling($move);
         } elseif ($this->isEnPassant($move)) {
-            $this->_removeEnPassantCapturedPawn($move);
+            $this->removeEnPassantCapturedPawn($move);
         }
         $destination = $move->getDestination();
-        $this->_pieces[$destination] = $this->_pieces[$move->getSource()];
+        $this->pieces[$destination] = $this->pieces[$move->getSource()];
         if ($move->getPromotion() !== null) {
-            $this->_pieces[$destination]
-                = $this->_pieces[$destination][0] . $move->getPromotion();
+            $this->pieces[$destination]
+                = $this->pieces[$destination][0] . $move->getPromotion();
         }
-        $this->_removePiece($move->getSource());
+        $this->removePiece($move->getSource());
     }
 
     /**
@@ -141,8 +141,8 @@ class Position
     public function canMoveKing($isWhite)
     {
         $piece = $isWhite ? 'wk' : 'bk';
-        $kingSquare = array_search($piece, $this->_pieces);
-        $destinations = $this->_getCapturingDestinations($kingSquare);
+        $kingSquare = array_search($piece, $this->pieces);
+        $destinations = $this->getCapturingDestinations($kingSquare);
         foreach ($destinations as $destination) {
             $position = clone $this;
             $position->applyMove(new Move($kingSquare, $destination));
@@ -162,7 +162,7 @@ class Position
      */
     public function isUnderAttack($square)
     {
-        foreach (array_keys($this->_pieces) as $attacker) {
+        foreach (array_keys($this->pieces) as $attacker) {
             if ($this->isAttacking($attacker, $square)) {
                 return true;
             }
@@ -180,10 +180,10 @@ class Position
      */
     public function isAttacking($source, $destination)
     {
-        if ($this->_pieces[$source][0] == $this->_pieces[$destination][0]) {
+        if ($this->pieces[$source][0] == $this->pieces[$destination][0]) {
             return false;
         }
-        return in_array($destination, $this->_getCapturingDestinations($source));
+        return in_array($destination, $this->getCapturingDestinations($source));
     }
 
     /**
@@ -193,20 +193,20 @@ class Position
      *
      * @return array
      */
-    private function _getCapturingDestinations($square)
+    private function getCapturingDestinations($square)
     {
         $result = array();
-        switch ($this->_pieces[$square][1]) {
+        switch ($this->pieces[$square][1]) {
             case 'p':
-                if ($this->_pieces[$square][0] == 'w') {
+                if ($this->pieces[$square][0] == 'w') {
                     $directions = array('nw', 'ne');
                 } else {
                     $directions = array('sw', 'se');
                 }
-                $result = $this->_getNeighborSquares($square, $directions);
+                $result = $this->getNeighborSquares($square, $directions);
                 break;
             case 'n':
-                $result = $this->_getKnightsSquares($square);
+                $result = $this->getKnightsSquares($square);
                 break;
             case 'b':
                 $directions = array('ne', 'se', 'sw', 'nw');
@@ -217,13 +217,13 @@ class Position
             case 'q':
                 $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
                 foreach ($directions as $direction) {
-                    $result = array_merge($result, $this->_getSquaresTo($direction, $square));
+                    $result = array_merge($result, $this->getSquaresTo($direction, $square));
                 }
                 break;
             case 'k':
                 $directions = array('n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw');
                 foreach ($directions as $direction) {
-                    $neighbor = $this->_getNeighborSquare($square, $direction);
+                    $neighbor = $this->getNeighborSquare($square, $direction);
                     if ($neighbor) {
                         $result []= $neighbor;
                     }
@@ -240,35 +240,35 @@ class Position
      *
      * @return array
      */
-    private function _getKnightsSquares($square)
+    private function getKnightsSquares($square)
     {
         $result = array();
         foreach (array('n', 'e', 's', 'w') as $direction) {
-            $square1 = $this->_getNeighborSquare($square, $direction);
+            $square1 = $this->getNeighborSquare($square, $direction);
             if ($square1) {
                 switch ($direction) {
                     case 'n':
                         $result = array_merge(
                             $result,
-                            $this->_getNeighborSquares($square1, array('nw', 'ne'))
+                            $this->getNeighborSquares($square1, array('nw', 'ne'))
                         );
                         break;
                     case 'e':
                         $result = array_merge(
                             $result,
-                            $this->_getNeighborSquares($square1, array('ne', 'se'))
+                            $this->getNeighborSquares($square1, array('ne', 'se'))
                         );
                         break;
                     case 's':
                         $result = array_merge(
                             $result,
-                            $this->_getNeighborSquares($square1, array('se', 'sw'))
+                            $this->getNeighborSquares($square1, array('se', 'sw'))
                         );
                         break;
                     case 'w':
                         $result = array_merge(
                             $result,
-                            $this->_getNeighborSquares($square1, array('sw', 'nw'))
+                            $this->getNeighborSquares($square1, array('sw', 'nw'))
                         );
                         break;
                 }
@@ -287,10 +287,10 @@ class Position
      *
      * @return array
      */
-    private function _getSquaresTo($direction, $square)
+    private function getSquaresTo($direction, $square)
     {
         $result = array();
-        while ($square = $this->_getNeighborSquare($square, $direction)) {
+        while ($square = $this->getNeighborSquare($square, $direction)) {
             $result []= $square;
             if ($this->hasPieceOn($square)) {
                 break;
@@ -307,11 +307,11 @@ class Position
      *
      * @return array
      */
-    private function _getNeighborSquares($square, $directions)
+    private function getNeighborSquares($square, $directions)
     {
         $result = array();
         foreach ($directions as $direction) {
-            $neighbor = $this->_getNeighborSquare($square, $direction);
+            $neighbor = $this->getNeighborSquare($square, $direction);
             if ($neighbor) {
                 $result []= $neighbor;
             }
@@ -327,7 +327,7 @@ class Position
      *
      * @return string
      */
-    private function _getNeighborSquare($square, $direction)
+    private function getNeighborSquare($square, $direction)
     {
         $file = $square[0];
         $rank = $square[1];
@@ -362,7 +362,7 @@ class Position
                 break;
         }
         $square = $file . $rank;
-        return $this->_isValidSquare($square) ? $square : false;
+        return $this->isValidSquare($square) ? $square : false;
     }
 
     /**
@@ -372,7 +372,7 @@ class Position
      *
      * @return bool
      */
-    private function _isValidSquare($square)
+    private function isValidSquare($square)
     {
         return $square[0] >= 'a' && $square[0] <= 'h'
             && $square[1] >= '1' && $square[1] <= '8';
@@ -388,7 +388,7 @@ class Position
     public function isChecked($isWhite)
     {
         $king = $isWhite ? 'wk' : 'bk';
-        return ($kingSquare = array_search($king, $this->_pieces))
+        return ($kingSquare = array_search($king, $this->pieces))
             && $this->isUnderAttack($kingSquare);
     }
 
@@ -401,7 +401,7 @@ class Position
      */
     public function isCastling($move)
     {
-        return $this->_pieces[$move->getSource()][1] == 'k'
+        return $this->pieces[$move->getSource()][1] == 'k'
             && $move->getFileDistance() == 2;
     }
 
@@ -412,7 +412,7 @@ class Position
      *
      * @return void
      */
-    private function _moveRookForCastling($move)
+    private function moveRookForCastling($move)
     {
         if ($move->getDestinationFile() == 'g') { // king's side
             $rookFrom = 'h' . $move->getSourceRank();
@@ -421,8 +421,8 @@ class Position
             $rookFrom = 'a' . $move->getSourceRank();
             $rookTo = 'd' . $move->getSourceRank();
         }
-        $this->_pieces[$rookTo] = $this->_pieces[$rookFrom];
-        $this->_removePiece($rookFrom);
+        $this->pieces[$rookTo] = $this->pieces[$rookFrom];
+        $this->removePiece($rookFrom);
     }
 
     /**
@@ -434,7 +434,7 @@ class Position
      */
     public function isEnPassant($move)
     {
-        return $this->_pieces[$move->getSource()][1] == 'p'
+        return $this->pieces[$move->getSource()][1] == 'p'
             && $move->getDestinationFile() != $move->getSourceFile()
             && !$this->hasPieceOn($move->getDestination());
     }
@@ -446,9 +446,9 @@ class Position
      *
      * @return void
      */
-    private function _removeEnPassantCapturedPawn($move)
+    private function removeEnPassantCapturedPawn($move)
     {
-        $this->_removePiece(
+        $this->removePiece(
             $move->getDestinationFile() . $move->getSourceRank()
         );
     }
@@ -460,9 +460,9 @@ class Position
      *
      * @return void
      */
-    private function _removePiece($square)
+    private function removePiece($square)
     {
-        unset($this->_pieces[$square]);
+        unset($this->pieces[$square]);
     }
 
     /**
@@ -474,7 +474,7 @@ class Position
     {
         $ranks = array();
         for ($rank = 8; $rank >= 1; --$rank) {
-            $ranks []= $this->_rankToString($rank);
+            $ranks []= $this->rankToString($rank);
         }
         return implode('/', $ranks);
     }
@@ -486,17 +486,17 @@ class Position
      *
      * @return string
      */
-    private function _rankToString($rank)
+    private function rankToString($rank)
     {
         $result = '';
         $emptySquares = 0;
         for ($file = 'a'; $file <= 'h'; ++$file) {
-            if (isset($this->_pieces[$file . $rank])) {
+            if (isset($this->pieces[$file . $rank])) {
                 if ($emptySquares > 0) {
                     $result .= $emptySquares;
                     $emptySquares = 0;
                 }
-                $piece = $this->_pieces[$file . $rank];
+                $piece = $this->pieces[$file . $rank];
                 if ($piece[0] == 'w') {
                     $piece = strtoupper($piece[1]);
                 } else {

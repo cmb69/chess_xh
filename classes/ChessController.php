@@ -32,35 +32,35 @@ class Controller extends Presenter
      *
      * @var string
      */
-    private $_requestedGame;
+    private $requestedGame;
 
     /**
      * The requested ply.
      *
      * @var int
      */
-    private $_requestedPly;
+    private $requestedPly;
 
     /**
      * Whether the board is flipped.
      *
      * @var bool
      */
-    private $_isFlipped;
+    private $isFlipped;
 
     /**
      * The requested action.
      *
      * @var string
      */
-    private $_requestedAction;
+    private $requestedAction;
 
     /**
      * Whether we're responding to an Ajax request.
      *
      * @var bool
      */
-    private $_isAjaxRequest;
+    private $isAjaxRequest;
 
     /**
      * Initializes a new instance.
@@ -70,22 +70,22 @@ class Controller extends Presenter
     public function __construct()
     {
         parent::__construct();
-        $this->_requestedGame = isset($_REQUEST['chess_game'])
+        $this->requestedGame = isset($_REQUEST['chess_game'])
             ? $_REQUEST['chess_game'] : "";
-        if (!Game::isValidName($this->_requestedGame)) {
-            $this->_requestedGame = "";
+        if (!Game::isValidName($this->requestedGame)) {
+            $this->requestedGame = "";
         }
-        $this->_requestedPly = isset($_REQUEST['chess_ply'])
+        $this->requestedPly = isset($_REQUEST['chess_ply'])
             ? (int) $_REQUEST['chess_ply'] : 0;
-        $this->_isFlipped = isset($_REQUEST['chess_flipped'])
+        $this->isFlipped = isset($_REQUEST['chess_flipped'])
             ? (bool) $_REQUEST['chess_flipped'] : false;
-        $this->_requestedAction = isset($_REQUEST['chess_action'])
+        $this->requestedAction = isset($_REQUEST['chess_action'])
             ? $_REQUEST['chess_action'] : "";
         $actions = array('start', 'previous', 'next', 'end', 'flip');
-        if (!in_array($this->_requestedAction, $actions)) {
-            $this->_requestedAction = "";
+        if (!in_array($this->requestedAction, $actions)) {
+            $this->requestedAction = "";
         }
-        $this->_isAjaxRequest = isset($_REQUEST['chess_ajax']);
+        $this->isAjaxRequest = isset($_REQUEST['chess_ajax']);
     }
 
     /**
@@ -97,13 +97,11 @@ class Controller extends Presenter
      */
     public function dispatch()
     {
-        global $chess;
-
-        $this->_emitScript();
+        $this->emitScript();
         if (XH_ADM // @phpstan-ignore-line
             && XH_wantsPluginAdministration("chess")
         ) {
-            $this->_handleAdministration();
+            $this->handleAdministration();
         }
     }
 
@@ -116,7 +114,7 @@ class Controller extends Presenter
      * @global string The (X)HTML to insert at the bottom of the body.
      * @global string The (X)HTML to insert in the head.
      */
-    private function _emitScript()
+    private function emitScript()
     {
         global $pth, $bjs, $hjs;
 
@@ -138,9 +136,9 @@ class Controller extends Presenter
      * @global string The value of the <var>action</var> GP parameter.
      * @global string The HTML of the contents area.
      */
-    private function _handleAdministration()
+    private function handleAdministration()
     {
-        global $admin, $action, $o;
+        global $admin, $o;
 
         $o .= print_plugin_admin('on');
         switch ($admin) {
@@ -149,7 +147,7 @@ class Controller extends Presenter
                 $o .= $infoView->render();
                 break;
             case 'plugin_main':
-                $this->_handleImport();
+                $this->handleImport();
                 break;
             default:
                 $o .= plugin_admin_common();
@@ -163,7 +161,7 @@ class Controller extends Presenter
      *
      * @global array  The paths of system files and folders.
      */
-    private function _handleImport()
+    private function handleImport()
     {
         global $pth;
 
@@ -183,7 +181,7 @@ class Controller extends Presenter
      */
     public function chess($basename)
     {
-        if ($this->_isAjaxRequest && $this->_requestedGame != $basename) {
+        if ($this->isAjaxRequest && $this->requestedGame != $basename) {
             return;
         }
         if (!Game::isValidName($basename)) {
@@ -193,8 +191,8 @@ class Controller extends Presenter
         if (!$game) {
             return $this->renderFailure('load_error', $basename);
         }
-        $gameView = GameView::make($game, $this->_getPly($game), $this->_isFlipped());
-        if ($this->_isAjaxRequest) {
+        $gameView = GameView::make($game, $this->getPly($game), $this->isFlipped());
+        if ($this->isAjaxRequest) {
             header('Content-Type:text/html; charset=UTF-8');
             echo $gameView->render();
             XH_exit();
@@ -210,10 +208,10 @@ class Controller extends Presenter
      *
      * @return int
      */
-    private function _getPly(Game $game)
+    private function getPly(Game $game)
     {
-        $result = $this->_requestedPly;
-        switch ($this->_requestedAction) {
+        $result = $this->requestedPly;
+        switch ($this->requestedAction) {
             case 'start':
                 $result = 0;
                 break;
@@ -234,10 +232,10 @@ class Controller extends Presenter
      *
      * @return bool
      */
-    private function _isFlipped()
+    private function isFlipped()
     {
-        $result = $this->_isFlipped;
-        if ($this->_requestedAction == 'flip') {
+        $result = $this->isFlipped;
+        if ($this->requestedAction == 'flip') {
             $result = !$result;
         }
         return $result;

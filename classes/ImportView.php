@@ -32,7 +32,7 @@ class ImportView
      *
      * @var PgnImporter
      */
-    private $_importer;
+    private $importer;
 
     /**
      * Returns a new self instance.
@@ -55,7 +55,7 @@ class ImportView
      */
     public function __construct(PgnImporter $importer)
     {
-        $this->_importer = $importer;
+        $this->importer = $importer;
     }
 
     /**
@@ -70,7 +70,7 @@ class ImportView
         global $plugin_tx;
 
         return '<h1>Chess &ndash; ' . $plugin_tx['chess']['menu_main'] . '</h1>'
-            . $this->_renderForm();
+            . $this->renderForm();
     }
 
     /**
@@ -81,7 +81,7 @@ class ImportView
      * @global string            The script name.
      * @global XH_CSRFProtection The CSRF protector.
      */
-    private function _renderForm()
+    private function renderForm()
     {
         global $sn, $_XH_csrfProtection;
 
@@ -92,7 +92,7 @@ class ImportView
         }
         $result .= '<input type="hidden" name="admin" value="plugin_main">'
             . '<input type="hidden" name="action" value="import">'
-            . $this->_renderList()
+            . $this->renderList()
             . '</form>';
         return $result;
     }
@@ -102,11 +102,11 @@ class ImportView
      *
      * @return string (X)HTML.
      */
-    private function _renderList()
+    private function renderList()
     {
         $result = '<ul>';
-        foreach ($this->_importer->findAll() as $name) {
-            $result .= $this->_renderListItem($name);
+        foreach ($this->importer->findAll() as $name) {
+            $result .= $this->renderListItem($name);
         }
         $result .= '</ul>';
         return $result;
@@ -121,7 +121,7 @@ class ImportView
      *
      * @global array The localization of the plugins.
      */
-    private function _renderListItem($name)
+    private function renderListItem($name)
     {
         global $plugin_tx;
 

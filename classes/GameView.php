@@ -32,28 +32,28 @@ class GameView
      *
      * @var Game
      */
-    private $_game;
+    private $game;
 
     /**
      * The current ply number.
      *
      * @var int
      */
-    private $_ply;
+    private $ply;
 
     /**
      * The current position.
      *
      * @var Position
      */
-    private $_position;
+    private $position;
 
     /**
      * Whether the board is flipped (i.e. the white side is at the top).
      *
      * @var bool
      */
-    private $_flipped;
+    private $flipped;
 
     /**
      * Makes a new game view.
@@ -80,12 +80,12 @@ class GameView
      */
     public function __construct(Game $game, $ply = 0, $flipped = false)
     {
-        $this->_game = $game;
-        $this->_ply = (int) $ply;
-        $this->_position = $game->getPosition(
-            min($this->_ply, $this->_game->getPlyCount())
+        $this->game = $game;
+        $this->ply = (int) $ply;
+        $this->position = $game->getPosition(
+            min($this->ply, $this->game->getPlyCount())
         );
-        $this->_flipped = (bool) $flipped;
+        $this->flipped = (bool) $flipped;
     }
 
     /**
@@ -95,9 +95,9 @@ class GameView
      */
     public function render()
     {
-        return '<div id="chess_view_' . $this->_game->getName()
+        return '<div id="chess_view_' . $this->game->getName()
             . '" class="chess_view">'
-            . $this->_renderBoard() . $this->_renderControlPanel()
+            . $this->renderBoard() . $this->renderControlPanel()
             . '</div>';
     }
 
@@ -106,11 +106,11 @@ class GameView
      *
      * @return string (X)HTML.
      */
-    private function _renderBoard()
+    private function renderBoard()
     {
         $result = '<table class="chess_board">';
-        foreach ($this->_getRanks() as $rank) {
-            $result .= $this->_renderRank($rank);
+        foreach ($this->getRanks() as $rank) {
+            $result .= $this->renderRank($rank);
         }
         $result .= '</table>';
         return $result;
@@ -121,10 +121,10 @@ class GameView
      *
      * @return array
      */
-    private function _getRanks()
+    private function getRanks()
     {
         $ranks = range(8, 1, -1);
-        if ($this->_flipped) {
+        if ($this->flipped) {
             $ranks = array_reverse($ranks);
         }
         return $ranks;
@@ -137,11 +137,11 @@ class GameView
      *
      * @return string (X)HTML.
      */
-    private function _renderRank($rank)
+    private function renderRank($rank)
     {
         $result = '<tr>';
-        foreach ($this->_getFiles() as $file) {
-            $result .= $this->_renderSquare($file, $rank);
+        foreach ($this->getFiles() as $file) {
+            $result .= $this->renderSquare($file, $rank);
         }
         $result .= '</tr>';
         return $result;
@@ -152,10 +152,10 @@ class GameView
      *
      * @return array
      */
-    private function _getFiles()
+    private function getFiles()
     {
         $files = array_map('chr', range(97, 104));
-        if ($this->_flipped) {
+        if ($this->flipped) {
             $files = array_reverse($files);
         }
         return $files;
@@ -169,15 +169,15 @@ class GameView
      *
      * @return string (X)HTML.
      */
-    private function _renderSquare($file, $rank)
+    private function renderSquare($file, $rank)
     {
         $square = "$file$rank";
         $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
         $result = '<td class="' . $class . '">';
-        $move = $this->_game->getMove($this->_ply - 1);
+        $move = $this->game->getMove($this->ply - 1);
         $moved = $move !== null && $move->isSourceOrDestination($square);
-        if ($this->_position->hasPieceOn($square)) {
-            $result .= $this->_renderPiece($this->_position->getPieceOn($square), $moved);
+        if ($this->position->hasPieceOn($square)) {
+            $result .= $this->renderPiece($this->position->getPieceOn($square), $moved);
         } else {
             if ($moved) {
                 $result .= '<span class="chess_move">&nbsp;</span>';
@@ -199,7 +199,7 @@ class GameView
      *
      * @global array The paths of system files and folders.
      */
-    private function _renderPiece($piece, $moved)
+    private function renderPiece($piece, $moved)
     {
         global $pth;
 
@@ -216,21 +216,21 @@ class GameView
      * @global string The script name.
      * @global string The selected URL.
      */
-    private function _renderControlPanel()
+    private function renderControlPanel()
     {
         global $sn, $su;
 
         return '<form class="chess_control_panel" action="' . $sn
-            . '#chess_view_' . $this->_game->getName() . '" method="'
+            . '#chess_view_' . $this->game->getName() . '" method="'
             . 'get' . '">'
-            . $this->_renderHiddenInput('selected', $su)
-            . $this->_renderHiddenInput('chess_game', $this->_game->getName())
-            . $this->_renderHiddenInput('chess_flipped', (string) (int) $this->_flipped)
-            . $this->_renderButton('goto')
-            . $this->_renderButton('start') . $this->_renderButton('previous')
-            . $this->_renderPlyInput($this->_ply)
-            . $this->_renderButton('next') . $this->_renderButton('end')
-            . $this->_renderButton('flip')
+            . $this->renderHiddenInput('selected', $su)
+            . $this->renderHiddenInput('chess_game', $this->game->getName())
+            . $this->renderHiddenInput('chess_flipped', (string) (int) $this->flipped)
+            . $this->renderButton('goto')
+            . $this->renderButton('start') . $this->renderButton('previous')
+            . $this->renderPlyInput($this->ply)
+            . $this->renderButton('next') . $this->renderButton('end')
+            . $this->renderButton('flip')
             . '</form>';
     }
 
@@ -241,7 +241,7 @@ class GameView
      *
      * @return string (X)HTML.
      */
-    private function _renderPlyInput($value)
+    private function renderPlyInput($value)
     {
         return '<input type="text" name="chess_ply" value="' . $value . '">';
     }
@@ -254,7 +254,7 @@ class GameView
      *
      * @return string (X)HTML.
      */
-    private function _renderHiddenInput($name, $value)
+    private function renderHiddenInput($name, $value)
     {
         return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
     }
@@ -268,18 +268,18 @@ class GameView
      *
      * @global array The localization of the plugins.
      */
-    private function _renderButton($which)
+    private function renderButton($which)
     {
         global $plugin_tx;
 
         switch ($which) {
             case 'start':
                 $value = 'start';
-                $disabled = ($this->_ply == 0);
+                $disabled = ($this->ply == 0);
                 break;
             case 'previous':
                 $value = 'previous';
-                $disabled = ($this->_ply == 0);
+                $disabled = ($this->ply == 0);
                 break;
             case 'goto':
                 $value = 'goto';
@@ -287,11 +287,11 @@ class GameView
                 break;
             case 'next':
                 $value = 'next';
-                $disabled = ($this->_ply == $this->_game->getPlyCount());
+                $disabled = ($this->ply == $this->game->getPlyCount());
                 break;
             case 'end':
                 $value = 'end';
-                $disabled = ($this->_ply == $this->_game->getPlyCount());
+                $disabled = ($this->ply == $this->game->getPlyCount());
                 break;
             case 'flip':
                 $value = 'flip';
