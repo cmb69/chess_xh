@@ -42,6 +42,17 @@ class ImportCommandTest extends TestCase
         Approvals::verifyHtml($response->output());
     }
 
+    public function testImportIsCsrfProtected(): void
+    {
+        $this->csrfProtector->method("check")->willReturn(false);
+        $request = new FakeRequest([
+            "url" => "http://example.com/?&action=import",
+            "post" => ["chess_game" => "foo"],
+        ]);
+        $response = $this->sut()->execute($request);
+        $this->assertStringContainsString("not authorized", $response->output());
+    }
+
     public function testImport(): void
     {
         $this->importer->expects($this->once())->method("import")->with("foo");

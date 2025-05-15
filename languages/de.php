@@ -10,6 +10,8 @@ $plugin_tx['chess']['label_next']="Weiter";
 $plugin_tx['chess']['label_end']="Ende";
 $plugin_tx['chess']['label_import']="Import";
 
+$plugin_tx['chess']['error_unauthorized']="Sie sind nicht befugt diese Aktion auszuführen!";
+
 $plugin_tx['chess']['message_invalid_name']="Der Name \"%s\" ist ungültig!";
 $plugin_tx['chess']['message_load_error']="Die Schachdatei \"%s\" kann nicht geladen werden!";
 

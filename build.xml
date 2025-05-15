@@ -2,10 +2,6 @@
 
 <project name="Chess" default="default">
 
-  <fileset id="attack-tests" dir="tests/attack">
-    <include name="*Test.php"/>
-  </fileset>
-
   <target name="sniff" description="checks adherence to coding standards">
     <exec executable="phpcs" passthru="true" checkreturn="true">
       <arg value="--standard=PSR12"/>
@@ -13,7 +9,7 @@
       <arg file="admin.php"/>
       <arg file="index.php"/>
       <arg file="classes"/>
-      <arg file="tests/unit"/>
+      <arg file="tests"/>
     </exec>
   </target>
 
@@ -26,16 +22,6 @@
   </target>
 
   <target name="check" description="runs all checks" depends="sniff,stan,test"/>
-
-  <target name="attack-tests">
-    <fail unless="env.CMSIMPLEDIR" message="CMSIMPLEDIR undefined!"/>
-    <phpunit haltonerror="true" haltonfailure="true">
-      <formatter type="plain" usefile="false"/>
-      <batchtest>
-        <fileset refid="attack-tests"/>
-      </batchtest>
-    </phpunit>
-  </target>
 
   <target name="coverage" description="generates coverage report">
     <exec executable="phpunit" passthru="true" checkreturn="true">

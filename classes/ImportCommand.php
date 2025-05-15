@@ -53,7 +53,7 @@ class ImportCommand
         $o = "";
         if ($request->get("action") === "import") {
             if (!$this->csrfProtector->check($request->post("chess_token"))) {
-                return Response::create("not authorized");
+                return Response::create($this->view->message("fail", "error_unauthorized"));
             }
             $game = $request->post("chess_game");
             if (Game::isValidName($game)) {
