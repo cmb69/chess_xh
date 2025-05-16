@@ -1,6 +1,6 @@
 <?php
 
-namespace Chess;
+namespace Chess\Model;
 
 use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;

@@ -17,10 +17,10 @@ require_once "../plib/classes/View.php";
 require_once "../plib/classes/FakeRequest.php";
 require_once "../plib/classes/FakeSystemChecker.php";
 
+require_once './classes/model/Game.php';
+require_once './classes/model/Move.php';
+require_once './classes/model/Position.php';
 require_once "./classes/Dic.php";
-require_once './classes/Game.php';
-require_once './classes/Position.php';
-require_once './classes/Move.php';
 require_once './classes/PgnImporter.php';
 require_once './classes/ChessController.php';
 require_once './classes/InfoView.php';

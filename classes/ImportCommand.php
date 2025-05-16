@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Chess\Model\Game;
 use Plib\CsrfProtector;
 use Plib\Request;
 use Plib\Response;

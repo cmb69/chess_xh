@@ -19,7 +19,7 @@
  * along with Chess_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Chess;
+namespace Chess\Model;
 
 use LogicException;
 use Plib\Document;

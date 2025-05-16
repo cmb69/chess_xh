@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Chess\Model\Game;
 use PgnParser;
 
 class PgnImporter

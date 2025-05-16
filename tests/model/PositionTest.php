@@ -1,6 +1,6 @@
 <?php
 
-namespace Chess;
+namespace Chess\Model;
 
 use PHPUnit\Framework\TestCase;
 

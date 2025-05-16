@@ -20,7 +20,7 @@ class ChessControllerTest extends TestCase
 
     private function sut(): ChessController
     {
-        return new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
+        return new ChessController("./", new DocumentStore(__DIR__ . "/model/"), $this->view);
     }
 
     public function testChess(): void

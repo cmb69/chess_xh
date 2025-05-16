@@ -21,6 +21,8 @@
 
 namespace Chess;
 
+use Chess\Model\Game;
+use Chess\Model\Position;
 use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
