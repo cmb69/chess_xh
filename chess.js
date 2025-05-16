@@ -18,7 +18,7 @@ function getParams(button) {
 }
 
 function onSubmit(event) {
-    var target, form, request, method;
+    var target, form, request;
 
     function displayLoader() {
         var table, img;
@@ -33,8 +33,8 @@ function onSubmit(event) {
 
     function isSuccess() {
         return request.status === 200 &&
-                /<div id="chess_view_/.test(request.responseText) &&
-                /<\/div>\s*$/.test(request.responseText);
+            /<div id="chess_view_/.test(request.responseText) &&
+            /<\/div>\s*$/.test(request.responseText);
     }
 
     function onSuccess(form, html) {
@@ -42,7 +42,7 @@ function onSubmit(event) {
 
         function removeMoveClasses() {
             var elements = container.querySelectorAll(".chess_move");
-            Array.prototype.forEach.call(elements, function (element) {
+            elements.forEach(element => {
                 element.className = "";
             });
         }
@@ -63,45 +63,19 @@ function onSubmit(event) {
         }
     }
 
-    function getUrl() {
-        var result = location.pathname;
-        if (method === "GET") {
-            result += "?" + getParams(target);
-        }
-        return result;
-    }
-
-    function getBody() {
-        var result = null;
-        if (method !== "GET") {
-            result = getParams(target);
-        }
-        return result;
-    }
-
     target = event.target;
     if (target.nodeName === "BUTTON" && !target.disabled) {
         form = target.form;
-        method = form.method.toUpperCase();
         request = new XMLHttpRequest();
-        request.open(method, getUrl());
-        if (method === "POST") {
-            request.setRequestHeader("Content-Type",
-                    "application/x-www-form-urlencoded");
-        }
+        request.open("GET", location.pathname + "?" + getParams(target));
         request.onreadystatechange = onReadyStateChange;
-        request.send(getBody());
+        request.send();
         event.preventDefault();
         displayLoader();
     }
 }
 
-function registerClickHandlers() {
-    var forms = document.getElementsByClassName("chess_control_panel");
-    Array.prototype.forEach.call(forms, function (form) {
-        form.addEventListener("click", onSubmit);
-    });
-
-}
-
-registerClickHandlers();
+var forms = document.querySelectorAll(".chess_control_panel");
+forms.forEach(form => {
+    form.addEventListener("click", onSubmit);
+});
