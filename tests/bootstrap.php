@@ -14,7 +14,6 @@ require_once "../plib/classes/View.php";
 require_once "../plib/classes/FakeRequest.php";
 
 require_once "./classes/Dic.php";
-require_once "./classes/Factory.php";
 require_once './classes/Game.php';
 require_once './classes/Position.php';
 require_once './classes/Move.php';

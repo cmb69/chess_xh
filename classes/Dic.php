@@ -30,7 +30,7 @@ class Dic
 
     public static function chessController(): ChessController
     {
-        return new ChessController(new Factory(), self::view());
+        return new ChessController(new GameView(self::view()), self::view());
     }
 
     public static function importCommand(): ImportCommand

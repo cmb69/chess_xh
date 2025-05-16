@@ -26,15 +26,15 @@ use Plib\View;
 
 class ChessController
 {
-    /** @var Factory */
-    private $factory;
+    /** @var GameView */
+    private $gameView;
 
     /** @var View */
     private $view;
 
-    public function __construct(Factory $factory, View $view)
+    public function __construct(GameView $gameView, View $view)
     {
-        $this->factory = $factory;
+        $this->gameView = $gameView;
         $this->view = $view;
     }
 
@@ -56,12 +56,11 @@ class ChessController
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
         $this->emitScript();
-        $gameView = $this->factory->makeGameView();
         if (isset($_REQUEST['chess_ajax'])) {
-            return Response::create($gameView->render($game, $this->getPly($game), $this->isFlipped()))
+            return Response::create($this->gameView->render($game, $this->getPly($game), $this->isFlipped()))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($gameView->render($game, $this->getPly($game), $this->isFlipped()));
+            return Response::create($this->gameView->render($game, $this->getPly($game), $this->isFlipped()));
         }
     }
 
