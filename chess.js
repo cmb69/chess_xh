@@ -8,7 +8,7 @@ function serialize(params) {
 function getParams(button) {
     var form = button.form;
     return serialize({
-        selected: form.selected.value,
+        // selected: form.selected.value,
         chess_game: form.chess_game.value,
         chess_ply: form.chess_ply.value,
         chess_flipped: form.chess_flipped.value,
@@ -67,7 +67,7 @@ function onSubmit(event) {
     if (target.nodeName === "BUTTON" && !target.disabled) {
         form = target.form;
         request = new XMLHttpRequest();
-        request.open("GET", location.pathname + "?" + getParams(target));
+        request.open("GET", location.pathname + "?" + form.selected.value + "&" + getParams(target));
         request.onreadystatechange = onReadyStateChange;
         request.send();
         event.preventDefault();
