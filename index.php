@@ -22,16 +22,7 @@
 use Chess\Dic;
 use Plib\Request;
 
-/**
- * Renders a game view.
- *
- * @param string $basename A basename of a data file.
- *
- * @return string (X)HTML.
- *
- * @global $_Chess_controller The chess controller.
- */
-function chess($basename)
+function chess(string $basename): string
 {
     return Dic::chessController()->chess($basename, Request::current())();
 }
