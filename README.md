@@ -40,11 +40,7 @@ The installation is done as with many other CMSimple_XH plugins.
 1. Unzip the distribution on your computer.
 1. Upload the whole folder `chess/` to your server into the `plugins/`
    folder of  CMSimple_XH.
-1. Set write permissions for the subfolders `css/`, `data/` and
-   `languages/`.
-1. Protect Chess_XH's data/ folder against direct access by any means your
-   webserver provides. .htaccess files for Apache servers are already placed
-   there.
+1. Set write permissions for the subfolders `css/` and `languages/`.
 1. Check under `Plugins` → `Chess`, if all requirements are fulfilled.
 
 ## Settings

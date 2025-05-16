@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -28,6 +29,9 @@ class InfoView
 {
     /** @var string */
     private $pluginFolder;
+
+    /** @var DocumentStore */
+    private $store;
 
     /** @var SystemChecker */
     private $systemChecker;
@@ -37,10 +41,12 @@ class InfoView
 
     public function __construct(
         string $pluginFolder,
+        DocumentStore $store,
         SystemChecker $systemChecker,
         View $view
     ) {
         $this->pluginFolder = $pluginFolder;
+        $this->store = $store;
         $this->systemChecker = $systemChecker;
         $this->view = $view;
     }
@@ -78,6 +84,11 @@ class InfoView
             $type = $okay ? "success" : "warning";
             $checks[] = $this->view->message($type, "syscheck_writable", $folder, $this->success($okay));
         }
+
+        $folder = $this->store->folder();
+        $okay = $this->systemChecker->checkWritability($folder);
+        $type = $okay ? "success" : "warning";
+        $checks[] = $this->view->message($type, "syscheck_writable", $folder, $this->success($okay));
 
         return $checks;
     }

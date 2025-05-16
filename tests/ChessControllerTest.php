@@ -18,12 +18,11 @@ class ChessControllerTest extends TestCase
 
     public function setUp(): void
     {
-        global $pth, $plugin_tx;
+        global $pth;
 
         $pth = array(
             'folder' => array('plugins' => '../')
         );
-        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
         $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
     }

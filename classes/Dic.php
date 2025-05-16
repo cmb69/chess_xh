@@ -49,6 +49,7 @@ class Dic
         global $pth;
         return new InfoView(
             $pth["folder"]["plugins"] . "chess/",
+            new DocumentStore(self::contentFolder()),
             new SystemChecker(),
             self::view()
         );
@@ -57,7 +58,7 @@ class Dic
     private static function contentFolder(): string
     {
         global $pth;
-        return $pth["folder"]["plugins"] . "chess/data/";
+        return $pth["folder"]["content"] . $pth["folder"]["base"] . "chess/";
     }
 
     private static function view(): View

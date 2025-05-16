@@ -53,20 +53,6 @@ final class Game implements Document
         return $store->retrieve($name . ".dat", self::class);
     }
 
-    // public static function load(string $filename): ?Game
-    // {
-    //     if (!is_readable($filename)) {
-    //         return null;
-    //     }
-    //     $result = unserialize(file_get_contents($filename));
-    //     if ($result) {
-    //         $result->name = basename($filename, ".dat");
-    //         return $result;
-    //     } else {
-    //         return null;
-    //     }
-    // }
-
     public function __construct()
     {
         $this->name = '';
