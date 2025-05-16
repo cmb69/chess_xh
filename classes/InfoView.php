@@ -47,12 +47,13 @@ class InfoView
 
     public function render(): string
     {
-        return "<h1>Chess " . $this->view->esc(Dic::VERSION) . "</h1>\n"
-            . "<h2>" . $this->view->text("syscheck_title") . "</h2>\n"
-            . $this->systemChecks();
+        return $this->view->render("info", [
+            "version" => Dic::VERSION,
+            "checks" => $this->systemChecks(),
+        ]);
     }
 
-    private function systemChecks(): string
+    private function systemChecks(): array
     {
         $checks = [];
 
@@ -78,7 +79,7 @@ class InfoView
             $checks[] = $this->view->message($type, "syscheck_writable", $folder, $this->success($okay));
         }
 
-        return implode("", $checks);
+        return $checks;
     }
 
     private function success(bool $okay): string

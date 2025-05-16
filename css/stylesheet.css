@@ -49,9 +49,10 @@
     text-align: right;
 }
 
-/*
- * Back end.
- */
+/* back-end  */
+
+section.chess_plugininfo {}
+section.chess_syscheck {}
 
 .chess_import_form li button {
     margin-left: 1em;
