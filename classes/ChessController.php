@@ -64,11 +64,39 @@ class ChessController
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
         if ($request->get("chess_ajax") !== null) {
-            return Response::create($this->render($request, $game, $this->getPly($request, $game), $this->isFlipped($request)))
+            return Response::create($this->render($request, $game))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($this->render($request, $game, $this->getPly($request, $game), $this->isFlipped($request)));
+            return Response::create($this->render($request, $game));
         }
+    }
+
+    private function requestedAction(Request $request): string
+    {
+        $res = $request->get("chess_action") ?? "";
+        $actions = array('start', 'previous', 'next', 'end', 'flip');
+        if (!in_array($res, $actions)) {
+            $res = "";
+        }
+        return $res;
+    }
+
+    public function render(Request $request, Game $game): string
+    {
+        $ply = $this->getPly($request, $game);
+        $flipped = $this->isFlipped($request);
+        $position = $game->getPosition(min($ply, $game->getPlyCount()));
+        return $this->view->render("main", [
+            "name" => $game->getName(),
+            "ranks" => $this->board($game, $ply, $position, $flipped),
+            "url" => $request->url()->relative() . '#chess_view_' . $game->getName(),
+            "selected" => $request->selected(),
+            "ply" => $ply,
+            "flipped" => (int) $flipped,
+            "start_disabled" => $ply === 0 ? "disabled" : "",
+            "end_disabled" => $ply === $game->getPlyCount() ? "disabled" : "",
+            "script" => $this->pluginFolder . "chess.js",
+        ]);
     }
 
     private function getPly(Request $request, Game $game): int
@@ -97,32 +125,6 @@ class ChessController
             $result = !$result;
         }
         return $result;
-    }
-
-    private function requestedAction(Request $request): string
-    {
-        $res = $request->get("chess_action") ?? "";
-        $actions = array('start', 'previous', 'next', 'end', 'flip');
-        if (!in_array($res, $actions)) {
-            $res = "";
-        }
-        return $res;
-    }
-
-    public function render(Request $request, Game $game, int $ply, bool $flipped): string
-    {
-        $position = $game->getPosition(min($ply, $game->getPlyCount()));
-        return $this->view->render("main", [
-            "name" => $game->getName(),
-            "ranks" => $this->board($game, $ply, $position, $flipped),
-            "url" => $request->url()->relative() . '#chess_view_' . $game->getName(),
-            "selected" => $request->selected(),
-            "ply" => $ply,
-            "flipped" => (int) $flipped,
-            "start_disabled" => $ply === 0 ? "disabled" : "",
-            "end_disabled" => $ply === $game->getPlyCount() ? "disabled" : "",
-            "script" => $this->pluginFolder . "chess.js",
-        ]);
     }
 
     private function board(Game $game, int $ply, Position $position, bool $flipped): array
