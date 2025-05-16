@@ -18,13 +18,8 @@ class ChessControllerTest extends TestCase
 
     public function setUp(): void
     {
-        global $pth;
-
-        $pth = array(
-            'folder' => array('plugins' => '../')
-        );
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
     }
 
     public function testChess(): void
@@ -43,7 +38,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessFlipped(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=flip"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -51,7 +46,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessStartAction(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=start&chess_ply=1"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -59,7 +54,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessNextAction(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=next"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -67,7 +62,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessPreviousAction(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=previous&chess_ply=1"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -75,7 +70,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessEndAction(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=end"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -90,7 +85,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessAjax(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_game=italian&chess_ajax=1"]);
         $response = $this->subject->chess("italian", $request);
         $this->assertSame("Content-Type:text/html; charset=UTF-8", $response->contentType());
@@ -99,7 +94,7 @@ class ChessControllerTest extends TestCase
 
     public function testIrrelevantAjax(): void
     {
-        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
+        $this->subject = new ChessController("./", new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_game=spanish&chess_ajax=1"]);
         $response = $this->subject->chess("italian", $request);
         $this->assertNull($response->contentType());
@@ -108,12 +103,11 @@ class ChessControllerTest extends TestCase
 
     public function testEmitsScript(): void
     {
-        global $bjs, $pth;
+        global $bjs;
 
-        $pth = ["folder" => ["plugins" => "../"]];
         $bjs = '';
         $request = new FakeRequest();
         $this->subject->chess("italian", $request);
-        $this->assertSame('<script type="text/javascript" src="../chess/chess.js"></script>', $bjs);
+        $this->assertSame('<script type="text/javascript" src="./chess.js"></script>', $bjs);
     }
 }

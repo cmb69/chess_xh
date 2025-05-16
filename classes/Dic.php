@@ -32,7 +32,12 @@ class Dic
 
     public static function chessController(): ChessController
     {
-        return new ChessController(new DocumentStore(self::contentFolder()), self::view());
+        global $pth;
+        return new ChessController(
+            $pth["folder"]["plugins"] . "chess/",
+            new DocumentStore(self::contentFolder()),
+            self::view()
+        );
     }
 
     public static function importCommand(): ImportCommand

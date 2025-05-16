@@ -28,6 +28,9 @@ use Plib\View;
 
 class ChessController
 {
+    /** @var string */
+    private $pluginFolder;
+
     /** @var DocumentStore */
     private $store;
 
@@ -35,9 +38,11 @@ class ChessController
     private $view;
 
     public function __construct(
+        string $pluginFolder,
         DocumentStore $store,
         View $view
     ) {
+        $this->pluginFolder = $pluginFolder;
         $this->store = $store;
         $this->view = $view;
     }
@@ -107,10 +112,10 @@ class ChessController
 
     private function emitScript(): void
     {
-        global $pth, $bjs;
+        global $bjs;
 
         $bjs = '<script type="text/javascript" src="'
-            . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
+            . $this->pluginFolder . 'chess.js"></script>';
     }
 
     public function render(Game $game, int $ply, bool $flipped): string
@@ -187,9 +192,7 @@ class ChessController
 
     private function renderPiece(string $piece, bool $moved): string
     {
-        global $pth;
-
-        $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
+        $src = $this->pluginFolder . 'images/' . $piece . '.png';
         $class = $moved ? 'class="chess_move"' : '';
         return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
     }
