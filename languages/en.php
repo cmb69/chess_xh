@@ -2,6 +2,19 @@
 
 $plugin_tx['chess']['menu_main']="Import";
 
+$plugin_tx['chess']['alt_wk']="white king";
+$plugin_tx['chess']['alt_wq']="white queen";
+$plugin_tx['chess']['alt_wr']="white rook";
+$plugin_tx['chess']['alt_wb']="white bishop";
+$plugin_tx['chess']['alt_wn']="white knight";
+$plugin_tx['chess']['alt_wp']="white pawn";
+$plugin_tx['chess']['alt_bk']="black king";
+$plugin_tx['chess']['alt_bq']="black queen";
+$plugin_tx['chess']['alt_br']="black rook";
+$plugin_tx['chess']['alt_bb']="black bishop";
+$plugin_tx['chess']['alt_bn']="black knight";
+$plugin_tx['chess']['alt_bp']="black pawn";
+
 $plugin_tx['chess']['label_flip']="Flip";
 $plugin_tx['chess']['label_start']="Start";
 $plugin_tx['chess']['label_previous']="Previous";

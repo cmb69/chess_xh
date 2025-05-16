@@ -189,6 +189,6 @@ class ChessController
     {
         $src = $this->pluginFolder . 'images/' . $piece . '.png';
         $class = $moved ? 'class="chess_move"' : '';
-        return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
+        return '<img ' . $class . ' src="' . $src . '" alt="' . $this->view->text("alt_$piece") . '">';
     }
 }
