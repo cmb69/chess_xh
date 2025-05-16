@@ -21,10 +21,15 @@
 
 namespace Chess;
 
+use Plib\View;
+
 class GameView
 {
     /** @var Game */
     private $game;
+
+    /** @var View */
+    private $view;
 
     /** @var int */
     private $ply;
@@ -35,9 +40,10 @@ class GameView
     /** @var bool */
     private $flipped;
 
-    public function __construct(Game $game, int $ply = 0, bool $flipped = false)
+    public function __construct(Game $game, View $view, int $ply = 0, bool $flipped = false)
     {
         $this->game = $game;
+        $this->view = $view;
         $this->ply = (int) $ply;
         $this->position = $game->getPosition(
             min($this->ply, $this->game->getPlyCount())
@@ -47,19 +53,25 @@ class GameView
 
     public function render(): string
     {
-        return '<div id="chess_view_' . $this->game->getName()
-            . '" class="chess_view">' . "\n"
-            . $this->renderBoard() . $this->renderControlPanel()
-            . '</div>' . "\n";
+        global $sn, $su;
+        return $this->view->render("main", [
+            "name" => $this->game->getName(),
+            "ranks" => $this->board(),
+            "url" => $sn . '#chess_view_' . $this->game->getName(),
+            "selected" => $su,
+            "ply" => $this->ply,
+            "flipped" => (int) $this->flipped,
+            "start_disabled" => $this->ply === 0 ? "disabled" : "",
+            "end_disabled" => $this->ply === $this->game->getPlyCount() ? "disabled" : "",
+        ]);
     }
 
-    private function renderBoard(): string
+    private function board(): array
     {
-        $result = '<table class="chess_board">' . "\n";
+        $result = [];
         foreach ($this->getRanks() as $rank) {
-            $result .= $this->renderRank($rank);
+            $result[] = $this->rank($rank);
         }
-        $result .= '</table>' . "\n";
         return $result;
     }
 
@@ -72,13 +84,12 @@ class GameView
         return $ranks;
     }
 
-    private function renderRank(int $rank): string
+    private function rank(int $rank): array
     {
-        $result = '<tr>' . "\n";
+        $result = [];
         foreach ($this->getFiles() as $file) {
-            $result .= $this->renderSquare($file, $rank);
+            $result[] = $this->renderSquare($file, $rank);
         }
-        $result .= '</tr>' . "\n";
         return $result;
     }
 
@@ -118,71 +129,5 @@ class GameView
         $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
         $class = $moved ? 'class="chess_move"' : '';
         return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
-    }
-
-    private function renderControlPanel(): string
-    {
-        global $sn, $su;
-
-        return '<form class="chess_control_panel" action="' . $sn
-            . '#chess_view_' . $this->game->getName() . '" method="'
-            . 'get' . '">'
-            . $this->renderHiddenInput('selected', $su)
-            . $this->renderHiddenInput('chess_game', $this->game->getName())
-            . $this->renderHiddenInput('chess_flipped', (string) (int) $this->flipped)
-            . $this->renderButton('goto')
-            . $this->renderButton('start') . $this->renderButton('previous')
-            . $this->renderPlyInput($this->ply)
-            . $this->renderButton('next') . $this->renderButton('end')
-            . $this->renderButton('flip')
-            . '</form>';
-    }
-
-    private function renderPlyInput(int $value): string
-    {
-        return '<input type="text" name="chess_ply" value="' . $value . '">';
-    }
-
-    private function renderHiddenInput(string $name, string $value): string
-    {
-        return '<input type="hidden" name="' . $name . '" value="' . $value . '">';
-    }
-
-    private function renderButton(string $which): string
-    {
-        global $plugin_tx;
-
-        switch ($which) {
-            case 'start':
-                $value = 'start';
-                $disabled = ($this->ply == 0);
-                break;
-            case 'previous':
-                $value = 'previous';
-                $disabled = ($this->ply == 0);
-                break;
-            case 'goto':
-                $value = 'goto';
-                $disabled = false;
-                break;
-            case 'next':
-                $value = 'next';
-                $disabled = ($this->ply == $this->game->getPlyCount());
-                break;
-            case 'end':
-                $value = 'end';
-                $disabled = ($this->ply == $this->game->getPlyCount());
-                break;
-            case 'flip':
-                $value = 'flip';
-                $disabled = false;
-                break;
-            default:
-                $value = "";
-                $disabled = true;
-        }
-        return '<button type="submit" name="chess_action" value="' . $value . '"'
-            . ($disabled ? ' disabled="disabled"' : '') . '>'
-            . $plugin_tx['chess']["label_$which"] . '</button>';
     }
 }

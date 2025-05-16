@@ -4,6 +4,7 @@ namespace Chess;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\View;
 
 class GameViewTest extends TestCase
 {
@@ -12,6 +13,9 @@ class GameViewTest extends TestCase
 
     /** @var Game */
     private $game;
+
+    /** @var View */
+    private $view;
 
     public function setUp(): void
     {
@@ -33,7 +37,8 @@ class GameViewTest extends TestCase
             )
         );
         $this->game = new Game();
-        $this->subject = new GameView($this->game);
+        $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
+        $this->subject = new GameView($this->game, $this->view);
     }
 
     public function testRendersView(): void
@@ -47,13 +52,13 @@ class GameViewTest extends TestCase
         $game->move('e2', 'e4');
         $game->move('e7', 'e5');
         $game->move('e1', 'e2');
-        $subject = new GameView($game, 2);
+        $subject = new GameView($game, $this->view, 2);
         Approvals::verifyHtml($subject->render());
     }
 
     public function testFlipped(): void
     {
-        $this->subject = new GameView(new Game(), 0, true);
+        $this->subject = new GameView(new Game(), $this->view, 0, true);
         Approvals::verifyHtml($this->subject->render());
     }
 
