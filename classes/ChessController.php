@@ -65,10 +65,10 @@ class ChessController
         }
         $this->emitScript();
         if ($request->get("chess_ajax") !== null) {
-            return Response::create($this->render($game, $this->getPly($request, $game), $this->isFlipped($request)))
+            return Response::create($this->render($request, $game, $this->getPly($request, $game), $this->isFlipped($request)))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($this->render($game, $this->getPly($request, $game), $this->isFlipped($request)));
+            return Response::create($this->render($request, $game, $this->getPly($request, $game), $this->isFlipped($request)));
         }
     }
 
@@ -118,15 +118,14 @@ class ChessController
             . $this->pluginFolder . 'chess.js"></script>';
     }
 
-    public function render(Game $game, int $ply, bool $flipped): string
+    public function render(Request $request, Game $game, int $ply, bool $flipped): string
     {
-        global $sn, $su;
         $position = $game->getPosition(min($ply, $game->getPlyCount()));
         return $this->view->render("main", [
             "name" => $game->getName(),
             "ranks" => $this->board($game, $ply, $position, $flipped),
-            "url" => $sn . '#chess_view_' . $game->getName(),
-            "selected" => $su,
+            "url" => $request->url()->relative() . '#chess_view_' . $game->getName(),
+            "selected" => $request->selected(),
             "ply" => $ply,
             "flipped" => (int) $flipped,
             "start_disabled" => $ply === 0 ? "disabled" : "",
