@@ -24,5 +24,5 @@ use Plib\Request;
 
 function chess(string $basename): string
 {
-    return Dic::chessController()->chess($basename, Request::current())();
+    return Dic::chessController()($basename, Request::current())();
 }

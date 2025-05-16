@@ -47,7 +47,7 @@ class ChessController
         $this->view = $view;
     }
 
-    public function chess(string $basename, Request $request): Response
+    public function __invoke(string $basename, Request $request): Response
     {
         $requestedGame = $request->get("chess_game") ?? "";
         if (!Game::isValidName($requestedGame)) {
