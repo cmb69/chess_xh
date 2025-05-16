@@ -63,7 +63,6 @@ class ChessController
         if (!$game) {
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
-        $this->emitScript();
         if ($request->get("chess_ajax") !== null) {
             return Response::create($this->render($request, $game, $this->getPly($request, $game), $this->isFlipped($request)))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
@@ -110,14 +109,6 @@ class ChessController
         return $res;
     }
 
-    private function emitScript(): void
-    {
-        global $bjs;
-
-        $bjs = '<script type="text/javascript" src="'
-            . $this->pluginFolder . 'chess.js"></script>';
-    }
-
     public function render(Request $request, Game $game, int $ply, bool $flipped): string
     {
         $position = $game->getPosition(min($ply, $game->getPlyCount()));
@@ -130,6 +121,7 @@ class ChessController
             "flipped" => (int) $flipped,
             "start_disabled" => $ply === 0 ? "disabled" : "",
             "end_disabled" => $ply === $game->getPlyCount() ? "disabled" : "",
+            "script" => $this->pluginFolder . "chess.js",
         ]);
     }
 

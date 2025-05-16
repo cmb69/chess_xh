@@ -100,14 +100,4 @@ class ChessControllerTest extends TestCase
         $this->assertNull($response->contentType());
         $this->assertSame("", $response->output());
     }
-
-    public function testEmitsScript(): void
-    {
-        global $bjs;
-
-        $bjs = '';
-        $request = new FakeRequest();
-        $this->subject->chess("italian", $request);
-        $this->assertSame('<script type="text/javascript" src="./chess.js"></script>', $bjs);
-    }
 }

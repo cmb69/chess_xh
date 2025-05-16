@@ -14,9 +14,11 @@ if (!defined("CMSIMPLE_XH_VERSION")) {http_response_code(403); exit;}
  * @var int $flipped
  * @var string $start_disabled
  * @var string $end_disabled
+ * @var string $script
  */
 ?>
 
+<script type="module" src="<?=$this->esc($script)?>"></script>
 <div id="chess_view_<?=$this->esc($name)?>" class="chess_view">
   <table class="chess_board">
 <?foreach ($ranks as $rank):?>
