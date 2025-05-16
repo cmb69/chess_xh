@@ -56,14 +56,12 @@ class ChessController
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
         $this->emitScript();
-        $gameView = $this->factory->makeGameView($game, $this->getPly($game), $this->isFlipped());
+        $gameView = $this->factory->makeGameView();
         if (isset($_REQUEST['chess_ajax'])) {
-            // header('Content-Type:text/html; charset=UTF-8');
-            // echo $gameView->render();
-            // XH_exit();
-            return Response::create($gameView->render())->withContentType("Content-Type:text/html; charset=UTF-8");
+            return Response::create($gameView->render($game, $this->getPly($game), $this->isFlipped()))
+                ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($gameView->render());
+            return Response::create($gameView->render($game, $this->getPly($game), $this->isFlipped()));
         }
     }
 
@@ -76,15 +74,15 @@ class ChessController
                 $result = 0;
                 break;
             case 'next':
-                $result = min($result + 1, $game->getPlyCount());
+                $result = $result + 1;
                 break;
             case 'previous':
-                $result = max($result - 1, 0);
+                $result = $result - 1;
                 break;
             case 'end':
                 $result = $game->getPlyCount();
         }
-        return $result;
+        return max(0, min($game->getPlyCount(), $result));
     }
 
     private function isFlipped(): bool

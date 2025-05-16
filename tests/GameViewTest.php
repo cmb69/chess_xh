@@ -38,12 +38,12 @@ class GameViewTest extends TestCase
         );
         $this->game = new Game();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->subject = new GameView($this->game, $this->view);
+        $this->subject = new GameView($this->view);
     }
 
     public function testRendersView(): void
     {
-        Approvals::verifyHtml($this->subject->render());
+        Approvals::verifyHtml($this->subject->render($this->game, 0, false));
     }
 
     public function testRendersWhiteKingOnLightSquare(): void
@@ -52,20 +52,13 @@ class GameViewTest extends TestCase
         $game->move('e2', 'e4');
         $game->move('e7', 'e5');
         $game->move('e1', 'e2');
-        $subject = new GameView($game, $this->view, 2);
-        Approvals::verifyHtml($subject->render());
+        $subject = new GameView($this->view, 2);
+        Approvals::verifyHtml($subject->render($game, 2, false));
     }
 
     public function testFlipped(): void
     {
-        $this->subject = new GameView(new Game(), $this->view, 0, true);
-        Approvals::verifyHtml($this->subject->render());
-    }
-
-    public function testRendersPlyInputDoesntTopMax(): void
-    {
-        $_REQUEST['chess_action'] = 'goto';
-        $_REQUEST['chess_ply'] = '23';
-        Approvals::verifyHtml($this->subject->render());
+        $this->subject = new GameView($this->view, 0);
+        Approvals::verifyHtml($this->subject->render(new Game(), 0, true));
     }
 }

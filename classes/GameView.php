@@ -25,92 +25,75 @@ use Plib\View;
 
 class GameView
 {
-    /** @var Game */
-    private $game;
-
     /** @var View */
     private $view;
 
-    /** @var int */
-    private $ply;
-
-    /** @var Position */
-    private $position;
-
-    /** @var bool */
-    private $flipped;
-
-    public function __construct(Game $game, View $view, int $ply = 0, bool $flipped = false)
+    public function __construct(View $view)
     {
-        $this->game = $game;
         $this->view = $view;
-        $this->ply = (int) $ply;
-        $this->position = $game->getPosition(
-            min($this->ply, $this->game->getPlyCount())
-        );
-        $this->flipped = (bool) $flipped;
     }
 
-    public function render(): string
+    public function render(Game $game, int $ply, bool $flipped): string
     {
         global $sn, $su;
+        $position = $game->getPosition(min($ply, $game->getPlyCount()));
         return $this->view->render("main", [
-            "name" => $this->game->getName(),
-            "ranks" => $this->board(),
-            "url" => $sn . '#chess_view_' . $this->game->getName(),
+            "name" => $game->getName(),
+            "ranks" => $this->board($game, $ply, $position, $flipped),
+            "url" => $sn . '#chess_view_' . $game->getName(),
             "selected" => $su,
-            "ply" => $this->ply,
-            "flipped" => (int) $this->flipped,
-            "start_disabled" => $this->ply === 0 ? "disabled" : "",
-            "end_disabled" => $this->ply === $this->game->getPlyCount() ? "disabled" : "",
+            "ply" => $ply,
+            "flipped" => (int) $flipped,
+            "start_disabled" => $ply === 0 ? "disabled" : "",
+            "end_disabled" => $ply === $game->getPlyCount() ? "disabled" : "",
         ]);
     }
 
-    private function board(): array
+    private function board(Game $game, int $ply, Position $position, bool $flipped): array
     {
         $result = [];
-        foreach ($this->getRanks() as $rank) {
-            $result[] = $this->rank($rank);
+        foreach ($this->getRanks($flipped) as $rank) {
+            $result[] = $this->rank($game, $rank, $ply, $position, $flipped);
         }
         return $result;
     }
 
-    private function getRanks(): array
+    private function getRanks(bool $flipped): array
     {
         $ranks = range(8, 1, -1);
-        if ($this->flipped) {
+        if ($flipped) {
             $ranks = array_reverse($ranks);
         }
         return $ranks;
     }
 
-    private function rank(int $rank): array
+    private function rank(Game $game, int $rank, int $ply, Position $position, bool $flipped): array
     {
         $result = [];
-        foreach ($this->getFiles() as $file) {
-            $result[] = $this->renderSquare($file, $rank);
+        foreach ($this->getFiles($flipped) as $file) {
+            $result[] = $this->renderSquare($game, $file, $rank, $ply, $position);
         }
         return $result;
     }
 
-    private function getFiles(): array
+    private function getFiles(bool $flipped): array
     {
         $files = array_map('chr', range(97, 104));
-        if ($this->flipped) {
+        if ($flipped) {
             $files = array_reverse($files);
         }
         return $files;
     }
 
-    private function renderSquare(string $file, int $rank): string
+    private function renderSquare(Game $game, string $file, int $rank, int $ply, Position $position): string
     {
         $square = "$file$rank";
         $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
         $result = '<td class="' . $class . '">' . "\n";
-        $move = $this->game->getMove($this->ply - 1);
+        $move = $game->getMove($ply - 1);
         $moved = $move !== null && $move->isSourceOrDestination($square);
-        if ($this->position->hasPieceOn($square)) {
-            $result .= $this->renderPiece($this->position->getPieceOn($square), $moved);
+        if ($position->hasPieceOn($square)) {
+            $result .= $this->renderPiece($position->getPieceOn($square), $moved);
         } else {
             if ($moved) {
                 $result .= '<span class="chess_move">&nbsp;</span>';
