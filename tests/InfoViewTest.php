@@ -29,7 +29,7 @@ class InfoViewTest extends TestCase
 
     public function testRendersInfo(): void
     {
-        $response = $this->sut()->render();
-        Approvals::verifyHtml($response);
+        $response = $this->sut()();
+        Approvals::verifyHtml($response->output());
     }
 }

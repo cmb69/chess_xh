@@ -22,6 +22,7 @@
 namespace Chess;
 
 use Plib\DocumentStore;
+use Plib\Response;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -51,12 +52,12 @@ class InfoView
         $this->view = $view;
     }
 
-    public function render(): string
+    public function __invoke(): Response
     {
-        return $this->view->render("info", [
+        return Response::create($this->view->render("info", [
             "version" => Dic::VERSION,
             "checks" => $this->systemChecks(),
-        ]);
+        ]))->withTitle("Chess " . $this->view->esc(Dic::VERSION));
     }
 
     private function systemChecks(): array
