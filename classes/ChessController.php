@@ -26,15 +26,11 @@ use Plib\View;
 
 class ChessController
 {
-    /** @var GameView */
-    private $gameView;
-
     /** @var View */
     private $view;
 
-    public function __construct(GameView $gameView, View $view)
+    public function __construct(View $view)
     {
-        $this->gameView = $gameView;
         $this->view = $view;
     }
 
@@ -57,10 +53,10 @@ class ChessController
         }
         $this->emitScript();
         if (isset($_REQUEST['chess_ajax'])) {
-            return Response::create($this->gameView->render($game, $this->getPly($game), $this->isFlipped()))
+            return Response::create($this->render($game, $this->getPly($game), $this->isFlipped()))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($this->gameView->render($game, $this->getPly($game), $this->isFlipped()));
+            return Response::create($this->render($game, $this->getPly($game), $this->isFlipped()));
         }
     }
 
@@ -111,5 +107,86 @@ class ChessController
 
         $bjs = '<script type="text/javascript" src="'
             . $pth['folder']['plugins'] . 'chess/chess.js"></script>';
+    }
+
+    public function render(Game $game, int $ply, bool $flipped): string
+    {
+        global $sn, $su;
+        $position = $game->getPosition(min($ply, $game->getPlyCount()));
+        return $this->view->render("main", [
+            "name" => $game->getName(),
+            "ranks" => $this->board($game, $ply, $position, $flipped),
+            "url" => $sn . '#chess_view_' . $game->getName(),
+            "selected" => $su,
+            "ply" => $ply,
+            "flipped" => (int) $flipped,
+            "start_disabled" => $ply === 0 ? "disabled" : "",
+            "end_disabled" => $ply === $game->getPlyCount() ? "disabled" : "",
+        ]);
+    }
+
+    private function board(Game $game, int $ply, Position $position, bool $flipped): array
+    {
+        $result = [];
+        foreach ($this->getRanks($flipped) as $rank) {
+            $result[] = $this->rank($game, $rank, $ply, $position, $flipped);
+        }
+        return $result;
+    }
+
+    private function getRanks(bool $flipped): array
+    {
+        $ranks = range(8, 1, -1);
+        if ($flipped) {
+            $ranks = array_reverse($ranks);
+        }
+        return $ranks;
+    }
+
+    private function rank(Game $game, int $rank, int $ply, Position $position, bool $flipped): array
+    {
+        $result = [];
+        foreach ($this->getFiles($flipped) as $file) {
+            $result[] = $this->renderSquare($game, $file, $rank, $ply, $position);
+        }
+        return $result;
+    }
+
+    private function getFiles(bool $flipped): array
+    {
+        $files = array_map('chr', range(97, 104));
+        if ($flipped) {
+            $files = array_reverse($files);
+        }
+        return $files;
+    }
+
+    private function renderSquare(Game $game, string $file, int $rank, int $ply, Position $position): string
+    {
+        $square = "$file$rank";
+        $class = ((int) $rank + ord($file)) % 2 ? 'chess_light' : 'chess_dark';
+        $result = '<td class="' . $class . '">' . "\n";
+        $move = $game->getMove($ply - 1);
+        $moved = $move !== null && $move->isSourceOrDestination($square);
+        if ($position->hasPieceOn($square)) {
+            $result .= $this->renderPiece($position->getPieceOn($square), $moved);
+        } else {
+            if ($moved) {
+                $result .= '<span class="chess_move">&nbsp;</span>';
+            } else {
+                $result .= '&nbsp;';
+            }
+        }
+        $result .= '</td>' . "\n";
+        return $result;
+    }
+
+    private function renderPiece(string $piece, bool $moved): string
+    {
+        global $pth;
+
+        $src = $pth['folder']['plugins'] . 'chess/images/' . $piece . '.png';
+        $class = $moved ? 'class="chess_move"' : '';
+        return '<img ' . $class . ' src="' . $src . '" alt="' . $piece . '">';
     }
 }

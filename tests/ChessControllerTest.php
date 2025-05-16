@@ -2,6 +2,7 @@
 
 namespace Chess;
 
+use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
 use Plib\View;
 
@@ -9,9 +10,6 @@ class ChessControllerTest extends TestCase
 {
     /** @var Controller */
     private $subject;
-
-    /** @var GameView */
-    private $gameView;
 
     /** @var View */
     private $view;
@@ -30,17 +28,13 @@ class ChessControllerTest extends TestCase
             )
         );
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->subject = new ChessController($this->gameView, $this->view);
+        $this->subject = new ChessController($this->view);
     }
 
     public function testChess(): void
     {
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessInvalidName(): void
@@ -53,54 +47,39 @@ class ChessControllerTest extends TestCase
 
     public function testChessFlipped(): void
     {
-        $_REQUEST['chess_flipped'] = '1';
         $_REQUEST['chess_action'] = 'flip';
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        $this->subject = new ChessController($this->view);
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessStartAction(): void
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'start';
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        $this->subject = new ChessController($this->view);
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessNextAction(): void
     {
         $_REQUEST['chess_action'] = 'next';
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        $this->subject = new ChessController($this->view);
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessPreviousAction(): void
     {
         $_REQUEST['chess_ply'] = '1';
         $_REQUEST['chess_action'] = 'previous';
-        $this->gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        $this->subject = new ChessController($this->view);
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessEndAction(): void
     {
         $_REQUEST['chess_action'] = 'end';
-        $this->gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
-        $this->assertEquals('foo', $this->subject->chess('italian')->output());
+        $this->subject = new ChessController($this->view);
+        Approvals::verifyHtml($this->subject->chess('italian')->output());
     }
 
     public function testChessFailure(): void
@@ -115,21 +94,17 @@ class ChessControllerTest extends TestCase
     {
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'italian';
-        $this->gameView = $this->getMockBuilder(GameView::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->subject = new ChessController($this->gameView, $this->view);
-        $this->gameView->expects($this->once())->method('render')
-            ->will($this->returnValue('foo'));
+        $this->subject = new ChessController($this->view);
         $response = $this->subject->chess('italian');
-        $this->assertSame("foo", $response->output());
         $this->assertSame("Content-Type:text/html; charset=UTF-8", $response->contentType());
+        Approvals::verifyHtml($response->output());
     }
 
     public function testIrrelevantAjax(): void
     {
         $_REQUEST['chess_ajax'] = '1';
         $_REQUEST['chess_game'] = 'spanish';
-        $this->subject = new ChessController($this->gameView, $this->view);
+        $this->subject = new ChessController($this->view);
         $response = $this->subject->chess('italian');
         $this->assertNull($response->contentType());
         $this->assertSame("", $response->output());
