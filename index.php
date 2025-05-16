@@ -20,6 +20,7 @@
  */
 
 use Chess\Dic;
+use Plib\Request;
 
 /**
  * Renders a game view.
@@ -32,5 +33,5 @@ use Chess\Dic;
  */
 function chess($basename)
 {
-    return Dic::chessController()->chess($basename)();
+    return Dic::chessController()->chess($basename, Request::current())();
 }

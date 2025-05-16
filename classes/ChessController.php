@@ -21,6 +21,7 @@
 
 namespace Chess;
 
+use Plib\Request;
 use Plib\Response;
 use Plib\View;
 
@@ -34,14 +35,13 @@ class ChessController
         $this->view = $view;
     }
 
-    public function chess(string $basename): Response
+    public function chess(string $basename, Request $request): Response
     {
-        $requestedGame = isset($_REQUEST['chess_game'])
-            ? $_REQUEST['chess_game'] : "";
+        $requestedGame = $request->get("chess_game") ?? "";
         if (!Game::isValidName($requestedGame)) {
             $requestedGame = "";
         }
-        if (isset($_REQUEST['chess_ajax']) && $requestedGame != $basename) {
+        if ($request->get("chess_ajax") !== null && $requestedGame != $basename) {
             return Response::create();
         }
         if (!Game::isValidName($basename)) {
@@ -52,19 +52,18 @@ class ChessController
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }
         $this->emitScript();
-        if (isset($_REQUEST['chess_ajax'])) {
-            return Response::create($this->render($game, $this->getPly($game), $this->isFlipped()))
+        if ($request->get("chess_ajax") !== null) {
+            return Response::create($this->render($game, $this->getPly($request, $game), $this->isFlipped($request)))
                 ->withContentType("Content-Type:text/html; charset=UTF-8");
         } else {
-            return Response::create($this->render($game, $this->getPly($game), $this->isFlipped()));
+            return Response::create($this->render($game, $this->getPly($request, $game), $this->isFlipped($request)));
         }
     }
 
-    private function getPly(Game $game): int
+    private function getPly(Request $request, Game $game): int
     {
-        $result = isset($_REQUEST['chess_ply'])
-            ? (int) $_REQUEST['chess_ply'] : 0;
-        switch ($this->requestedAction()) {
+        $result = (int) ($request->get("chess_ply") ?? "");
+        switch ($this->requestedAction($request)) {
             case 'start':
                 $result = 0;
                 break;
@@ -80,20 +79,18 @@ class ChessController
         return max(0, min($game->getPlyCount(), $result));
     }
 
-    private function isFlipped(): bool
+    private function isFlipped(Request $request): bool
     {
-        $result = isset($_REQUEST['chess_flipped'])
-            ? (bool) $_REQUEST['chess_flipped'] : false;
-        if ($this->requestedAction() == 'flip') {
+        $result = (bool) ($request->get("chess_flipped") ?? "");
+        if ($this->requestedAction($request) == 'flip') {
             $result = !$result;
         }
         return $result;
     }
 
-    private function requestedAction(): string
+    private function requestedAction(Request $request): string
     {
-        $res = isset($_REQUEST['chess_action'])
-            ? $_REQUEST['chess_action'] : "";
+        $res = $request->get("chess_action") ?? "";
         $actions = array('start', 'previous', 'next', 'end', 'flip');
         if (!in_array($res, $actions)) {
             $res = "";

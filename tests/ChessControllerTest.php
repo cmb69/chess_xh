@@ -4,6 +4,7 @@ namespace Chess;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 use Plib\View;
 
 class ChessControllerTest extends TestCase
@@ -34,78 +35,79 @@ class ChessControllerTest extends TestCase
 
     public function testChess(): void
     {
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest();
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessInvalidName(): void
     {
-        $this->assertStringContainsString(
-            "The name &quot;italian!&quot; is invalid",
-            $this->subject->chess('italian!')->output()
-        );
+        $request = new FakeRequest();
+        $response = $this->subject->chess("italian!", $request);
+        $this->assertStringContainsString("The name &quot;italian!&quot; is invalid", $response->output());
     }
 
     public function testChessFlipped(): void
     {
-        $_REQUEST['chess_action'] = 'flip';
         $this->subject = new ChessController($this->view);
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_action=flip"]);
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessStartAction(): void
     {
-        $_REQUEST['chess_ply'] = '1';
-        $_REQUEST['chess_action'] = 'start';
         $this->subject = new ChessController($this->view);
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_action=start&chess_ply=1"]);
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessNextAction(): void
     {
-        $_REQUEST['chess_action'] = 'next';
         $this->subject = new ChessController($this->view);
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_action=next"]);
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessPreviousAction(): void
     {
-        $_REQUEST['chess_ply'] = '1';
-        $_REQUEST['chess_action'] = 'previous';
         $this->subject = new ChessController($this->view);
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_action=previous&chess_ply=1"]);
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessEndAction(): void
     {
-        $_REQUEST['chess_action'] = 'end';
         $this->subject = new ChessController($this->view);
-        Approvals::verifyHtml($this->subject->chess('italian')->output());
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_action=end"]);
+        $response = $this->subject->chess("italian", $request);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testChessFailure(): void
     {
-        $this->assertStringContainsString(
-            "The chess file &quot;foo&quot; can't be loaded!",
-            $this->subject->chess('foo')->output()
-        );
+        $request = new FakeRequest();
+        $response = $this->subject->chess("foo", $request);
+        $this->assertStringContainsString("The chess file &quot;foo&quot; can't be loaded!", $response->output());
     }
 
     public function testChessAjax(): void
     {
-        $_REQUEST['chess_ajax'] = '1';
-        $_REQUEST['chess_game'] = 'italian';
         $this->subject = new ChessController($this->view);
-        $response = $this->subject->chess('italian');
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_game=italian&chess_ajax=1"]);
+        $response = $this->subject->chess("italian", $request);
         $this->assertSame("Content-Type:text/html; charset=UTF-8", $response->contentType());
         Approvals::verifyHtml($response->output());
     }
 
     public function testIrrelevantAjax(): void
     {
-        $_REQUEST['chess_ajax'] = '1';
-        $_REQUEST['chess_game'] = 'spanish';
         $this->subject = new ChessController($this->view);
-        $response = $this->subject->chess('italian');
+        $request = new FakeRequest(["url" => "http://example.com/?&chess_game=spanish&chess_ajax=1"]);
+        $response = $this->subject->chess("italian", $request);
         $this->assertNull($response->contentType());
         $this->assertSame("", $response->output());
     }
@@ -116,7 +118,8 @@ class ChessControllerTest extends TestCase
 
         $pth = ["folder" => ["plugins" => "../"]];
         $bjs = '';
-        $this->subject->chess('italian');
+        $request = new FakeRequest();
+        $this->subject->chess("italian", $request);
         $this->assertSame('<script type="text/javascript" src="../chess/chess.js"></script>', $bjs);
     }
 }
