@@ -21,17 +21,24 @@
 
 namespace Chess;
 
+use Plib\DocumentStore;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
 
 class ChessController
 {
+    /** @var DocumentStore */
+    private $store;
+
     /** @var View */
     private $view;
 
-    public function __construct(View $view)
-    {
+    public function __construct(
+        DocumentStore $store,
+        View $view
+    ) {
+        $this->store = $store;
         $this->view = $view;
     }
 
@@ -47,7 +54,7 @@ class ChessController
         if (!Game::isValidName($basename)) {
             return Response::create($this->view->message("fail", "message_invalid_name", $basename));
         }
-        $game = Game::load($basename);
+        $game = Game::retrieve($basename, $this->store);
         if (!$game) {
             return Response::create($this->view->message("fail", "message_load_error", $basename));
         }

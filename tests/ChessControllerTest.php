@@ -4,6 +4,7 @@ namespace Chess;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\DocumentStore;
 use Plib\FakeRequest;
 use Plib\View;
 
@@ -22,15 +23,9 @@ class ChessControllerTest extends TestCase
         $pth = array(
             'folder' => array('plugins' => '../')
         );
-        $plugin_tx = array(
-            'chess' => array(
-                'message_invalid_name' => 'The name "%s" is invalid!',
-                'message_load_error' => 'The chess file "%s" can\'t be loaded!'
-            )
-        );
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
     }
 
     public function testChess(): void
@@ -49,7 +44,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessFlipped(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=flip"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -57,7 +52,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessStartAction(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=start&chess_ply=1"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -65,7 +60,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessNextAction(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=next"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -73,7 +68,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessPreviousAction(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=previous&chess_ply=1"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -81,7 +76,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessEndAction(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_action=end"]);
         $response = $this->subject->chess("italian", $request);
         Approvals::verifyHtml($response->output());
@@ -96,7 +91,7 @@ class ChessControllerTest extends TestCase
 
     public function testChessAjax(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_game=italian&chess_ajax=1"]);
         $response = $this->subject->chess("italian", $request);
         $this->assertSame("Content-Type:text/html; charset=UTF-8", $response->contentType());
@@ -105,7 +100,7 @@ class ChessControllerTest extends TestCase
 
     public function testIrrelevantAjax(): void
     {
-        $this->subject = new ChessController($this->view);
+        $this->subject = new ChessController(new DocumentStore(__DIR__ . "/"), $this->view);
         $request = new FakeRequest(["url" => "http://example.com/?&chess_game=spanish&chess_ajax=1"]);
         $response = $this->subject->chess("italian", $request);
         $this->assertNull($response->contentType());

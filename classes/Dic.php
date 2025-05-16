@@ -22,6 +22,7 @@
 namespace Chess;
 
 use Plib\CsrfProtector;
+use Plib\DocumentStore;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -31,14 +32,13 @@ class Dic
 
     public static function chessController(): ChessController
     {
-        return new ChessController(self::view());
+        return new ChessController(new DocumentStore(self::contentFolder()), self::view());
     }
 
     public static function importCommand(): ImportCommand
     {
-        global $pth;
         return new ImportCommand(
-            new PgnImporter($pth["folder"]["plugins"] . "chess/data/"),
+            new PgnImporter(self::contentFolder()),
             new CsrfProtector(),
             self::view()
         );
@@ -52,6 +52,12 @@ class Dic
             new SystemChecker(),
             self::view()
         );
+    }
+
+    private static function contentFolder(): string
+    {
+        global $pth;
+        return $pth["folder"]["plugins"] . "chess/data/";
     }
 
     private static function view(): View

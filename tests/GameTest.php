@@ -6,25 +6,25 @@ use org\bovigo\vfs\vfsStreamWrapper;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
+use Plib\DocumentStore;
 
 class GameTest extends TestCase
 {
     /** @var Game */
     private $subject;
 
+    /** @var DocumentStore */
+    private $store;
+
     public function setUp(): void
     {
-        global $pth;
-
-        $pth = array(
-            'folder' => array('plugins' => '../')
-        );
+        $this->store = new DocumentStore(__DIR__ . "/");
         $this->subject = new Game();
     }
 
     public function testLoad(): void
     {
-        $this->subject = Game::load('italian');
+        $this->subject = Game::retrieve("italian", $this->store);
         $this->assertEquals('italian', $this->subject->getName());
         $this->assertEquals(
             'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R',
@@ -34,7 +34,7 @@ class GameTest extends TestCase
 
     public function testLoadNotExistingReturnsNull(): void
     {
-        $this->assertNull(Game::load('doesntexist'));
+        $this->assertNull(Game::retrieve("doesntexist", $this->store));
     }
 
     public function testLoadEmptyFileReturnsNull(): void
@@ -47,7 +47,7 @@ class GameTest extends TestCase
         $dataFolder = $pth['folder']['plugins'] . 'chess/data/';
         mkdir($dataFolder, 0777, true);
         touch($dataFolder . 'foo.dat');
-        $this->assertNull(Game::load('foo'));
+        $this->assertNull(Game::retrieve("foo", $this->store));
     }
 
     public function testgetPositionReturnsChessPosition(): void
@@ -116,6 +116,6 @@ class GameTest extends TestCase
 
 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 *
 EOT;
-        $this->assertEquals($expected, (string) Game::load('italian'));
+        $this->assertEquals($expected, (string) Game::retrieve("italian", $this->store));
     }
 }

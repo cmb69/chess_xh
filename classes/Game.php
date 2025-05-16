@@ -21,7 +21,11 @@
 
 namespace Chess;
 
-class Game
+use LogicException;
+use Plib\Document;
+use Plib\DocumentStore;
+
+final class Game implements Document
 {
     /** @var string */
     private $name;
@@ -34,23 +38,34 @@ class Game
         return (bool) preg_match('/^[a-z0-9_-]+$/ui', $basename);
     }
 
-    public static function load(string $basename): ?Game
+    public static function fromString(string $contents, string $key): ?self
     {
-        global $pth;
-
-        $filename = $pth['folder']['plugins'] . 'chess/data/' . $basename
-            . '.dat';
-        if (!is_readable($filename)) {
+        $that = unserialize($contents);
+        if (!($that instanceof self)) {
             return null;
         }
-        $result = unserialize(file_get_contents($filename));
-        if ($result) {
-            $result->name = $basename;
-            return $result;
-        } else {
-            return null;
-        }
+        $that->name = basename($key, ".dat");
+        return $that;
     }
+
+    public static function retrieve(string $name, DocumentStore $store): ?self
+    {
+        return $store->retrieve($name . ".dat", self::class);
+    }
+
+    // public static function load(string $filename): ?Game
+    // {
+    //     if (!is_readable($filename)) {
+    //         return null;
+    //     }
+    //     $result = unserialize(file_get_contents($filename));
+    //     if ($result) {
+    //         $result->name = basename($filename, ".dat");
+    //         return $result;
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
     public function __construct()
     {
@@ -136,5 +151,10 @@ class Game
         }
         $result .= '*';
         return $result;
+    }
+
+    public function toString(): string
+    {
+        throw new LogicException("can't save games");
     }
 }
