@@ -15,6 +15,12 @@ $plugin_tx['chess']['error_unauthorized']="You are not authorized to perform thi
 $plugin_tx['chess']['message_invalid_name']="The name \"%s\" is invalid";
 $plugin_tx['chess']['message_load_error']="The chess file \"%s\" can't be loaded!";
 
-$plugin_tx['chess']['alt_icon']="Knight on chess board fragment";
+$plugin_tx['chess']['syscheck_title']="System Check";
+$plugin_tx['chess']['syscheck_phpversion']="PHP version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_xhversion']="CMSimple_XH version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_plibversion']="Plib_XH version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_writable']="%s is writable: %s";
+$plugin_tx['chess']['syscheck_good']="okay";
+$plugin_tx['chess']['syscheck_bad']="not okay";
 
 ?>

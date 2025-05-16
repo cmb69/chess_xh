@@ -15,6 +15,12 @@ $plugin_tx['chess']['error_unauthorized']="Sie sind nicht befugt diese Aktion au
 $plugin_tx['chess']['message_invalid_name']="Der Name \"%s\" ist ungültig!";
 $plugin_tx['chess']['message_load_error']="Die Schachdatei \"%s\" kann nicht geladen werden!";
 
-$plugin_tx['chess']['alt_icon']="Springer auf Schachbrettfragment";
+$plugin_tx['chess']['syscheck_title']="System-Prüfung";
+$plugin_tx['chess']['syscheck_phpversion']="PHP Version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_xhversion']="CMSimple_XH Version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_plibversion']="Plib_XH Version ≥ %s: %s";
+$plugin_tx['chess']['syscheck_writable']="%s is schreibbar: %s";
+$plugin_tx['chess']['syscheck_good']="okay";
+$plugin_tx['chess']['syscheck_bad']="nicht okay";
 
 ?>

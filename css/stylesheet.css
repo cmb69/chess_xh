@@ -56,11 +56,3 @@
 .chess_import_form li button {
     margin-left: 1em;
 }
-
-.chess_icon {
-    float: left;
-    margin-right: 1em;
-}
-.chess_license {
-    text-align: justify;
-}

@@ -43,10 +43,8 @@ Die Installation erfolgt wie bei vielen anderen CMSimple_XH-Plugins auch.
 1. Schützen Sie den Daten-Ordner von Chess_XH vor direktem Zugriff auf eine
    Weise, die Ihr Webserver unterstützt. Eine .htaccess-Datei für Apache Server ist
    bereits enthalten.
-<!--
-1. Navigieren Sie zur Administration von Chess, und prüfen Sie, ob alle
+1. Prüfen Sie unter `Plugins` → `Chess`, ob alle
    Voraussetzungen für den Betrieb erfüllt sind.
--->
 
 ## Einstellungen
 

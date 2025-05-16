@@ -22,6 +22,7 @@
 namespace Chess;
 
 use Plib\CsrfProtector;
+use Plib\SystemChecker;
 use Plib\View;
 
 class Dic
@@ -45,7 +46,12 @@ class Dic
 
     public static function infoView(): InfoView
     {
-        return new InfoView();
+        global $pth;
+        return new InfoView(
+            $pth["folder"]["plugins"] . "chess/",
+            new SystemChecker(),
+            self::view()
+        );
     }
 
     private static function view(): View

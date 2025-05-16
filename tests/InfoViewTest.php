@@ -3,8 +3,11 @@
 namespace Chess;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\TestCase;
+use Plib\FakeSystemChecker;
+use Plib\View;
 
-class InfoViewTest
+class InfoViewTest extends TestCase
 {
     public function setUp(): void
     {
@@ -20,7 +23,8 @@ class InfoViewTest
 
     public function testRendersInfo(): void
     {
-        $response = (new InfoView())->render();
+        $view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["chess"]);
+        $response = (new InfoView("./", new FakeSystemChecker(), $view))->render();
         Approvals::verifyHtml($response);
     }
 }
